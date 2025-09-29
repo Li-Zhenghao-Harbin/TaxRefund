@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cityu.dao.ItemMapper">
+  <resultMap id="BaseResultMap" type="org.cityu.dataobject.ItemDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="invoice_number" jdbcType="VARCHAR" property="invoiceNumber" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="unit_price" jdbcType="DECIMAL" property="unitPrice" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from b_item
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.cityu.dataobject.ItemDO">
+    insert into b_item (id, invoice_number, item_name, 
+      quantity, unit_price, amount
+      )
+    values (#{id,jdbcType=INTEGER}, #{invoiceNumber,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{quantity,jdbcType=INTEGER}, #{unitPrice,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.cityu.dataobject.ItemDO">
+    update b_item
+    set invoice_number = #{invoiceNumber,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
+      amount = #{amount,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, invoice_number, item_name, quantity, unit_price, amount
+    from b_item
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, invoice_number, item_name, quantity, unit_price, amount
+    from b_item
+  </select>
+</mapper>

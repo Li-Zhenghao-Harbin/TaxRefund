@@ -15,7 +15,7 @@
                         password="123456">
         </jdbcConnection>
 
-        <javaModelGenerator targetPackage="org.cityu.dataobject.merchant" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="org.cityu.dataobject" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -24,10 +24,10 @@
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="org.cityu.dao.merchant" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="org.cityu.dao" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table schema="" tableName="b_user" domainObjectName="User"/>
+        <table schema="" tableName="b_item" domainObjectName="Item"/>
     </context>
 </generatorConfiguration>
