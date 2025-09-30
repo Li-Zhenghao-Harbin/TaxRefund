@@ -28,6 +28,6 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table schema="" tableName="b_item" domainObjectName="Item"/>
+        <table schema="" tableName="b_sequence" domainObjectName="Sequence"/>
     </context>
 </generatorConfiguration>

@@ -15,7 +15,7 @@ public class ManagerAccessAspect {
     @Value("${server.port:8080}")
     private String serverPort;
 
-    // catch @ManagerOnly, can only be accessed by merchant through port 8081
+    // catch @ManagerOnly, can only be accessed by merchant through port 8080
     @Before("@annotation(org.cityu.common.annotation.ManagerOnly) || @within(org.cityu.common.annotation.ManagerOnly)")
     public void checkManagerAccess(JoinPoint joinPoint) {
         if (!"8080".equals(serverPort)) {

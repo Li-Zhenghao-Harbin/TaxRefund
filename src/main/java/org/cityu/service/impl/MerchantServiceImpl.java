@@ -1,6 +1,6 @@
 package org.cityu.service.impl;
 
-import org.cityu.dao.merchant.UserMapper;
+import org.cityu.dao.UserMapper;
 import org.cityu.dataobject.UserDO;
 import org.cityu.service.MerchantService;
 import org.springframework.beans.factory.annotation.Autowired;

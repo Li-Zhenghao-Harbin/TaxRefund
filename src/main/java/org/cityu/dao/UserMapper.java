@@ -1,4 +1,4 @@
-package org.cityu.dao.merchant;
+package org.cityu.dao;
 
 import java.util.List;
 import org.cityu.dataobject.UserDO;

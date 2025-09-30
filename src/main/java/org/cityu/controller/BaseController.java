@@ -4,6 +4,7 @@ import org.cityu.error.BusinessException;
 import org.cityu.error.EmBusinessError;
 import org.cityu.response.CommonReturnType;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -14,6 +15,10 @@ import java.util.Map;
 
 public class BaseController {
     public static final String CONTENT_TYPE_FORMED = "application/x-www-form-urlencoded";
+    public static final String CONTENT_TYPE_JSON = MediaType.APPLICATION_JSON_VALUE;
+
+    public static final String BUSINESS_INVOICE = "invoice";
+    public static final String BUSINESS_APPLICATION_FORM = "application_form";
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)

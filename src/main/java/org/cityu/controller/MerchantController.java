@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.cityu.controller.BaseController.CONTENT_TYPE_FORMED;
+import static org.cityu.controller.BaseController.CONTENT_TYPE_JSON;
 
 @RestController
 @RequestMapping("/merchant")
@@ -37,10 +38,10 @@ public class MerchantController {
     @Autowired
     private InvoiceService invoiceService;
 
-    @RequestMapping(value = "/createInvoice", method = {RequestMethod.POST}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/createInvoice", method = {RequestMethod.POST}, consumes = CONTENT_TYPE_JSON)
     @ResponseBody
     public CommonReturnType createInvoice(@RequestBody JsonNode jsonNode) {
-        String invoiceNumber = jsonNode.get("invoiceNumber").asText();
+        String invoiceNumber = ""; //jsonNode.get("invoiceNumber").asText();
         String sellerTaxId = jsonNode.get("sellerTaxId").asText();
         BigDecimal amount = jsonNode.get("amount").decimalValue();
 

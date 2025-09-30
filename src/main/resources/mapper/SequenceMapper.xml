@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cityu.dao.SequenceMapper">
+  <resultMap id="BaseResultMap" type="org.cityu.dataobject.SequenceDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="business" jdbcType="VARCHAR" property="business" />
+    <result column="current" jdbcType="INTEGER" property="current" />
+    <result column="step" jdbcType="INTEGER" property="step" />
+  </resultMap>
+  <update id="updateCurrentValue" parameterType="java.lang.String">
+    update b_sequence
+    set current = current + step
+    where business = #{business,jdbcType=VARCHAR}
+  </update>
+  <select id="getCurrentValue" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select current
+    from b_sequence
+    where business = #{business,jdbcType=VARCHAR}
+  </select>
+</mapper>
