@@ -43,4 +43,11 @@
     status
     from b_invoice
   </select>
+  <update id="updateInvoiceToRelatedApplicationForm">
+    update b_invoice set application_form_number = #{applicationFormNumber}
+    where invoice_number in
+    <foreach collection="invoiceNumbers" item="invoiceNumber" open="(" close=")" separator=",">
+      #{invoiceNumber, jdbcType=VARCHAR}
+    </foreach>
+  </update>
 </mapper>

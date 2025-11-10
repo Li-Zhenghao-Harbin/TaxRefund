@@ -1,0 +1,86 @@
+package org.cityu.dataobject;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class ApplicationFormDO {
+    private Integer id;
+
+    private String applicationFormNumber;
+
+    private String applicantName;
+
+    private String applicantId;
+
+    private String applicantCountry;
+
+    private Date issueDate;
+
+    private BigDecimal totalAmount;
+
+    private BigDecimal customsConfirmAmount;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getApplicationFormNumber() {
+        return applicationFormNumber;
+    }
+
+    public void setApplicationFormNumber(String applicationFormNumber) {
+        this.applicationFormNumber = applicationFormNumber == null ? null : applicationFormNumber.trim();
+    }
+
+    public String getApplicantName() {
+        return applicantName;
+    }
+
+    public void setApplicantName(String applicantName) {
+        this.applicantName = applicantName == null ? null : applicantName.trim();
+    }
+
+    public String getApplicantId() {
+        return applicantId;
+    }
+
+    public void setApplicantId(String applicantId) {
+        this.applicantId = applicantId == null ? null : applicantId.trim();
+    }
+
+    public String getApplicantCountry() {
+        return applicantCountry;
+    }
+
+    public void setApplicantCountry(String applicantCountry) {
+        this.applicantCountry = applicantCountry == null ? null : applicantCountry.trim();
+    }
+
+    public Date getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getCustomsConfirmAmount() {
+        return customsConfirmAmount;
+    }
+
+    public void setCustomsConfirmAmount(BigDecimal customsConfirmAmount) {
+        this.customsConfirmAmount = customsConfirmAmount;
+    }
+}

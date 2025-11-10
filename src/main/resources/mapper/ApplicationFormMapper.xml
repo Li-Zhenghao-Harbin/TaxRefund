@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cityu.dao.ApplicationFormMapper">
+  <resultMap id="BaseResultMap" type="org.cityu.dataobject.ApplicationFormDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="application_form_number" jdbcType="VARCHAR" property="applicationFormNumber" />
+    <result column="applicant_name" jdbcType="VARCHAR" property="applicantName" />
+    <result column="applicant_id" jdbcType="VARCHAR" property="applicantId" />
+    <result column="applicant_country" jdbcType="VARCHAR" property="applicantCountry" />
+    <result column="issue_date" jdbcType="TIMESTAMP" property="issueDate" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="customs_confirm_amount" jdbcType="DECIMAL" property="customsConfirmAmount" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from b_application_form
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.cityu.dataobject.ApplicationFormDO">
+    insert into b_application_form (id, application_form_number, applicant_name, 
+      applicant_id, applicant_country, issue_date, 
+      total_amount, customs_confirm_amount)
+    values (#{id,jdbcType=INTEGER}, #{applicationFormNumber,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR}, 
+      #{applicantId,jdbcType=VARCHAR}, #{applicantCountry,jdbcType=VARCHAR}, #{issueDate,jdbcType=TIMESTAMP}, 
+      #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.cityu.dataobject.ApplicationFormDO">
+    update b_application_form
+    set application_form_number = #{applicationFormNumber,jdbcType=VARCHAR},
+      applicant_name = #{applicantName,jdbcType=VARCHAR},
+      applicant_id = #{applicantId,jdbcType=VARCHAR},
+      applicant_country = #{applicantCountry,jdbcType=VARCHAR},
+      issue_date = #{issueDate,jdbcType=TIMESTAMP},
+      total_amount = #{totalAmount,jdbcType=DECIMAL},
+      customs_confirm_amount = #{customsConfirmAmount,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, application_form_number, applicant_name, applicant_id, applicant_country, 
+    issue_date, total_amount, customs_confirm_amount
+    from b_application_form
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, application_form_number, applicant_name, applicant_id, applicant_country, 
+    issue_date, total_amount, customs_confirm_amount
+    from b_application_form
+  </select>
+</mapper>

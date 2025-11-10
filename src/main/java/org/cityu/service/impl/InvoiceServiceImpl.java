@@ -5,6 +5,7 @@ import org.cityu.dao.ItemMapper;
 import org.cityu.dao.SequenceMapper;
 import org.cityu.dataobject.InvoiceDO;
 import org.cityu.dataobject.ItemDO;
+import org.cityu.error.BusinessException;
 import org.cityu.service.InvoiceService;
 import org.cityu.service.model.InvoiceModel;
 import org.cityu.service.model.ItemModel;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.cityu.common.utils.CommonUtils.generateInvoiceNumber;
 import static org.cityu.controller.BaseController.BUSINESS_INVOICE;
@@ -43,6 +46,13 @@ public class InvoiceServiceImpl implements InvoiceService {
             itemModel.setInvoiceNumber(invoiceNumber);
             itemMapper.insert(convertFromItemModel(itemModel));
         }
+    }
+
+    @Override
+    @Transactional
+    public int updateInvoiceToRelatedApplicationForm(String applicationFormNumber, List<String> invoiceNumbers) {
+        int affectRows = invoiceMapper.updateInvoiceToRelatedApplicationForm(applicationFormNumber, invoiceNumbers);
+        return affectRows;
     }
 
     private InvoiceDO convertFromInvoiceModel(InvoiceModel invoiceModel) {
