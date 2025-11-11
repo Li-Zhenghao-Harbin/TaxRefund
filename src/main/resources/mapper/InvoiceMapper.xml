@@ -10,10 +10,6 @@
     <result column="application_form_number" jdbcType="VARCHAR" property="applicationFormNumber" />
     <result column="status" jdbcType="BIT" property="status" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from b_invoice
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
   <insert id="insert" parameterType="org.cityu.dataobject.InvoiceDO">
     insert into b_invoice (id, invoice_number, seller_tax_id, 
       amount, issue_date, application_form_number, 
@@ -22,27 +18,6 @@
       #{amount,jdbcType=DECIMAL}, #{issueDate,jdbcType=TIMESTAMP}, #{applicationFormNumber,jdbcType=VARCHAR}, 
       #{status,jdbcType=BIT})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="org.cityu.dataobject.InvoiceDO">
-    update b_invoice
-    set invoice_number = #{invoiceNumber,jdbcType=VARCHAR},
-      seller_tax_id = #{sellerTaxId,jdbcType=VARCHAR},
-      amount = #{amount,jdbcType=DECIMAL},
-      issue_date = #{issueDate,jdbcType=TIMESTAMP},
-      application_form_number = #{applicationFormNumber,jdbcType=VARCHAR},
-      status = #{status,jdbcType=BIT}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, invoice_number, seller_tax_id, amount, issue_date, application_form_number, 
-    status
-    from b_invoice
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select id, invoice_number, seller_tax_id, amount, issue_date, application_form_number, 
-    status
-    from b_invoice
-  </select>
   <update id="updateInvoiceToRelatedApplicationForm">
     update b_invoice set application_form_number = #{applicationFormNumber}
     where invoice_number in

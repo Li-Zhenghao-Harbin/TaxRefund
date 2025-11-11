@@ -48,13 +48,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
     }
 
-    @Override
-    @Transactional
-    public int updateInvoiceToRelatedApplicationForm(String applicationFormNumber, List<String> invoiceNumbers) {
-        int affectRows = invoiceMapper.updateInvoiceToRelatedApplicationForm(applicationFormNumber, invoiceNumbers);
-        return affectRows;
-    }
-
     private InvoiceDO convertFromInvoiceModel(InvoiceModel invoiceModel) {
         InvoiceDO invoiceDO = new InvoiceDO();
         BeanUtils.copyProperties(invoiceModel, invoiceDO);
