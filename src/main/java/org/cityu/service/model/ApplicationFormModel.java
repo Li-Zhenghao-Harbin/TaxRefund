@@ -11,6 +11,7 @@ public class ApplicationFormModel {
     private String applicantId;
     private String applicantCountry;
     private Date issueDate;
+    private String issueMerchantId;
     private BigDecimal totalAmount;
     private BigDecimal customsConfirmAmount;
     private List<InvoiceModel> invoices;
@@ -61,6 +62,14 @@ public class ApplicationFormModel {
 
     public void setIssueDate(Date issueDate) {
         this.issueDate = issueDate;
+    }
+
+    public String getIssueMerchantId() {
+        return issueMerchantId;
+    }
+
+    public void setIssueMerchantId(String issueMerchantId) {
+        this.issueMerchantId = issueMerchantId;
     }
 
     public BigDecimal getTotalAmount() {

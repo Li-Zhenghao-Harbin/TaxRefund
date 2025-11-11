@@ -8,15 +8,16 @@
     <result column="applicant_id" jdbcType="VARCHAR" property="applicantId" />
     <result column="applicant_country" jdbcType="VARCHAR" property="applicantCountry" />
     <result column="issue_date" jdbcType="TIMESTAMP" property="issueDate" />
+    <result column="issue_merchant_id" jdbcType="VARCHAR" property="issueMerchantId" />
     <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
     <result column="customs_confirm_amount" jdbcType="DECIMAL" property="customsConfirmAmount" />
   </resultMap>
   <insert id="insert" parameterType="org.cityu.dataobject.ApplicationFormDO">
     insert into b_application_form (id, application_form_number, applicant_name, 
-      applicant_id, applicant_country, issue_date, 
+      applicant_id, applicant_country, issue_date, issue_merchant_id,
       total_amount, customs_confirm_amount)
     values (#{id,jdbcType=INTEGER}, #{applicationFormNumber,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR}, 
-      #{applicantId,jdbcType=VARCHAR}, #{applicantCountry,jdbcType=VARCHAR}, #{issueDate,jdbcType=TIMESTAMP}, 
-      #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL})
+      #{applicantId,jdbcType=VARCHAR}, #{applicantCountry,jdbcType=VARCHAR}, #{issueDate,jdbcType=TIMESTAMP},
+      #{issueMerchantId,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL})
   </insert>
 </mapper>

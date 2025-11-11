@@ -81,6 +81,7 @@ public class MerchantController {
         String applicantName = jsonNode.get("applicantName").asText();
         String applicantId = jsonNode.get("applicantId").asText();
         String applicantCountry = jsonNode.get("applicantCountry").asText();
+        String issueMerchantId = jsonNode.get("issueMerchantId").asText();
         BigDecimal totalAmount = jsonNode.get("totalAmount").decimalValue();
         // get invoices
         JsonNode invoicesNode = jsonNode.get("invoices");
@@ -94,6 +95,7 @@ public class MerchantController {
         applicationFormModel.setCustomsConfirmAmount(new BigDecimal(0));
         applicationFormModel.setInvoices(invoices);
         applicationFormModel.setIssueDate(CommonUtils.getCurrentDate());
+        applicationFormModel.setIssueMerchantId(issueMerchantId);
         applicationFormService.createApplicationForm(applicationFormModel);
         return CommonReturnType.create(null);
     }
