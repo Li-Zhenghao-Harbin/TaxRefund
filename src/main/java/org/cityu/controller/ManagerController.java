@@ -28,13 +28,15 @@ public class ManagerController {
     @RequestMapping(value = "/register", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
     public CommonReturnType register(@RequestParam(name = "name") String name,
-                                                   @RequestParam(name = "password") String password,
-                                                   @RequestParam(name = "role") Integer role) {
+                                     @RequestParam(name = "password") String password,
+                                     @RequestParam(name = "role") Integer role,
+                                     @RequestParam(name = "sellerTaxId") String sellerTaxId) {
         UserModel userModel = new UserModel();
         userModel.setName(name);
         userModel.setPassword(password);
         userModel.setRole(role);
         userModel.setAvailable(1);
+        userModel.setSellerTaxId(sellerTaxId);
         userService.register(userModel);
         return CommonReturnType.create(null);
     }
