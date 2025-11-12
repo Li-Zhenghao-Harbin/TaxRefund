@@ -51,6 +51,18 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         invoiceMapper.updateInvoiceToRelatedApplicationForm(applicationFormNumber, invoiceNumbers);
     }
 
+    @Override
+    public ApplicationFormModel getApplicationForm(String applicationFormNumber) {
+        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationForm(applicationFormNumber);
+        return convertFormApplicationFormDO(applicationFormDO);
+    }
+
+    private ApplicationFormModel convertFormApplicationFormDO(ApplicationFormDO applicationFormDO) {
+        ApplicationFormModel applicationFormModel = new ApplicationFormModel();
+        BeanUtils.copyProperties(applicationFormDO, applicationFormModel);
+        return applicationFormModel;
+    }
+
     private ApplicationFormDO convertFromApplicationFormModel(ApplicationFormModel applicationFormModel) {
         ApplicationFormDO applicationFormDO = new ApplicationFormDO();
         BeanUtils.copyProperties(applicationFormModel, applicationFormDO);
