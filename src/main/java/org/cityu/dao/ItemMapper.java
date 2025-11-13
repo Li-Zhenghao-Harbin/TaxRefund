@@ -5,4 +5,5 @@ import org.cityu.dataobject.ItemDO;
 
 public interface ItemMapper {
     int insert(ItemDO record);
+    List<ItemDO> getItemByInvoiceNumber(String invoiceNumber);
 }

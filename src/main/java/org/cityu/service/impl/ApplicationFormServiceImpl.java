@@ -5,6 +5,7 @@ import org.cityu.dao.InvoiceMapper;
 import org.cityu.dao.SequenceMapper;
 import org.cityu.dataobject.ApplicationFormDO;
 import org.cityu.service.ApplicationFormService;
+import org.cityu.service.InvoiceService;
 import org.cityu.service.model.ApplicationFormModel;
 import org.cityu.service.model.InvoiceModel;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +32,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     @Autowired
     private SequenceMapper sequenceMapper;
 
+    @Autowired
+    private InvoiceService invoiceService;
+
     @Override
     @Transactional
     public void createApplicationForm(ApplicationFormModel applicationFormModel) {
@@ -52,9 +56,13 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     }
 
     @Override
+    @Transactional
     public ApplicationFormModel getApplicationForm(String applicationFormNumber) {
         ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationForm(applicationFormNumber);
-        return convertFormApplicationFormDO(applicationFormDO);
+        ApplicationFormModel applicationFormModel = convertFormApplicationFormDO(applicationFormDO);
+        List<InvoiceModel> invoices = invoiceService.getInvoiceByApplicationFormNumber(applicationFormNumber);
+        applicationFormModel.setInvoices(invoices);
+        return applicationFormModel;
     }
 
     private ApplicationFormModel convertFormApplicationFormDO(ApplicationFormDO applicationFormDO) {

@@ -17,4 +17,9 @@
       #{quantity,jdbcType=INTEGER}, #{unitPrice,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}
       )
   </insert>
+  <select id="getItemByInvoiceNumber" resultMap="BaseResultMap">
+    select item_name, quantity, unit_price, amount
+    from b_item
+    where invoice_number = #{invoiceNumber, jdbcType=VARCHAR}
+  </select>
 </mapper>

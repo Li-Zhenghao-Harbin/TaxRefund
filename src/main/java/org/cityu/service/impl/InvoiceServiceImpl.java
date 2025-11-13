@@ -5,16 +5,15 @@ import org.cityu.dao.ItemMapper;
 import org.cityu.dao.SequenceMapper;
 import org.cityu.dataobject.InvoiceDO;
 import org.cityu.dataobject.ItemDO;
-import org.cityu.error.BusinessException;
 import org.cityu.service.InvoiceService;
 import org.cityu.service.model.InvoiceModel;
 import org.cityu.service.model.ItemModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.cityu.common.utils.CommonUtils.generateInvoiceNumber;
@@ -46,6 +45,58 @@ public class InvoiceServiceImpl implements InvoiceService {
             itemModel.setInvoiceNumber(invoiceNumber);
             itemMapper.insert(convertFromItemModel(itemModel));
         }
+    }
+
+    @Override
+    @Transactional
+    public List<InvoiceModel> getInvoiceByApplicationFormNumber(String applicationFormNumber) {
+        List<InvoiceDO> invoiceDOs = invoiceMapper.getInvoiceByApplicationFormNumber(applicationFormNumber);
+        List<InvoiceModel> invoiceModels = convertFromInvoiceDOList(invoiceDOs);
+        for (InvoiceModel invoiceModel : invoiceModels) {
+            String invoiceNumber = invoiceModel.getInvoiceNumber();
+            List<ItemDO> itemDOs = itemMapper.getItemByInvoiceNumber(invoiceNumber);
+            List<ItemModel> itemModels = convertFromItemDOList(itemDOs);
+            invoiceModel.setItems(itemModels);
+        }
+        return invoiceModels;
+    }
+
+    private List<InvoiceModel> convertFromInvoiceDOList(List<InvoiceDO> invoiceDOs) {
+        List<InvoiceModel> invoiceModels = new ArrayList<>();
+        for (InvoiceDO invoiceDO : invoiceDOs) {
+            InvoiceModel invoiceModel = convertFromInvoiceDO(invoiceDO);
+            invoiceModels.add(invoiceModel);
+        }
+        return invoiceModels;
+    }
+
+    @Override
+    @Transactional
+    public InvoiceModel getInvoiceByInvoiceNumber(String invoiceNumber) {
+        InvoiceModel invoiceModel = convertFromInvoiceDO(invoiceMapper.getInvoiceByInvoiceNumber(invoiceNumber));
+        List<ItemModel> items = convertFromItemDOList(itemMapper.getItemByInvoiceNumber(invoiceNumber));
+        invoiceModel.setItems(items);
+        return invoiceModel;
+    }
+
+    private List<ItemModel> convertFromItemDOList(List<ItemDO> itemDOS) {
+        List<ItemModel> itemModels = new ArrayList<>();
+        for (ItemDO itemDO : itemDOS) {
+            itemModels.add(convertFromItemDO(itemDO));
+        }
+        return itemModels;
+    }
+
+    private ItemModel convertFromItemDO(ItemDO itemDO) {
+        ItemModel itemModel = new ItemModel();
+        BeanUtils.copyProperties(itemDO, itemModel);
+        return itemModel;
+    }
+
+    private InvoiceModel convertFromInvoiceDO(InvoiceDO invoiceDO) {
+        InvoiceModel invoiceModel = new InvoiceModel();
+        BeanUtils.copyProperties(invoiceDO, invoiceModel);
+        return invoiceModel;
     }
 
     private InvoiceDO convertFromInvoiceModel(InvoiceModel invoiceModel) {

@@ -25,4 +25,14 @@
       #{invoiceNumber, jdbcType=VARCHAR}
     </foreach>
   </update>
+  <select id="getInvoiceByApplicationFormNumber" resultMap="BaseResultMap">
+    select invoice_number, seller_tax_id, amount, issue_date, status
+    from b_invoice
+    where application_form_number = #{applicationFormNumber, jdbcType=VARCHAR}
+  </select>
+  <select id="getInvoiceByInvoiceNumber" resultMap="BaseResultMap">
+    select invoice_number, seller_tax_id, amount, issue_date, status
+    from b_invoice
+    where invoice_number = #{invoiceNumber, jdbcType=VARCHAR}
+  </select>
 </mapper>
