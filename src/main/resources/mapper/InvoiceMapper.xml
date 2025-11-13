@@ -19,7 +19,8 @@
       #{status,jdbcType=BIT})
   </insert>
   <update id="updateInvoiceToRelatedApplicationForm">
-    update b_invoice set application_form_number = #{applicationFormNumber}
+    update b_invoice
+    set application_form_number = #{applicationFormNumber}, status = 2
     where invoice_number in
     <foreach collection="invoiceNumbers" item="invoiceNumber" open="(" close=")" separator=",">
       #{invoiceNumber, jdbcType=VARCHAR}

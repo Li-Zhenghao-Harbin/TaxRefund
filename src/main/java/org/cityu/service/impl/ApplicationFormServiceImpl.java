@@ -4,6 +4,9 @@ import org.cityu.dao.ApplicationFormMapper;
 import org.cityu.dao.InvoiceMapper;
 import org.cityu.dao.SequenceMapper;
 import org.cityu.dataobject.ApplicationFormDO;
+import org.cityu.dataobject.InvoiceDO;
+import org.cityu.error.BusinessException;
+import org.cityu.error.EmBusinessError;
 import org.cityu.service.ApplicationFormService;
 import org.cityu.service.InvoiceService;
 import org.cityu.service.model.ApplicationFormModel;
@@ -37,7 +40,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     @Transactional
-    public void createApplicationForm(ApplicationFormModel applicationFormModel) {
+    public ApplicationFormModel createApplicationForm(ApplicationFormModel applicationFormModel) throws BusinessException {
         // generate application form
         int invoiceNumberSeries = sequenceMapper.getCurrentValue(BUSINESS_APPLICATION_FORM);
         sequenceMapper.updateCurrentValue(BUSINESS_APPLICATION_FORM);
@@ -48,11 +51,22 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         applicationFormMapper.insert(applicationFormDO);
         // relate to invoices
         List<InvoiceModel> invoices = applicationFormModel.getInvoices();
+        for (InvoiceModel invoice : invoices) {
+            // set the status of the invoice
+            InvoiceDO invoiceDO = invoiceMapper.getInvoiceByInvoiceNumber(invoice.getInvoiceNumber());
+            invoice.setStatus(invoiceDO.getStatus());
+        }
         List<String> invoiceNumbers = new ArrayList<>();
         for (InvoiceModel invoiceModel : invoices) {
+            // check invoice
+            if (invoiceModel.getStatus() != 1) {
+                throw new BusinessException(EmBusinessError.INVOICE_STATUS_INVALID);
+            }
             invoiceNumbers.add(invoiceModel.getInvoiceNumber());
         }
+        // update application form information
         invoiceMapper.updateInvoiceToRelatedApplicationForm(applicationFormNumber, invoiceNumbers);
+        return applicationFormModel;
     }
 
     @Override

@@ -1,10 +1,11 @@
 package org.cityu.error;
 
 public class BusinessException extends Exception implements  CommonError {
+
     private CommonError commonError;
 
     public BusinessException(CommonError commonError) {
-        super();
+        super(commonError.getErrorMessage());
         this.commonError = commonError;
     }
 

@@ -3,6 +3,7 @@ package org.cityu.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.cityu.common.annotation.MerchantOnly;
 import org.cityu.common.utils.CommonUtils;
+import org.cityu.error.BusinessException;
 import org.cityu.response.CommonReturnType;
 import org.cityu.service.ApplicationFormService;
 import org.cityu.service.InvoiceService;
@@ -25,7 +26,7 @@ import static org.cityu.controller.BaseController.CONTENT_TYPE_JSON;
 @RequestMapping("/merchant")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
 @MerchantOnly
-public class MerchantController {
+public class MerchantController extends BaseController {
 
     @Autowired
     private MerchantService merchantService;
@@ -74,9 +75,16 @@ public class MerchantController {
         return items;
     }
 
+    @RequestMapping(value = "/getInvoiceByInvoiceNumber", method = {RequestMethod.GET})
+    @ResponseBody
+    public CommonReturnType getInvoiceByInvoiceNumber(@RequestParam(name = "invoiceNumber") String invoiceNumber) {
+        InvoiceModel invoiceModel = invoiceService.getInvoiceByInvoiceNumber(invoiceNumber);
+        return CommonReturnType.create(invoiceModel);
+    }
+
     @RequestMapping(value = "/createApplicationForm", method = {RequestMethod.POST}, consumes = CONTENT_TYPE_JSON)
     @ResponseBody
-    public CommonReturnType createApplicationForm(@RequestBody JsonNode jsonNode) throws ParseException {
+    public CommonReturnType createApplicationForm(@RequestBody JsonNode jsonNode) throws ParseException, BusinessException {
         String applicationFormNumber = ""; // generate application form number later in service
         String applicantName = jsonNode.get("applicantName").asText();
         String applicantId = jsonNode.get("applicantId").asText();
@@ -97,7 +105,7 @@ public class MerchantController {
         applicationFormModel.setIssueDate(CommonUtils.getCurrentDate());
         applicationFormModel.setIssueMerchantId(issueMerchantId);
         applicationFormService.createApplicationForm(applicationFormModel);
-        return CommonReturnType.create(null);
+        return CommonReturnType.create(applicationFormModel);
     }
 
     private List<InvoiceModel> getInvoicesFromJson(JsonNode jsonNode) throws ParseException {
