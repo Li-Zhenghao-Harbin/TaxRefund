@@ -14,6 +14,7 @@ import org.cityu.service.model.InvoiceModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -39,8 +40,8 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     private InvoiceService invoiceService;
 
     @Override
-    @Transactional
-    public ApplicationFormModel createApplicationForm(ApplicationFormModel applicationFormModel) throws BusinessException {
+    @Transactional(rollbackFor = Exception.class)
+    public void createApplicationForm(ApplicationFormModel applicationFormModel) throws BusinessException {
         // generate application form
         int invoiceNumberSeries = sequenceMapper.getCurrentValue(BUSINESS_APPLICATION_FORM);
         sequenceMapper.updateCurrentValue(BUSINESS_APPLICATION_FORM);
@@ -60,13 +61,12 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         for (InvoiceModel invoiceModel : invoices) {
             // check invoice
             if (invoiceModel.getStatus() != 1) {
-                throw new BusinessException(EmBusinessError.INVOICE_STATUS_INVALID);
+                throw new BusinessException(EmBusinessError.INVOICE_STATUS_IMPROPER);
             }
             invoiceNumbers.add(invoiceModel.getInvoiceNumber());
         }
         // update application form information
         invoiceMapper.updateInvoiceToRelatedApplicationForm(applicationFormNumber, invoiceNumbers);
-        return applicationFormModel;
     }
 
     @Override

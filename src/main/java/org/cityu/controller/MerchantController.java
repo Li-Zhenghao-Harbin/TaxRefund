@@ -20,8 +20,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.cityu.controller.BaseController.CONTENT_TYPE_JSON;
-
 @RestController
 @RequestMapping("/merchant")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
@@ -105,7 +103,7 @@ public class MerchantController extends BaseController {
         applicationFormModel.setIssueDate(CommonUtils.getCurrentDate());
         applicationFormModel.setIssueMerchantId(issueMerchantId);
         applicationFormService.createApplicationForm(applicationFormModel);
-        return CommonReturnType.create(applicationFormModel);
+        return CommonReturnType.create(null);
     }
 
     private List<InvoiceModel> getInvoicesFromJson(JsonNode jsonNode) throws ParseException {

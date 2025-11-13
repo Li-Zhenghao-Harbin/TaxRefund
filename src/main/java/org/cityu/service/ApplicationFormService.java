@@ -5,6 +5,6 @@ import org.cityu.error.BusinessException;
 import org.cityu.service.model.ApplicationFormModel;
 
 public interface ApplicationFormService {
-    ApplicationFormModel createApplicationForm(ApplicationFormModel applicationFormModel) throws BusinessException;
+    void createApplicationForm(ApplicationFormModel applicationFormModel) throws BusinessException;
     ApplicationFormModel getApplicationForm(String applicationFormNumber);
 }
