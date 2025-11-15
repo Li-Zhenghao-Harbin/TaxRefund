@@ -24,30 +24,30 @@ public class App
     }
 
     // manager client
-    @Profile("manager")
-    @Bean
-    public void managerRunner() {
-        System.out.println("manager client starts at: " + 8080);
-    }
-
-    // merchant client
-    @Profile("merchant")
-    @Bean
-    public void merchantRunner() {
-        System.out.println("merchant client starts at: " + 8081);
-    }
-
-    // customs client
-    @Profile("customs")
-    @Bean
-    public void customsRunner() {
-        System.out.println("customs client starts at: " + 8082);
-    }
-
-    // agency client
-    @Profile("agency")
-    @Bean
-    public void agencyRunner() {
-        System.out.println("agency client start at: " + 8083);
-    }
+//    @Profile("manager")
+//    @Bean
+//    public void managerRunner() {
+//        System.out.println("manager client starts at: " + 8080);
+//    }
+//
+//    // merchant client
+//    @Profile("merchant")
+//    @Bean
+//    public void merchantRunner() {
+//        System.out.println("merchant client starts at: " + 8081);
+//    }
+//
+//    // customs client
+//    @Profile("customs")
+//    @Bean
+//    public void customsRunner() {
+//        System.out.println("customs client starts at: " + 8082);
+//    }
+//
+//    // agency client
+//    @Profile("agency")
+//    @Bean
+//    public void agencyRunner() {
+//        System.out.println("agency client start at: " + 8083);
+//    }
 }

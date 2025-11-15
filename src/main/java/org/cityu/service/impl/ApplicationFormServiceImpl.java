@@ -73,6 +73,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     @Transactional
     public ApplicationFormModel getApplicationForm(String applicationFormNumber) {
         ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationForm(applicationFormNumber);
+        if (applicationFormDO == null) {
+            return null;
+        }
         ApplicationFormModel applicationFormModel = convertFormApplicationFormDO(applicationFormDO);
         List<InvoiceModel> invoices = invoiceService.getInvoiceByApplicationFormNumber(applicationFormNumber);
         applicationFormModel.setInvoices(invoices);

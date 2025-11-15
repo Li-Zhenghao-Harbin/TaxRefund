@@ -20,6 +20,10 @@ public class BaseController {
     public static final String BUSINESS_INVOICE = "invoice";
     public static final String BUSINESS_APPLICATION_FORM = "application_form";
 
+    public static final String ROLE_MERCHANT = "1";
+    public static final String ROLE_CUSTOMS = "2";
+    public static final String ROLE_AGENCY = "3";
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

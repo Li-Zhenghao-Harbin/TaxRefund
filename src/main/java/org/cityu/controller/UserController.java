@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import static org.cityu.controller.BaseController.CONTENT_TYPE_FORMED;
 
 @RestController
-@RequestMapping("/manager")
+//@RequestMapping("/manager")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
-@ManagerOnly
-public class ManagerController {
+//@ManagerOnly
+public class UserController {
 
     @Autowired
     private UserService userService;
