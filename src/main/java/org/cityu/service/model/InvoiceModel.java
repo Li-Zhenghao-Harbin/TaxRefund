@@ -8,7 +8,8 @@ public class InvoiceModel {
     private Integer id;
     private String invoiceNumber;
     private String sellerTaxId;
-    private BigDecimal amount;
+    private BigDecimal totalAmount;
+    private BigDecimal customsConfirmAmount;
     private Date issueDate;
     private String applicationFormNumber;
     private Integer status;
@@ -38,12 +39,20 @@ public class InvoiceModel {
         this.sellerTaxId = sellerTaxId;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getcustomsConfirmAmount() {
+        return customsConfirmAmount;
+    }
+
+    public void setcustomsConfirmAmount(BigDecimal customsConfirmAmount) {
+        this.customsConfirmAmount = customsConfirmAmount;
     }
 
     public Date getIssueDate() {

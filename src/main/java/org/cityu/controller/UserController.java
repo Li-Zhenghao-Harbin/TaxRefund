@@ -1,6 +1,5 @@
 package org.cityu.controller;
 
-import org.cityu.common.annotation.ManagerOnly;
 import org.cityu.common.utils.JwtTokenUtils;
 import org.cityu.error.BusinessException;
 import org.cityu.error.EmBusinessError;
@@ -11,10 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;

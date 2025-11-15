@@ -7,18 +7,18 @@
     <result column="item_name" jdbcType="VARCHAR" property="itemName" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
     <result column="unit_price" jdbcType="DECIMAL" property="unitPrice" />
-    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <insert id="insert" parameterType="org.cityu.dataobject.ItemDO">
     insert into b_item (id, invoice_number, item_name, 
-      quantity, unit_price, amount
+      quantity, unit_price, status
       )
     values (#{id,jdbcType=INTEGER}, #{invoiceNumber,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
-      #{quantity,jdbcType=INTEGER}, #{unitPrice,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}
+      #{quantity,jdbcType=INTEGER}, #{unitPrice,jdbcType=DECIMAL}, 1
       )
   </insert>
   <select id="getItemByInvoiceNumber" resultMap="BaseResultMap">
-    select item_name, quantity, unit_price, amount
+    select id, item_name, quantity, unit_price, status
     from b_item
     where invoice_number = #{invoiceNumber, jdbcType=VARCHAR}
   </select>

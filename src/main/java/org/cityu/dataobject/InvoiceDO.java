@@ -10,7 +10,9 @@ public class InvoiceDO {
 
     private String sellerTaxId;
 
-    private BigDecimal amount;
+    private BigDecimal totalAmount;
+
+    private BigDecimal customsConfirmAmount;
 
     private Date issueDate;
 
@@ -42,12 +44,20 @@ public class InvoiceDO {
         this.sellerTaxId = sellerTaxId == null ? null : sellerTaxId.trim();
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getcustomsConfirmAmount() {
+        return customsConfirmAmount;
+    }
+
+    public void setcustomsConfirmAmount(BigDecimal customsConfirmAmount) {
+        this.customsConfirmAmount = customsConfirmAmount;
     }
 
     public Date getIssueDate() {

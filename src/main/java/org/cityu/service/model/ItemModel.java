@@ -6,8 +6,8 @@ public class ItemModel {
     private String itemName;
     private Integer quantity;
     private BigDecimal unitPrice;
-    private BigDecimal amount;
     private String invoiceNumber;
+    private Integer status;
 
     public String getItemName() {
         return itemName;
@@ -33,19 +33,19 @@ public class ItemModel {
         this.unitPrice = unitPrice;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

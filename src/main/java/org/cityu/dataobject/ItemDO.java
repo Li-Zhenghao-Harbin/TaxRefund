@@ -13,7 +13,7 @@ public class ItemDO {
 
     private BigDecimal unitPrice;
 
-    private BigDecimal amount;
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -55,11 +55,11 @@ public class ItemDO {
         this.unitPrice = unitPrice;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

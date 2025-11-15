@@ -43,7 +43,6 @@ public class ApplicationFormController {
         applicationFormModel.setApplicantId(applicantId);
         applicationFormModel.setApplicantCountry(applicantCountry);
         applicationFormModel.setTotalAmount(totalAmount);
-        applicationFormModel.setCustomsConfirmAmount(new BigDecimal(0));
         applicationFormModel.setInvoices(invoices);
         applicationFormModel.setIssueDate(CommonUtils.getCurrentDate());
         applicationFormModel.setIssueMerchantId(issueMerchantId);
@@ -51,7 +50,7 @@ public class ApplicationFormController {
         return CommonReturnType.create(null);
     }
 
-    private List<InvoiceModel> getInvoicesFromJson(JsonNode jsonNode) throws ParseException {
+    private List<InvoiceModel> getInvoicesFromJson(JsonNode jsonNode) {
         List<InvoiceModel> invoices = new ArrayList<>();
         if (jsonNode != null && jsonNode.isArray()) {
             for (JsonNode invoiceNode : jsonNode) {
