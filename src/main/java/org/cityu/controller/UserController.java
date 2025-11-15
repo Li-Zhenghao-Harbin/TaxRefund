@@ -1,6 +1,7 @@
 package org.cityu.controller;
 
 import org.cityu.common.annotation.ManagerOnly;
+import org.cityu.common.utils.JwtTokenUtils;
 import org.cityu.error.BusinessException;
 import org.cityu.error.EmBusinessError;
 import org.cityu.response.CommonReturnType;
@@ -15,6 +16,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.cityu.controller.BaseController.CONTENT_TYPE_FORMED;
 
@@ -28,13 +31,9 @@ public class UserController {
     @Autowired
     private HttpServletRequest httpServletRequest;
 
-    /**
-     * Create account
-     * @param name
-     * @param password
-     * @param role
-     * @return
-     */
+    @Autowired
+    private JwtTokenUtils jwtTokenUtils;
+
     @RequestMapping(value = "/register", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
     public CommonReturnType register(@RequestParam(name = "name") String name,
@@ -51,11 +50,6 @@ public class UserController {
         return CommonReturnType.create(null);
     }
 
-    /**
-     * Get User Information
-     * @param id
-     * @return
-     */
     @RequestMapping(value = "/getUser", method = {RequestMethod.GET})
     @ResponseBody
     public CommonReturnType getUser(@RequestParam(name = "id") Integer id) {
@@ -63,11 +57,6 @@ public class UserController {
         return CommonReturnType.create(userModel);
     }
 
-    /**
-     * Change account information
-     * @param id
-     * @return
-     */
     @RequestMapping(value = "/changeUserInfo", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
     public CommonReturnType changeUserInfo(@RequestParam(name = "id") Integer id,
@@ -85,15 +74,6 @@ public class UserController {
         return CommonReturnType.create(null);
     }
 
-    /**
-     * User login
-     * @param name
-     * @param password
-     * @return
-     * @throws BusinessException
-     * @throws UnsupportedEncodingException
-     * @throws NoSuchAlgorithmException
-     */
     @RequestMapping(value = "/login", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
     public CommonReturnType login(@RequestParam(name = "name") String name,
@@ -103,16 +83,14 @@ public class UserController {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
         }
         UserModel userModel = userService.validateLogin(name, encode(password));
-        this.httpServletRequest.getSession().setAttribute("IS_LOGIN", true);
-        this.httpServletRequest.getSession().setAttribute("LOGIN_USER", userModel);
-        return CommonReturnType.create(userModel);
+        // generate token
+        String token = jwtTokenUtils.generateToken(userModel.getId(), userModel.getRole());
+        Map<String, Object> result = new HashMap<>();
+        result.put("user", userModel);
+        result.put("token", token);
+        return CommonReturnType.create(result);
     }
 
-    /**
-     * Encode
-     * @param str
-     * @return encoded string
-     */
     public String encode(String str) {
         return Base64.getEncoder().encodeToString(str.getBytes());
     }
