@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.cityu.common.annotation.RequireRole;
 import org.cityu.service.model.UserModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -13,12 +14,16 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 @Aspect
 @Component
 public class RoleAccessAspect {
+
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     @Before("@annotation(org.cityu.common.annotation.RequireRole)")
     public void checkRoleAccess(JoinPoint joinPoint) {
@@ -47,13 +52,10 @@ public class RoleAccessAspect {
     private Integer getCurrentUserRole() {
         // get role from session
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        UserModel role = (UserModel) request.getSession().getAttribute("role");
+        UserModel role = (UserModel) request.getSession().getAttribute("LOGIN_USER");
         if (role != null) {
             return role.getRole();
         }
-//        return null;
-        // TODO
-        // debug
-        return new Integer(3);
+        return null;
     }
 }

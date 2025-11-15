@@ -13,4 +13,6 @@ public interface UserMapper {
     List<UserDO> selectAll();
 
     int updateByPrimaryKey(UserDO record);
+
+    UserDO selectByName(String name);
 }

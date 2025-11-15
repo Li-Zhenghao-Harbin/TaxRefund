@@ -3,7 +3,8 @@ package org.cityu.error;
 public enum EmBusinessError implements CommonError {
     PARAMETER_VALIDATION_ERROR(10000, "Parameters illegal"),
     UNKNOWN_ERROR(10001, "Unknown error"),
-    INVOICE_STATUS_IMPROPER(20001, "improper invoice status");
+    USER_LOGIN_FAIL(20000, "Failed to login"),
+    INVOICE_STATUS_IMPROPER(30001, "Improper invoice status");
     ;
 
     private EmBusinessError(int errorCode, String errorMessage) {

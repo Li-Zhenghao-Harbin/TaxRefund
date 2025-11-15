@@ -3,7 +3,7 @@ package org.cityu.dataobject;
 public class SellerDO {
     private Integer id;
 
-    private String merchantId;
+    private String merchantName;
 
     private String sellerTaxId;
 
@@ -15,12 +15,12 @@ public class SellerDO {
         this.id = id;
     }
 
-    public String getMerchantId() {
-        return merchantId;
+    public String getMerchantName() {
+        return merchantName;
     }
 
-    public void setMerchantId(String merchantId) {
-        this.merchantId = merchantId == null ? null : merchantId.trim();
+    public void setMerchantName(String merchantName) {
+        this.merchantName = merchantName == null ? null : merchantName.trim();
     }
 
     public String getSellerTaxId() {

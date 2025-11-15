@@ -1,22 +1,32 @@
 package org.cityu.controller;
 
 import org.cityu.common.annotation.ManagerOnly;
+import org.cityu.error.BusinessException;
+import org.cityu.error.EmBusinessError;
 import org.cityu.response.CommonReturnType;
 import org.cityu.service.UserService;
 import org.cityu.service.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
 import static org.cityu.controller.BaseController.CONTENT_TYPE_FORMED;
 
 @RestController
-//@RequestMapping("/manager")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
-//@ManagerOnly
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     /**
      * Create account
@@ -33,7 +43,7 @@ public class UserController {
                                      @RequestParam(name = "sellerTaxId") String sellerTaxId) {
         UserModel userModel = new UserModel();
         userModel.setName(name);
-        userModel.setPassword(password);
+        userModel.setPassword(encode(password));
         userModel.setRole(role);
         userModel.setAvailable(1);
         userModel.setSellerTaxId(sellerTaxId);
@@ -73,5 +83,37 @@ public class UserController {
         userModel.setAvailable(available);
         userService.changeUserInfo(userModel);
         return CommonReturnType.create(null);
+    }
+
+    /**
+     * User login
+     * @param name
+     * @param password
+     * @return
+     * @throws BusinessException
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
+    @RequestMapping(value = "/login", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
+    @ResponseBody
+    public CommonReturnType login(@RequestParam(name = "name") String name,
+                                  @RequestParam(name = "password") String password,
+                                  HttpServletRequest request) throws BusinessException {
+        if (name.isEmpty() || password.isEmpty()) {
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
+        }
+        UserModel userModel = userService.validateLogin(name, encode(password));
+        this.httpServletRequest.getSession().setAttribute("IS_LOGIN", true);
+        this.httpServletRequest.getSession().setAttribute("LOGIN_USER", userModel);
+        return CommonReturnType.create(userModel);
+    }
+
+    /**
+     * Encode
+     * @param str
+     * @return encoded string
+     */
+    public String encode(String str) {
+        return Base64.getEncoder().encodeToString(str.getBytes());
     }
 }

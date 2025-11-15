@@ -35,4 +35,9 @@
     select id, name, password, role, available
     from b_user
   </select>
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, name, password, role, available
+    from b_user
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
 </mapper>

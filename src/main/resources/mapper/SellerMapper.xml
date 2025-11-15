@@ -3,7 +3,7 @@
 <mapper namespace="org.cityu.dao.SellerMapper">
   <resultMap id="BaseResultMap" type="org.cityu.dataobject.SellerDO">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
     <result column="seller_tax_id" jdbcType="VARCHAR" property="sellerTaxId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -11,24 +11,24 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="org.cityu.dataobject.SellerDO">
-    insert into b_seller (id, merchant_id, seller_tax_id
+    insert into b_seller (id, merchant_name, seller_tax_id
       )
-    values (#{id,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, #{sellerTaxId,jdbcType=VARCHAR}
+    values (#{id,jdbcType=INTEGER}, #{merchantName,jdbcType=VARCHAR}, #{sellerTaxId,jdbcType=VARCHAR}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="org.cityu.dataobject.SellerDO">
     update b_seller
-    set merchant_id = #{merchantId,jdbcType=VARCHAR},
+    set merchant_name = #{merchantName,jdbcType=VARCHAR},
       seller_tax_id = #{sellerTaxId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, merchant_id, seller_tax_id
+    select id, merchant_name, seller_tax_id
     from b_seller
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, merchant_id, seller_tax_id
+    select id, merchant_name, seller_tax_id
     from b_seller
   </select>
 </mapper>
