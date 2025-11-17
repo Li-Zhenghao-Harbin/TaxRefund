@@ -5,6 +5,8 @@ import org.cityu.dao.ItemMapper;
 import org.cityu.dao.SequenceMapper;
 import org.cityu.dataobject.InvoiceDO;
 import org.cityu.dataobject.ItemDO;
+import org.cityu.error.BusinessException;
+import org.cityu.error.EmBusinessError;
 import org.cityu.service.InvoiceService;
 import org.cityu.service.model.InvoiceModel;
 import org.cityu.service.model.ItemModel;
@@ -48,9 +50,12 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    @Transactional
-    public List<InvoiceModel> getInvoiceByApplicationFormNumber(String applicationFormNumber) {
+    @Transactional(rollbackFor =  Exception.class)
+    public List<InvoiceModel> getInvoiceByApplicationFormNumber(String applicationFormNumber) throws BusinessException {
         List<InvoiceDO> invoiceDOs = invoiceMapper.getInvoiceByApplicationFormNumber(applicationFormNumber);
+        if (invoiceDOs.isEmpty()) {
+            throw new BusinessException(EmBusinessError.INVOICE_NOT_EXIST);
+        }
         List<InvoiceModel> invoiceModels = convertFromInvoiceDOList(invoiceDOs);
         for (InvoiceModel invoiceModel : invoiceModels) {
             String invoiceNumber = invoiceModel.getInvoiceNumber();
@@ -71,9 +76,13 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    @Transactional
-    public InvoiceModel getInvoiceByInvoiceNumber(String invoiceNumber) {
-        InvoiceModel invoiceModel = convertFromInvoiceDO(invoiceMapper.getInvoiceByInvoiceNumber(invoiceNumber));
+    @Transactional(rollbackFor =  Exception.class)
+    public InvoiceModel getInvoiceByInvoiceNumber(String invoiceNumber) throws BusinessException {
+        InvoiceDO invoiceDO = invoiceMapper.getInvoiceByInvoiceNumber(invoiceNumber);
+        if (invoiceDO == null) {
+            throw new BusinessException(EmBusinessError.INVOICE_NOT_EXIST);
+        }
+        InvoiceModel invoiceModel = convertFromInvoiceDO(invoiceDO);
         List<ItemModel> items = convertFromItemDOList(itemMapper.getItemByInvoiceNumber(invoiceNumber));
         invoiceModel.setItems(items);
         return invoiceModel;

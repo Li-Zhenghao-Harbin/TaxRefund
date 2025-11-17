@@ -22,6 +22,7 @@ import static org.cityu.common.utils.JsonUtils.*;
 import static org.cityu.controller.BaseController.*;
 
 @RestController
+@RequestMapping("/applicationForm")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
 public class ApplicationFormController {
     @Autowired
@@ -56,7 +57,7 @@ public class ApplicationFormController {
     @RequestMapping(value = "/getApplicationForm", method = {RequestMethod.GET})
     @ResponseBody
     @RequireRole({ROLE_MERCHANT, ROLE_CUSTOMS})
-    public CommonReturnType getApplicationForm(@RequestParam(name = "applicationFormNumber") String applicationFormNumber) {
+    public CommonReturnType getApplicationForm(@RequestParam(name = "applicationFormNumber") String applicationFormNumber) throws BusinessException {
         ApplicationFormModel applicationFormModel = applicationFormService.getApplicationForm(applicationFormNumber);
         return CommonReturnType.create(applicationFormModel);
     }

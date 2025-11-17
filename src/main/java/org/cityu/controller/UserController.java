@@ -17,6 +17,7 @@ import java.util.Map;
 import static org.cityu.controller.BaseController.CONTENT_TYPE_FORMED;
 
 @RestController
+@RequestMapping("/user")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
 public class UserController {
 
@@ -72,8 +73,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
     public CommonReturnType login(@RequestParam(name = "name") String name,
-                                  @RequestParam(name = "password") String password,
-                                  HttpServletRequest request) throws BusinessException {
+                                  @RequestParam(name = "password") String password) throws BusinessException {
         if (name.isEmpty() || password.isEmpty()) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
         }

@@ -21,7 +21,7 @@
       #{issueMerchantId,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL}, 1)
   </insert>
   <select id="getApplicationForm" resultMap="BaseResultMap">
-    select applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_id, status
+    select id, application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_id, status
     from b_application_form
     where application_form_number = #{applicationFormNumber, jdbcType=VARCHAR}
   </select>

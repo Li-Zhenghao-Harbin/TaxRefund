@@ -76,11 +76,11 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     }
 
     @Override
-    @Transactional
-    public ApplicationFormModel getApplicationForm(String applicationFormNumber) {
+    @Transactional(rollbackFor = Exception.class)
+    public ApplicationFormModel getApplicationForm(String applicationFormNumber) throws BusinessException {
         ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationForm(applicationFormNumber);
         if (applicationFormDO == null) {
-            return null;
+            throw new BusinessException(EmBusinessError.APPLICATION_FORM_NOT_EXIST);
         }
         ApplicationFormModel applicationFormModel = convertFormApplicationFormDO(applicationFormDO);
         List<InvoiceModel> invoices = invoiceService.getInvoiceByApplicationFormNumber(applicationFormNumber);
@@ -89,8 +89,12 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void reviewApplicationForm(String applicationFormNumber, List<ItemModel> items) throws BusinessException {
+        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationForm(applicationFormNumber);
+        if (applicationFormDO == null) {
+            throw new BusinessException(EmBusinessError.APPLICATION_FORM_NOT_EXIST);
+        }
         for (ItemModel itemModel : items) {
             itemMapper.updateItemStatus(itemModel.getId(), -1);
         }

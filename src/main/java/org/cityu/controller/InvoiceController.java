@@ -3,6 +3,7 @@ package org.cityu.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.cityu.common.annotation.RequireRole;
 import org.cityu.common.utils.CommonUtils;
+import org.cityu.error.BusinessException;
 import org.cityu.response.CommonReturnType;
 import org.cityu.service.InvoiceService;
 import org.cityu.service.model.InvoiceModel;
@@ -18,6 +19,7 @@ import static org.cityu.common.utils.JsonUtils.getItemsFromJson;
 import static org.cityu.controller.BaseController.*;
 
 @RestController
+@RequestMapping("/invoice")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
 public class InvoiceController {
 
@@ -47,7 +49,7 @@ public class InvoiceController {
     @RequestMapping(value = "/getInvoiceByInvoiceNumber", method = {RequestMethod.GET})
     @ResponseBody
     @RequireRole({ROLE_MERCHANT, ROLE_CUSTOMS})
-    public CommonReturnType getInvoiceByInvoiceNumber(@RequestParam(name = "invoiceNumber") String invoiceNumber) {
+    public CommonReturnType getInvoiceByInvoiceNumber(@RequestParam(name = "invoiceNumber") String invoiceNumber) throws BusinessException {
         InvoiceModel invoiceModel = invoiceService.getInvoiceByInvoiceNumber(invoiceNumber);
         return CommonReturnType.create(invoiceModel);
     }
