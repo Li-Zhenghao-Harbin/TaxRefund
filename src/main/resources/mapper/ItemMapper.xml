@@ -20,6 +20,11 @@
   <select id="getItemByInvoiceNumber" resultMap="BaseResultMap">
     select id, item_name, quantity, unit_price, status
     from b_item
-    where invoice_number = #{invoiceNumber, jdbcType=VARCHAR}
+    where invoice_number = #{invoiceNumber,jdbcType=VARCHAR}
   </select>
+  <update id="updateItemStatus">
+    update b_item
+    set status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

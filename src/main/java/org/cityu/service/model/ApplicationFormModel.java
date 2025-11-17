@@ -14,6 +14,7 @@ public class ApplicationFormModel {
     private String issueMerchantId;
     private BigDecimal totalAmount;
     private BigDecimal customsConfirmAmount;
+    private Integer status;
     private List<InvoiceModel> invoices;
 
     public Integer getId() {
@@ -94,5 +95,13 @@ public class ApplicationFormModel {
 
     public void setInvoices(List<InvoiceModel> invoices) {
         this.invoices = invoices;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

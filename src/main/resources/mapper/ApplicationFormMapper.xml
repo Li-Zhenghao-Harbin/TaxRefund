@@ -15,14 +15,25 @@
   <insert id="insert" parameterType="org.cityu.dataobject.ApplicationFormDO">
     insert into b_application_form (id, application_form_number, applicant_name, 
       applicant_id, applicant_country, issue_date, issue_merchant_id,
-      total_amount, customs_confirm_amount)
+      total_amount, customs_confirm_amount, status)
     values (#{id,jdbcType=INTEGER}, #{applicationFormNumber,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR}, 
       #{applicantId,jdbcType=VARCHAR}, #{applicantCountry,jdbcType=VARCHAR}, #{issueDate,jdbcType=TIMESTAMP},
-      #{issueMerchantId,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL})
+      #{issueMerchantId,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL}, 1)
   </insert>
   <select id="getApplicationForm" resultMap="BaseResultMap">
-    select applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_id
+    select applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_id, status
     from b_application_form
     where application_form_number = #{applicationFormNumber, jdbcType=VARCHAR}
   </select>
+  <update id="updateReviewedApplicationForm">
+    update b_application_form
+    set status = #{status,jdbcType=INTEGER}, customs_confirm_amount = (
+      SELECT sum(unit_price * quantity)
+      FROM b_application_form a
+      LEFT JOIN b_invoice b ON a.application_form_number = b.application_form_number
+      LEFT JOIN b_item i ON b.invoice_number = i.invoice_number
+      WHERE i.STATUS = 1;
+    )
+    where application_form_number = #{applicationFormNumber, jdbcType=VARCHAR}
+  </update>
 </mapper>

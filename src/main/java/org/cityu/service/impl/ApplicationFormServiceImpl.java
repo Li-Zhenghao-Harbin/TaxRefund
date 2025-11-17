@@ -2,6 +2,7 @@ package org.cityu.service.impl;
 
 import org.cityu.dao.ApplicationFormMapper;
 import org.cityu.dao.InvoiceMapper;
+import org.cityu.dao.ItemMapper;
 import org.cityu.dao.SequenceMapper;
 import org.cityu.dataobject.ApplicationFormDO;
 import org.cityu.dataobject.InvoiceDO;
@@ -11,12 +12,14 @@ import org.cityu.service.ApplicationFormService;
 import org.cityu.service.InvoiceService;
 import org.cityu.service.model.ApplicationFormModel;
 import org.cityu.service.model.InvoiceModel;
+import org.cityu.service.model.ItemModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +41,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Autowired
     private InvoiceService invoiceService;
+
+    @Autowired
+    private ItemMapper itemMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -80,6 +86,15 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         List<InvoiceModel> invoices = invoiceService.getInvoiceByApplicationFormNumber(applicationFormNumber);
         applicationFormModel.setInvoices(invoices);
         return applicationFormModel;
+    }
+
+    @Override
+    @Transactional
+    public void reviewApplicationForm(String applicationFormNumber, List<ItemModel> items) throws BusinessException {
+        for (ItemModel itemModel : items) {
+            itemMapper.updateItemStatus(itemModel.getId(), -1);
+        }
+        applicationFormMapper.updateReviewedApplicationForm(applicationFormNumber, 2);
     }
 
     private ApplicationFormModel convertFormApplicationFormDO(ApplicationFormDO applicationFormDO) {

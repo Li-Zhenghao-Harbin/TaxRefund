@@ -22,6 +22,8 @@ public class ApplicationFormDO {
 
     private BigDecimal customsConfirmAmount;
 
+    private Integer status;
+
     public Integer getId() {
         return id;
     }
@@ -92,5 +94,13 @@ public class ApplicationFormDO {
 
     public void setCustomsConfirmAmount(BigDecimal customsConfirmAmount) {
         this.customsConfirmAmount = customsConfirmAmount;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

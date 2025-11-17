@@ -3,11 +3,20 @@ package org.cityu.service.model;
 import java.math.BigDecimal;
 
 public class ItemModel {
+    private Integer id;
     private String itemName;
     private Integer quantity;
     private BigDecimal unitPrice;
     private String invoiceNumber;
     private Integer status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getItemName() {
         return itemName;
