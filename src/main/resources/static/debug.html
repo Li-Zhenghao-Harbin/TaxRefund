@@ -1,0 +1,106 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="js/jquery-1.11.0.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="clear:both;">
+    <button id="login" type="submit">登录</button>
+    <button id="queryInvoice" type="submit">查询发票</button>
+</div>
+</body>
+<script>
+    jQuery(document).ready(function() {
+        // 登录功能
+        $("#login").on("click", function(){
+            var name = "debug"; // $("#telephone").val();
+            var password = "123"; // $("#password").val();
+
+            if (name == null || name == "") {
+                alert("user name can not be null");
+                return;
+            }
+            if (password == null || password == "") {
+                alert("password can not be null");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                url: "http://localhost:8081/user/login",
+                data: {
+                    "name": name,
+                    "password": password,
+                },
+                xhrFields: { withCredentials: true },
+                success: function(data) {
+                    if (data.status == "success") {
+                        // 保存token到localStorage
+                        var token = data.data.token;
+                        localStorage.setItem("auth_token", token);
+                        alert("登录成功！Token已保存");
+
+                        // 也可以保存用户信息（可选）
+                        localStorage.setItem("user_info", JSON.stringify(data.data.user));
+                    } else {
+                        alert("登录失败：" + (data.data.errorMessage || "未知错误"));
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("登录失败：" + (xhr.responseText || error));
+                }
+            });
+            return false;
+        });
+
+        // 查询发票功能
+        $("#queryInvoice").on("click", function(){
+            var invoiceNumber = "2025101100000001";
+
+            // 从localStorage获取token
+            var token = localStorage.getItem("auth_token");
+
+            if (!token) {
+                alert("请先登录！");
+                return;
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8081/invoice/getInvoiceByInvoiceNumber",
+                data: {
+                    "invoiceNumber": invoiceNumber
+                },
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                xhrFields: { withCredentials: true },
+                success: function(data) {
+                    if (data.status == "success") {
+                        alert("查询成功！发票数据：" + JSON.stringify(data.data));
+                        // 在这里处理返回的发票数据
+                        console.log("发票信息:", data.data);
+                    } else {
+                        alert("查询失败：" + (data.data.errorMessage || "未知错误"));
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errorMsg = "查询失败：";
+                    if (xhr.status === 401) {
+                        errorMsg += "未授权，请重新登录";
+                        // 清除无效的token
+                        localStorage.removeItem("auth_token");
+                    } else if (xhr.status === 403) {
+                        errorMsg += "权限不足，无法访问";
+                    } else {
+                        errorMsg += (xhr.responseText || error);
+                    }
+                    alert(errorMsg);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</html>
