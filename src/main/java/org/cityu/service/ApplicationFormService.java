@@ -10,5 +10,5 @@ import java.util.List;
 public interface ApplicationFormService {
     void createApplicationForm(ApplicationFormModel applicationFormModel) throws BusinessException;
     ApplicationFormModel getApplicationForm(String applicationFormNumber) throws BusinessException;
-    void reviewApplicationForm(String applicationFormNumber, List<ItemModel> items) throws BusinessException;
+    void reviewApplicationForm(String applicationFormNumber, List<ItemModel> rejectedItems) throws BusinessException;
 }

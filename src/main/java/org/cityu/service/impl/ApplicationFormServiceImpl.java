@@ -6,6 +6,7 @@ import org.cityu.dao.ItemMapper;
 import org.cityu.dao.SequenceMapper;
 import org.cityu.dataobject.ApplicationFormDO;
 import org.cityu.dataobject.InvoiceDO;
+import org.cityu.dataobject.ItemDO;
 import org.cityu.error.BusinessException;
 import org.cityu.error.EmBusinessError;
 import org.cityu.service.ApplicationFormService;
@@ -16,17 +17,15 @@ import org.cityu.service.model.ItemModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.cityu.common.utils.CommonUtils.generateApplicationFormNumber;
-import static org.cityu.common.utils.CommonUtils.generateInvoiceNumber;
 import static org.cityu.controller.BaseController.BUSINESS_APPLICATION_FORM;
-import static org.cityu.controller.BaseController.BUSINESS_INVOICE;
 
 @Service
 public class ApplicationFormServiceImpl implements ApplicationFormService {
@@ -67,7 +66,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         for (InvoiceModel invoiceModel : invoices) {
             // check invoice
             if (invoiceModel.getStatus() != 1) {
-                throw new BusinessException(EmBusinessError.INVOICE_STATUS_IMPROPER);
+                throw new BusinessException(EmBusinessError.IMPROPER_INVOICE_STATUS);
             }
             invoiceNumbers.add(invoiceModel.getInvoiceNumber());
         }
@@ -90,15 +89,29 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void reviewApplicationForm(String applicationFormNumber, List<ItemModel> items) throws BusinessException {
+    public void reviewApplicationForm(String applicationFormNumber, List<ItemModel> rejectedItems) throws BusinessException {
         ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationForm(applicationFormNumber);
         if (applicationFormDO == null) {
             throw new BusinessException(EmBusinessError.APPLICATION_FORM_NOT_EXIST);
         }
-        for (ItemModel itemModel : items) {
+        List<InvoiceDO> invoiceDOs = invoiceMapper.getInvoiceByApplicationFormNumber(applicationFormNumber);
+        // approve items
+        for (InvoiceDO invoiceDO : invoiceDOs) {
+            List<ItemDO> itemDOs = itemMapper.getItemByInvoiceNumber(invoiceDO.getInvoiceNumber());
+            for (ItemDO itemDO : itemDOs) {
+                // check item status
+                if (itemDO.getStatus() != 1) {
+                    throw new BusinessException(EmBusinessError.IMPROPER_APPLICATION_STATUS);
+                }
+                itemMapper.updateItemStatus(itemDO.getId(), 2);
+            }
+        }
+        // reject items
+        for (ItemModel itemModel : rejectedItems) {
             itemMapper.updateItemStatus(itemModel.getId(), -1);
         }
-        applicationFormMapper.updateReviewedApplicationForm(applicationFormNumber, 2);
+        BigDecimal customsConfirmAmount = applicationFormMapper.calculateCustomsConfirmAmount(applicationFormNumber);
+        applicationFormMapper.updateReviewedApplicationForm(applicationFormNumber, customsConfirmAmount, 2);
     }
 
     private ApplicationFormModel convertFormApplicationFormDO(ApplicationFormDO applicationFormDO) {

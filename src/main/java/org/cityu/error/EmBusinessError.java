@@ -6,9 +6,10 @@ public enum EmBusinessError implements CommonError {
     USER_LOGIN_FAIL(20000, "Failed to login"),
     // invoice
     INVOICE_NOT_EXIST(30000, "Invoice not exist"),
-    INVOICE_STATUS_IMPROPER(30001, "Improper invoice status"),
+    IMPROPER_INVOICE_STATUS(30001, "Improper invoice status"),
     // application form
-    APPLICATION_FORM_NOT_EXIST(40000, "Application form not exist")
+    APPLICATION_FORM_NOT_EXIST(40000, "Application form not exist"),
+    IMPROPER_APPLICATION_STATUS(40001, "Improper application status")
     ;
 
     private EmBusinessError(int errorCode, String errorMessage) {

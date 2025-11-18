@@ -23,17 +23,21 @@
   <select id="getApplicationForm" resultMap="BaseResultMap">
     select id, application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_id, status
     from b_application_form
-    where application_form_number = #{applicationFormNumber, jdbcType=VARCHAR}
+    where application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
   </select>
   <update id="updateReviewedApplicationForm">
     update b_application_form
-    set status = #{status,jdbcType=INTEGER}, customs_confirm_amount = (
-      SELECT sum(unit_price * quantity)
-      FROM b_application_form a
-      LEFT JOIN b_invoice b ON a.application_form_number = b.application_form_number
-      LEFT JOIN b_item i ON b.invoice_number = i.invoice_number
-      WHERE i.STATUS = 1;
-    )
-    where application_form_number = #{applicationFormNumber, jdbcType=VARCHAR}
+    set status = 2, customs_confirm_amount = #{customsConfirmAmount,jdbcType=DECIMAL}
+    where application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
   </update>
+  <select id="calculateCustomsConfirmAmount" resultType="java.math.BigDecimal">
+    select sum(t.quantity * t.unit_price) customs_confirm_amount from
+    (
+      select i.unit_price, i.quantity, i.status st, b.application_form_number
+      from b_invoice b, b_item i
+      where b.invoice_number = i.invoice_number
+    ) t
+    where t.application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
+    limit 1
+  </select>
 </mapper>
