@@ -6,17 +6,16 @@
     <result column="invoice_number" jdbcType="VARCHAR" property="invoiceNumber" />
     <result column="seller_tax_id" jdbcType="VARCHAR" property="sellerTaxId" />
     <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
-    <result column="customs_confirm_amount" jdbcType="DECIMAL" property="customsConfirmAmount" />
     <result column="issue_date" jdbcType="TIMESTAMP" property="issueDate" />
     <result column="application_form_number" jdbcType="VARCHAR" property="applicationFormNumber" />
     <result column="status" jdbcType="BIT" property="status" />
   </resultMap>
   <insert id="insert" parameterType="org.cityu.dataobject.InvoiceDO">
     insert into b_invoice (id, invoice_number, seller_tax_id, 
-      total_amount, customs_confirm_amount, issue_date, application_form_number,
+      total_amount, issue_date, application_form_number,
       status)
     values (#{id,jdbcType=INTEGER}, #{invoiceNumber,jdbcType=VARCHAR}, #{sellerTaxId,jdbcType=VARCHAR}, 
-      #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL}, #{issueDate,jdbcType=TIMESTAMP}, #{applicationFormNumber,jdbcType=VARCHAR},
+      #{totalAmount,jdbcType=DECIMAL}, #{issueDate,jdbcType=TIMESTAMP}, #{applicationFormNumber,jdbcType=VARCHAR},
       #{status,jdbcType=BIT})
   </insert>
   <update id="updateInvoiceToRelatedApplicationForm">
@@ -28,12 +27,12 @@
     </foreach>
   </update>
   <select id="getInvoiceByApplicationFormNumber" resultMap="BaseResultMap">
-    select invoice_number, seller_tax_id, total_amount, customs_confirm_amount, issue_date, status
+    select invoice_number, seller_tax_id, total_amount, issue_date, status
     from b_invoice
     where application_form_number = #{applicationFormNumber, jdbcType=VARCHAR}
   </select>
   <select id="getInvoiceByInvoiceNumber" resultMap="BaseResultMap">
-    select invoice_number, seller_tax_id, total_amount, customs_confirm_amount, issue_date, status
+    select invoice_number, seller_tax_id, total_amount, issue_date, status
     from b_invoice
     where invoice_number = #{invoiceNumber, jdbcType=VARCHAR}
   </select>

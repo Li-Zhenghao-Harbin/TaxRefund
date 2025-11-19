@@ -12,8 +12,6 @@ public class InvoiceDO {
 
     private BigDecimal totalAmount;
 
-    private BigDecimal customsConfirmAmount;
-
     private Date issueDate;
 
     private String applicationFormNumber;
@@ -50,14 +48,6 @@ public class InvoiceDO {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
-    }
-
-    public BigDecimal getcustomsConfirmAmount() {
-        return customsConfirmAmount;
-    }
-
-    public void setcustomsConfirmAmount(BigDecimal customsConfirmAmount) {
-        this.customsConfirmAmount = customsConfirmAmount;
     }
 
     public Date getIssueDate() {

@@ -9,7 +9,6 @@ public class InvoiceModel {
     private String invoiceNumber;
     private String sellerTaxId;
     private BigDecimal totalAmount;
-    private BigDecimal customsConfirmAmount;
     private Date issueDate;
     private String applicationFormNumber;
     private Integer status;
@@ -45,14 +44,6 @@ public class InvoiceModel {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
-    }
-
-    public BigDecimal getcustomsConfirmAmount() {
-        return customsConfirmAmount;
-    }
-
-    public void setcustomsConfirmAmount(BigDecimal customsConfirmAmount) {
-        this.customsConfirmAmount = customsConfirmAmount;
     }
 
     public Date getIssueDate() {
