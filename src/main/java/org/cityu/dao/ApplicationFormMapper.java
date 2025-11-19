@@ -3,7 +3,6 @@ package org.cityu.dao;
 import org.cityu.dataobject.ApplicationFormDO;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 public interface ApplicationFormMapper {
     int insert(ApplicationFormDO record);

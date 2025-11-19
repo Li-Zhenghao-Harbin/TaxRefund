@@ -32,13 +32,10 @@ public class InvoiceController {
     public CommonReturnType createInvoice(@RequestBody JsonNode jsonNode) {
         String invoiceNumber = "";  // generate invoice number later in service
         String sellerTaxId = jsonNode.get("sellerTaxId").asText();
-        BigDecimal totalAmount = jsonNode.get("totalAmount").decimalValue();
-
         List<ItemModel> items = getItemsFromJson(jsonNode.get("items"));
         InvoiceModel invoiceModel = new InvoiceModel();
         invoiceModel.setInvoiceNumber(invoiceNumber);
         invoiceModel.setSellerTaxId(sellerTaxId);
-        invoiceModel.setTotalAmount(totalAmount);
         invoiceModel.setIssueDate(CommonUtils.getCurrentDate());
         invoiceModel.setStatus(1);
         invoiceModel.setItems(items);

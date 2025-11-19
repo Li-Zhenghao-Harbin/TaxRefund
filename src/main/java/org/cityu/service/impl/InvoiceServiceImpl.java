@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +40,19 @@ public class InvoiceServiceImpl implements InvoiceService {
         int invoiceNumberSeries = sequenceMapper.getCurrentValue(BUSINESS_INVOICE);
         sequenceMapper.updateCurrentValue(BUSINESS_INVOICE);
         String invoiceNumber = generateInvoiceNumber(invoiceNumberSeries);
-        // reset invoice number
-        invoiceModel.setInvoiceNumber(invoiceNumber);
-        InvoiceDO invoiceDO = convertFromInvoiceModel(invoiceModel);
-        invoiceMapper.insert(invoiceDO);
+        // set items
+        BigDecimal totalAmount = new BigDecimal(0);
         for (ItemModel itemModel : invoiceModel.getItems()) {
             itemModel.setInvoiceNumber(invoiceNumber);
             itemMapper.insert(convertFromItemModel(itemModel));
+            // calculate total amount
+            totalAmount = totalAmount.add(itemModel.getUnitPrice().multiply(BigDecimal.valueOf(itemModel.getQuantity())));
         }
+        // reset invoice number
+        invoiceModel.setInvoiceNumber(invoiceNumber);
+        InvoiceDO invoiceDO = convertFromInvoiceModel(invoiceModel);
+        invoiceDO.setTotalAmount(totalAmount);
+        invoiceMapper.insert(invoiceDO);
     }
 
     @Override
