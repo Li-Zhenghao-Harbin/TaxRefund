@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel getUserById(Integer id) {
-        UserDO userDO = userMapper.selectByPrimaryKey(id);
+        UserDO userDO = userMapper.getUserById(id);
         return convertFromUserDO(userDO);
     }
 

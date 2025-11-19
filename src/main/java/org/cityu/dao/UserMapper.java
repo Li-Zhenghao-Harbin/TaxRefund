@@ -15,4 +15,6 @@ public interface UserMapper {
     int updateByPrimaryKey(UserDO record);
 
     UserDO selectByName(String name);
+
+    UserDO getUserById(Integer id);
 }

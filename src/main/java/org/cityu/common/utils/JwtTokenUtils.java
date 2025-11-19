@@ -43,6 +43,11 @@ public class JwtTokenUtils {
                 .compact();
     }
 
+    public Integer getUserIdFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.get("userId", Integer.class);
+    }
+
     public Integer getRoleFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
         return claims.get("role", Integer.class);

@@ -31,11 +31,11 @@ public class InvoiceController {
     @RequireRole({ROLE_MERCHANT})
     public CommonReturnType createInvoice(@RequestBody JsonNode jsonNode) {
         String invoiceNumber = "";  // generate invoice number later in service
-        String sellerTaxId = jsonNode.get("sellerTaxId").asText();
+//        String sellerTaxId = jsonNode.get("sellerTaxId").asText();
         List<ItemModel> items = getItemsFromJson(jsonNode.get("items"));
         InvoiceModel invoiceModel = new InvoiceModel();
         invoiceModel.setInvoiceNumber(invoiceNumber);
-        invoiceModel.setSellerTaxId(sellerTaxId);
+//        invoiceModel.setSellerTaxId(sellerTaxId);
         invoiceModel.setIssueDate(CommonUtils.getCurrentDate());
         invoiceModel.setStatus(1);
         invoiceModel.setItems(items);

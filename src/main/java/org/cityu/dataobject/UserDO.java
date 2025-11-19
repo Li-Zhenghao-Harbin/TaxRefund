@@ -11,6 +11,8 @@ public class UserDO {
 
     private Integer available;
 
+    private String sellerTaxId;
+
     public Integer getId() {
         return id;
     }
@@ -49,5 +51,13 @@ public class UserDO {
 
     public void setAvailable(Integer available) {
         this.available = available;
+    }
+
+    public String getSellerTaxId() {
+        return sellerTaxId;
+    }
+
+    public void setSellerTaxId(String sellerTaxId) {
+        this.sellerTaxId = sellerTaxId;
     }
 }

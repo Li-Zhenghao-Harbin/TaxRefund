@@ -1,5 +1,6 @@
 package org.cityu.service.impl;
 
+import org.cityu.common.component.UserContext;
 import org.cityu.dao.InvoiceMapper;
 import org.cityu.dao.ItemMapper;
 import org.cityu.dao.SequenceMapper;
@@ -10,6 +11,7 @@ import org.cityu.error.EmBusinessError;
 import org.cityu.service.InvoiceService;
 import org.cityu.service.model.InvoiceModel;
 import org.cityu.service.model.ItemModel;
+import org.cityu.service.model.UserModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,10 +50,12 @@ public class InvoiceServiceImpl implements InvoiceService {
             // calculate total amount
             totalAmount = totalAmount.add(itemModel.getUnitPrice().multiply(BigDecimal.valueOf(itemModel.getQuantity())));
         }
-        // reset invoice number
+        // reset invoice properties
         invoiceModel.setInvoiceNumber(invoiceNumber);
         InvoiceDO invoiceDO = convertFromInvoiceModel(invoiceModel);
         invoiceDO.setTotalAmount(totalAmount);
+        UserModel currentUser = UserContext.getCurrentUser();
+        invoiceDO.setSellerTaxId(currentUser.getSellerTaxId());
         invoiceMapper.insert(invoiceDO);
     }
 
