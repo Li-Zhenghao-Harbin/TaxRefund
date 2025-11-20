@@ -9,4 +9,5 @@ public interface ApplicationFormMapper {
     ApplicationFormDO getApplicationForm(String applicationFormNumber);
     int updateReviewedApplicationForm(String applicationFormNumber, BigDecimal customsConfirmAmount, Integer status);
     BigDecimal calculateCustomsConfirmAmount(String applicationFormNumber);
+    int taxRefundApplicationForm(String applicationFormNumber);
 }

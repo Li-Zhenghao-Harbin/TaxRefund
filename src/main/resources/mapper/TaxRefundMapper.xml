@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cityu.dao.TaxRefundMapper">
+  <resultMap id="BaseResultMap" type="org.cityu.dataobject.TaxRefundDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="application_form_number" jdbcType="VARCHAR" property="applicationFormNumber" />
+    <result column="tax_refund_method" jdbcType="INTEGER" property="taxRefundMethod" />
+    <result column="tax_refund_date" jdbcType="TIMESTAMP" property="taxRefundDate" />
+    <result column="application_form_material" jdbcType="VARCHAR" property="applicationFormNumberMaterial" />
+    <result column="invoice_material" jdbcType="VARCHAR" property="invoiceMaterial" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from b_tax_refund
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.cityu.dataobject.TaxRefundDO">
+    insert into b_tax_refund (id, application_form_number, tax_refund_method, 
+      tax_refund_date, application_form_material, invoice_material)
+    values (#{id,jdbcType=INTEGER}, #{applicationFormNumber,jdbcType=VARCHAR}, #{taxRefundMethod,jdbcType=INTEGER}, 
+      #{taxRefundDate,jdbcType=TIMESTAMP}, #{applicationFormMaterial,jdbcType=VARCHAR}, #{invoiceMaterial,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.cityu.dataobject.TaxRefundDO">
+    update b_tax_refund
+    set application_form_number = #{applicationFormNumber,jdbcType=VARCHAR},
+      tax_refund_method = #{taxRefundMethod,jdbcType=INTEGER},
+      tax_refund_date = #{taxRefundDate,jdbcType=TIMESTAMP},
+      application_form_material = #{applicationFormMaterial,jdbcType=VARCHAR},
+      invoice_material = #{invoiceMaterial,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, application_form_number, tax_refund_method, tax_refund_date, application_form_material, invoice_material
+    from b_tax_refund
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, application_form_number, tax_refund_method, tax_refund_date, application_form_material, invoice_material
+    from b_tax_refund
+  </select>
+</mapper>

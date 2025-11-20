@@ -40,4 +40,9 @@
     where t.application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
     limit 1
   </select>
+  <update id="taxRefundApplicationForm" parameterType="java.lang.String">
+    update b_application_form
+    set status = 3
+    where application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
+  </update>
 </mapper>

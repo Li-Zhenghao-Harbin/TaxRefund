@@ -5,20 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CommonUtils {
-    /**
-     * Get current date
-     * @return Date
-     */
+
     public static Date getCurrentDate() {
         Date currentDate = new Date();
         return currentDate;
     }
 
-    /**
-     * Generate invoice number
-     * @param series increase series
-     * @return invoice number
-     */
     public static String generateInvoiceNumber(int series) {
         StringBuilder stringBuilder = new StringBuilder();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -32,12 +24,6 @@ public class CommonUtils {
         return stringBuilder.toString();
     }
 
-    /**
-     * Convert date from String to Date
-     * @param date String
-     * @return Date
-     * @throws ParseException
-     */
     public static Date formatDate(String date) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.parse(date);
@@ -56,4 +42,21 @@ public class CommonUtils {
         return stringBuilder.toString();
     }
 
+    public static String generateApplicationFormMaterial(String applicationFormNumber) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder
+                .append("xxx/applicationForm/")
+                .append(applicationFormNumber)
+                .append(".pdf");
+        return stringBuilder.toString();
+    }
+
+    public static String generateInvoiceMaterial(String applicationFormNumber) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder
+                .append("xxx/invoice/")
+                .append(applicationFormNumber) // invoice related application form number
+                .append(".pdf");
+        return stringBuilder.toString();
+    }
 }

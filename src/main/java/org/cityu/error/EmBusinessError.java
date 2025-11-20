@@ -9,7 +9,10 @@ public enum EmBusinessError implements CommonError {
     IMPROPER_INVOICE_STATUS(30001, "Improper invoice status"),
     // application form
     APPLICATION_FORM_NOT_EXIST(40000, "Application form not exist"),
-    IMPROPER_APPLICATION_STATUS(40001, "Improper application status")
+    IMPROPER_APPLICATION_STATUS(40001, "Improper application status"),
+    APPLICATION_FORM_NOT_REVIEWED(40002, "Application form not reviewed"),
+    // tax refund,
+    REPEAT_TAX_REFOUND(50000, "The application form has already been tax refunded")
     ;
 
     private EmBusinessError(int errorCode, String errorMessage) {
