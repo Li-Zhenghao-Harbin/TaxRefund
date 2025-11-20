@@ -1,24 +1,23 @@
-package org.cityu.dataobject;
+package org.cityu.service.model;
 
 import java.util.Date;
 
-public class TaxRefundDO {
+public class TaxRefundModel {
     private String applicationFormNumber;
-
     private Integer taxRefundMethod;
-
     private Date taxRefundDate;
-
     private String applicationFormMaterial;
-
     private String invoiceMaterial;
+    private String bankCardNumber;
+    private String bankCardHolder;
+    private String bankName;
 
     public String getApplicationFormNumber() {
         return applicationFormNumber;
     }
 
     public void setApplicationFormNumber(String applicationFormNumber) {
-        this.applicationFormNumber = applicationFormNumber == null ? null : applicationFormNumber.trim();
+        this.applicationFormNumber = applicationFormNumber;
     }
 
     public Integer getTaxRefundMethod() {
@@ -51,5 +50,29 @@ public class TaxRefundDO {
 
     public void setInvoiceMaterial(String invoiceMaterial) {
         this.invoiceMaterial = invoiceMaterial;
+    }
+
+    public String getBankCardNumber() {
+        return bankCardNumber;
+    }
+
+    public void setBankCardNumber(String bankCardNumber) {
+        this.bankCardNumber = bankCardNumber;
+    }
+
+    public String getBankCardHolder() {
+        return bankCardHolder;
+    }
+
+    public void setBankCardHolder(String bankCardHolder) {
+        this.bankCardHolder = bankCardHolder;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
     }
 }

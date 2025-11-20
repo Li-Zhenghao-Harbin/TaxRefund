@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cityu.dao.BankCardMapper">
+  <resultMap id="BaseResultMap" type="org.cityu.dataobject.BankCardDO">
+    <id column="application_form_number" jdbcType="VARCHAR" property="applicationFormNumber" />
+    <result column="bank_card_number" jdbcType="VARCHAR" property="bankCardNumber" />
+    <result column="bank_card_holder" jdbcType="VARCHAR" property="bankCardHolder" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+  </resultMap>
+  <insert id="insert" parameterType="org.cityu.dataobject.BankCardDO">
+    insert into b_bank_card (application_form_number, bank_card_number, 
+      bank_card_holder, bank_name)
+    values (#{applicationFormNumber,jdbcType=VARCHAR}, #{bankCardNumber,jdbcType=VARCHAR}, 
+      #{bankCardHolder,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select application_form_number, bank_card_number, bank_card_holder, bank_name
+    from b_bank_card
+  </select>
+</mapper>
