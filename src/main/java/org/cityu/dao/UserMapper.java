@@ -4,8 +4,6 @@ import java.util.List;
 import org.cityu.dataobject.UserDO;
 
 public interface UserMapper {
-    int deleteByPrimaryKey(Integer id);
-
     int insert(UserDO record);
 
     UserDO selectByPrimaryKey(Integer id);
@@ -17,4 +15,6 @@ public interface UserMapper {
     UserDO selectByName(String name);
 
     UserDO getUserById(Integer id);
+
+    int delete(Integer id);
 }

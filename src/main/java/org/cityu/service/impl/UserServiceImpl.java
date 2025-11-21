@@ -62,6 +62,11 @@ public class UserServiceImpl implements UserService {
         return userModel;
     }
 
+    @Override
+    public void delete(Integer id) {
+        userMapper.delete(id);
+    }
+
     private UserDO convertFromUserModel(UserModel userModel) {
         UserDO userDO = new UserDO();
         BeanUtils.copyProperties(userModel, userDO);

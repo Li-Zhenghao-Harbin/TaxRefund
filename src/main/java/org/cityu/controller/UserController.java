@@ -92,4 +92,11 @@ public class UserController {
     public CommonReturnType logout() {
         return CommonReturnType.create("Logout");
     }
+
+    @RequestMapping(value = "/delete", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
+    @ResponseBody
+    public CommonReturnType delete(@RequestParam(name = "id") Integer id) {
+        userService.delete(id);
+        return CommonReturnType.create(null);
+    }
 }

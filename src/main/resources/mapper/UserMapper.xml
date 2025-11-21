@@ -9,7 +9,7 @@
     <result column="available" jdbcType="INTEGER" property="available" />
     <result column="seller_tax_id" jdbcType="INTEGER" property="sellerTaxId" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="delete" parameterType="java.lang.Integer">
     delete from b_user
     where id = #{id,jdbcType=INTEGER}
   </delete>

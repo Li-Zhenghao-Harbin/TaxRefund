@@ -8,4 +8,5 @@ public interface UserService {
     UserModel getUserById(Integer id);
     void changeUserInfo(UserModel userModel);
     UserModel validateLogin(String name, String encryptPassword) throws BusinessException;
+    void delete(Integer id);
 }
