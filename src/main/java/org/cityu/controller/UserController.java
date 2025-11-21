@@ -1,5 +1,6 @@
 package org.cityu.controller;
 
+import org.cityu.common.annotation.RequireRole;
 import org.cityu.common.utils.CommonUtils;
 import org.cityu.common.utils.JwtTokenUtils;
 import org.cityu.error.BusinessException;
@@ -15,7 +16,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.cityu.controller.BaseController.CONTENT_TYPE_FORMED;
+import static org.cityu.controller.BaseController.*;
 
 @RestController
 @RequestMapping("/user")
@@ -33,6 +34,7 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
+    @RequireRole({ROLE_MANAGER})
     public CommonReturnType register(@RequestParam(name = "name") String name,
                                      @RequestParam(name = "password") String password,
                                      @RequestParam(name = "role") Integer role,
@@ -49,6 +51,7 @@ public class UserController {
 
     @RequestMapping(value = "/getUser", method = {RequestMethod.GET})
     @ResponseBody
+    @RequireRole({ROLE_MANAGER})
     public CommonReturnType getUser(@RequestParam(name = "id") Integer id) {
         UserModel userModel = userService.getUserById(id);
         return CommonReturnType.create(userModel);
@@ -56,6 +59,7 @@ public class UserController {
 
     @RequestMapping(value = "/changeUserInfo", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
+    @RequireRole({ROLE_MANAGER})
     public CommonReturnType changeUserInfo(@RequestParam(name = "id") Integer id,
                                            @RequestParam(name = "name") String name,
                                            @RequestParam(name = "password") String password,
@@ -95,6 +99,7 @@ public class UserController {
 
     @RequestMapping(value = "/delete", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
+    @RequireRole({ROLE_MANAGER})
     public CommonReturnType delete(@RequestParam(name = "id") Integer id) {
         userService.delete(id);
         return CommonReturnType.create(null);

@@ -24,7 +24,7 @@ import static org.cityu.controller.BaseController.*;
 @RestController
 @RequestMapping("/applicationForm")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
-public class ApplicationFormController {
+public class ApplicationFormController extends BaseController {
     @Autowired
     private ApplicationFormService applicationFormService;
 
@@ -32,7 +32,6 @@ public class ApplicationFormController {
     @ResponseBody
     @RequireRole({ROLE_MERCHANT})
     public CommonReturnType createApplicationForm(@RequestBody JsonNode jsonNode) throws ParseException, BusinessException {
-        String applicationFormNumber = ""; // generate application form number later in service
         String applicantName = jsonNode.get("applicantName").asText();
         String applicantId = jsonNode.get("applicantId").asText();
         String applicantCountry = jsonNode.get("applicantCountry").asText();
@@ -63,9 +62,8 @@ public class ApplicationFormController {
     @RequireRole({ROLE_CUSTOMS})
     public CommonReturnType reviewApplicationForm(@RequestBody JsonNode jsonNode) throws BusinessException {
         String applicationFormNumber = jsonNode.get("applicationFormNumber").asText();
-        List<ItemModel> items = new ArrayList<>();
         JsonNode itemsNode = jsonNode.get("rejectItems");
-        items = getRejectedItemsFromJson(itemsNode);
+        List<ItemModel> items = getRejectedItemsFromJson(itemsNode);
         applicationFormService.reviewApplicationForm(applicationFormNumber, items);
         return CommonReturnType.create(null);
     }

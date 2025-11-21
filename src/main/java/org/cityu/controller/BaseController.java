@@ -23,6 +23,7 @@ public class BaseController {
     public static final String ROLE_MERCHANT = "1";
     public static final String ROLE_CUSTOMS = "2";
     public static final String ROLE_AGENCY = "3";
+    public static final String ROLE_MANAGER = "4";
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)

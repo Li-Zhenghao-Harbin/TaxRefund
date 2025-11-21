@@ -2,21 +2,17 @@ package org.cityu.controller;
 
 import org.cityu.common.annotation.RequireRole;
 import org.cityu.common.utils.CommonUtils;
-import org.cityu.dataobject.TaxRefundDO;
 import org.cityu.error.BusinessException;
 import org.cityu.response.CommonReturnType;
 import org.cityu.service.TaxRefundService;
 import org.cityu.service.model.TaxRefundModel;
-import org.cityu.service.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import static org.cityu.controller.BaseController.*;
 
 @RestController
 @RequestMapping("/taxRefund")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
-public class TaxRefundController {
+public class TaxRefundController extends BaseController {
 
     @Autowired
     private TaxRefundService taxRefundService;

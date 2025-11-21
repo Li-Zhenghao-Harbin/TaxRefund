@@ -21,7 +21,7 @@ import static org.cityu.controller.BaseController.*;
 @RestController
 @RequestMapping("/invoice")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
-public class InvoiceController {
+public class InvoiceController extends BaseController {
 
     @Autowired
     private InvoiceService invoiceService;
@@ -30,10 +30,8 @@ public class InvoiceController {
     @ResponseBody
     @RequireRole({ROLE_MERCHANT})
     public CommonReturnType createInvoice(@RequestBody JsonNode jsonNode) {
-        String invoiceNumber = "";  // generate invoice number later in service
         List<ItemModel> items = getItemsFromJson(jsonNode.get("items"));
         InvoiceModel invoiceModel = new InvoiceModel();
-        invoiceModel.setInvoiceNumber(invoiceNumber);
         invoiceModel.setIssueDate(CommonUtils.getCurrentDate());
         invoiceModel.setStatus(1);
         invoiceModel.setItems(items);
