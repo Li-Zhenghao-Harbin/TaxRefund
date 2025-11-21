@@ -39,5 +39,4 @@ public class CodeController {
         List<Object> result = codeService.getTaxRefundMethods();
         return CommonReturnType.create(result);
     }
-
 }

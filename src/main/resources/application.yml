@@ -1,18 +1,3 @@
-spring:
-  application:
-    name: tax-refund
-  datasource:
-    url: jdbc:mysql://localhost:3306/tax_refund
-    username: alpha
-    password: 123456
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
-mybatis:
-  mapper-locations: classpath:mapper/*.xml
-
 jwt:
   secret: abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
   expiration: 86400000
