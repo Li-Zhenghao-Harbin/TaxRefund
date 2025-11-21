@@ -2,26 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.cityu.dao.ApplicationFormMapper">
   <resultMap id="BaseResultMap" type="org.cityu.dataobject.ApplicationFormDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="application_form_number" jdbcType="VARCHAR" property="applicationFormNumber" />
+    <id column="application_form_number" jdbcType="VARCHAR" property="applicationFormNumber" />
     <result column="applicant_name" jdbcType="VARCHAR" property="applicantName" />
     <result column="applicant_id" jdbcType="VARCHAR" property="applicantId" />
     <result column="applicant_country" jdbcType="VARCHAR" property="applicantCountry" />
     <result column="issue_date" jdbcType="TIMESTAMP" property="issueDate" />
-    <result column="issue_merchant_id" jdbcType="VARCHAR" property="issueMerchantId" />
+    <result column="issue_merchant_id" jdbcType="INTEGER" property="issueMerchantId" />
     <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
     <result column="customs_confirm_amount" jdbcType="DECIMAL" property="customsConfirmAmount" />
   </resultMap>
   <insert id="insert" parameterType="org.cityu.dataobject.ApplicationFormDO">
-    insert into b_application_form (id, application_form_number, applicant_name, 
+    insert into b_application_form (application_form_number, applicant_name,
       applicant_id, applicant_country, issue_date, issue_merchant_id,
       total_amount, customs_confirm_amount, status)
-    values (#{id,jdbcType=INTEGER}, #{applicationFormNumber,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR}, 
+    values (#{applicationFormNumber,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR},
       #{applicantId,jdbcType=VARCHAR}, #{applicantCountry,jdbcType=VARCHAR}, #{issueDate,jdbcType=TIMESTAMP},
-      #{issueMerchantId,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL}, 1)
+      #{issueMerchantId,jdbcType=INTEGER}, #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL}, 1)
   </insert>
   <select id="getApplicationForm" resultMap="BaseResultMap">
-    select id, application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_id, status
+    select application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_id, status
     from b_application_form
     where application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
   </select>
@@ -31,14 +30,19 @@
     where application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
   </update>
   <select id="calculateCustomsConfirmAmount" resultType="java.math.BigDecimal">
-    select sum(t.quantity * t.unit_price) customs_confirm_amount from
-    (
-      select i.unit_price, i.quantity, i.status st, b.application_form_number
-      from b_invoice b, b_item i
-      where b.invoice_number = i.invoice_number
-    ) t
-    where t.application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
-    limit 1
+    select sum(i.quantity * i.unit_price) customs_confirm_amount
+    from b_invoice b left join b_item i
+    on b.invoice_number = i.invoice_number
+    where b.application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
+    and i.status = 2
+  </select>
+  <select id="calculateTotalAmount">
+    select sum(i.total_amount) total_amount
+    from b_invoice i
+    where i.invoice_number in
+    <foreach collection="invoiceNumbers" item="invoiceNumber" open="(" close=")" separator=",">
+      #{invoiceNumber, jdbcType=VARCHAR}
+    </foreach>
   </select>
   <update id="taxRefundApplicationForm" parameterType="java.lang.String">
     update b_application_form

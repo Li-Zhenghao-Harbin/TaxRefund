@@ -23,6 +23,7 @@ public class TaxRefundController {
 
     @RequestMapping(value = "/taxRefundByCash", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
+    @RequireRole({ROLE_AGENCY})
     public CommonReturnType taxRefundByCash(@RequestParam(name = "applicationFormNumber") String applicationFormNumber) throws BusinessException {
         TaxRefundModel taxRefundModel = new TaxRefundModel();
         taxRefundModel.setApplicationFormNumber(applicationFormNumber);
@@ -36,6 +37,7 @@ public class TaxRefundController {
 
     @RequestMapping(value = "/taxRefundByBankCard", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
+    @RequireRole({ROLE_AGENCY})
     public CommonReturnType taxRefundByBankCard(@RequestParam(name = "applicationFormNumber") String applicationFormNumber,
                                                 @RequestParam(name = "bankCardNumber") String bankCardNumber,
                                                 @RequestParam(name = "bankCardHolder") String bankCardHolder,

@@ -1,21 +1,11 @@
 package org.cityu.dataobject;
 
 public class SequenceDO {
-    private Integer id;
-
     private String business;
 
     private Integer current;
 
     private Integer step;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getBusiness() {
         return business;

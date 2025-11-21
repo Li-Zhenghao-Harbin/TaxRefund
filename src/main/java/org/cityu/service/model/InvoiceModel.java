@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 public class InvoiceModel {
-    private Integer id;
     private String invoiceNumber;
     private String sellerTaxId;
     private BigDecimal totalAmount;
@@ -13,14 +12,6 @@ public class InvoiceModel {
     private String applicationFormNumber;
     private Integer status;
     private List<ItemModel> items;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getInvoiceNumber() {
         return invoiceNumber;

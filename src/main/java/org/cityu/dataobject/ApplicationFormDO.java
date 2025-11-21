@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class ApplicationFormDO {
-    private Integer id;
-
     private String applicationFormNumber;
 
     private String applicantName;
@@ -16,21 +14,13 @@ public class ApplicationFormDO {
 
     private Date issueDate;
 
-    private String issueMerchantId;
+    private Integer issueMerchantId;
 
     private BigDecimal totalAmount;
 
     private BigDecimal customsConfirmAmount;
 
     private Integer status;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getApplicationFormNumber() {
         return applicationFormNumber;
@@ -72,11 +62,11 @@ public class ApplicationFormDO {
         this.issueDate = issueDate;
     }
 
-    public String getIssueMerchantId() {
+    public Integer getIssueMerchantId() {
         return issueMerchantId;
     }
 
-    public void setIssueMerchantId(String issueMerchantId) {
+    public void setIssueMerchantId(Integer issueMerchantId) {
         this.issueMerchantId = issueMerchantId;
     }
 

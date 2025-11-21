@@ -1,5 +1,6 @@
 package org.cityu.service.impl;
 
+import org.cityu.common.component.UserContext;
 import org.cityu.dao.ApplicationFormMapper;
 import org.cityu.dao.InvoiceMapper;
 import org.cityu.dao.ItemMapper;
@@ -14,9 +15,11 @@ import org.cityu.service.InvoiceService;
 import org.cityu.service.model.ApplicationFormModel;
 import org.cityu.service.model.InvoiceModel;
 import org.cityu.service.model.ItemModel;
+import org.cityu.service.model.UserModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -54,7 +57,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         // create application form
         ApplicationFormDO applicationFormDO = convertFromApplicationFormModel(applicationFormModel);
         applicationFormDO.setApplicationFormNumber(applicationFormNumber);
-        applicationFormMapper.insert(applicationFormDO);
+        // get merchant id
+        UserModel currentUser = UserContext.getCurrentUser();
+        applicationFormDO.setIssueMerchantId(currentUser.getId());
         // relate to invoices
         List<InvoiceModel> invoices = applicationFormModel.getInvoices();
         for (InvoiceModel invoice : invoices) {
@@ -70,6 +75,10 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
             }
             invoiceNumbers.add(invoiceModel.getInvoiceNumber());
         }
+        // calculate total amount
+        BigDecimal totalAmount = applicationFormMapper.calculateTotalAmount(invoiceNumbers);
+        applicationFormDO.setTotalAmount(totalAmount);
+        applicationFormMapper.insert(applicationFormDO);
         // update application form information
         invoiceMapper.updateInvoiceToRelatedApplicationForm(applicationFormNumber, invoiceNumbers);
     }
@@ -88,7 +97,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void reviewApplicationForm(String applicationFormNumber, List<ItemModel> rejectedItems) throws BusinessException {
         ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationForm(applicationFormNumber);
         if (applicationFormDO == null) {

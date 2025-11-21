@@ -1,19 +1,9 @@
 package org.cityu.dataobject;
 
 public class SellerDO {
-    private Integer id;
-
     private String merchantName;
 
     private String sellerTaxId;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getMerchantName() {
         return merchantName;

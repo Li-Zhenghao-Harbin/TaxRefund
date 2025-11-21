@@ -5,25 +5,16 @@ import java.util.Date;
 import java.util.List;
 
 public class ApplicationFormModel {
-    private Integer id;
     private String applicationFormNumber;
     private String applicantName;
     private String applicantId;
     private String applicantCountry;
     private Date issueDate;
-    private String issueMerchantId;
+    private Integer issueMerchantId;
     private BigDecimal totalAmount;
     private BigDecimal customsConfirmAmount;
     private Integer status;
     private List<InvoiceModel> invoices;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getApplicationFormNumber() {
         return applicationFormNumber;
@@ -65,11 +56,11 @@ public class ApplicationFormModel {
         this.issueDate = issueDate;
     }
 
-    public String getIssueMerchantId() {
+    public Integer getIssueMerchantId() {
         return issueMerchantId;
     }
 
-    public void setIssueMerchantId(String issueMerchantId) {
+    public void setIssueMerchantId(Integer issueMerchantId) {
         this.issueMerchantId = issueMerchantId;
     }
 

@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.cityu.dao.SellerMapper">
   <resultMap id="BaseResultMap" type="org.cityu.dataobject.SellerDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <id column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
     <result column="seller_tax_id" jdbcType="VARCHAR" property="sellerTaxId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -23,12 +22,12 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, merchant_name, seller_tax_id
+    select merchant_name, seller_tax_id
     from b_seller
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, merchant_name, seller_tax_id
+    select merchant_name, seller_tax_id
     from b_seller
   </select>
 </mapper>

@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.cityu.dao.InvoiceMapper">
   <resultMap id="BaseResultMap" type="org.cityu.dataobject.InvoiceDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="invoice_number" jdbcType="VARCHAR" property="invoiceNumber" />
+    <id column="invoice_number" jdbcType="VARCHAR" property="invoiceNumber" />
     <result column="seller_tax_id" jdbcType="VARCHAR" property="sellerTaxId" />
     <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
     <result column="issue_date" jdbcType="TIMESTAMP" property="issueDate" />
@@ -11,10 +10,10 @@
     <result column="status" jdbcType="BIT" property="status" />
   </resultMap>
   <insert id="insert" parameterType="org.cityu.dataobject.InvoiceDO">
-    insert into b_invoice (id, invoice_number, seller_tax_id, 
+    insert into b_invoice (invoice_number, seller_tax_id,
       total_amount, issue_date, application_form_number,
       status)
-    values (#{id,jdbcType=INTEGER}, #{invoiceNumber,jdbcType=VARCHAR}, #{sellerTaxId,jdbcType=VARCHAR}, 
+    values (#{invoiceNumber,jdbcType=VARCHAR}, #{sellerTaxId,jdbcType=VARCHAR},
       #{totalAmount,jdbcType=DECIMAL}, #{issueDate,jdbcType=TIMESTAMP}, #{applicationFormNumber,jdbcType=VARCHAR},
       #{status,jdbcType=BIT})
   </insert>

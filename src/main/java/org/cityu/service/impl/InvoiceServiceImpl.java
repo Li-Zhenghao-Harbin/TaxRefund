@@ -50,10 +50,11 @@ public class InvoiceServiceImpl implements InvoiceService {
             // calculate total amount
             totalAmount = totalAmount.add(itemModel.getUnitPrice().multiply(BigDecimal.valueOf(itemModel.getQuantity())));
         }
-        // reset invoice properties
+        // set invoice properties
         invoiceModel.setInvoiceNumber(invoiceNumber);
         InvoiceDO invoiceDO = convertFromInvoiceModel(invoiceModel);
         invoiceDO.setTotalAmount(totalAmount);
+        // set seller tax id
         UserModel currentUser = UserContext.getCurrentUser();
         invoiceDO.setSellerTaxId(currentUser.getSellerTaxId());
         invoiceMapper.insert(invoiceDO);

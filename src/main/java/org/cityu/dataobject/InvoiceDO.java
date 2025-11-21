@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class InvoiceDO {
-    private Integer id;
-
     private String invoiceNumber;
 
     private String sellerTaxId;
@@ -17,14 +15,6 @@ public class InvoiceDO {
     private String applicationFormNumber;
 
     private Integer status;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getInvoiceNumber() {
         return invoiceNumber;
