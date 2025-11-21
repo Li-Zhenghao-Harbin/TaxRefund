@@ -54,4 +54,11 @@ public class TaxRefundController {
         taxRefundService.taxRefundByBankCard(taxRefundModel);
         return CommonReturnType.create(null);
     }
+
+    @RequestMapping(value = "/printReceipt", method = {RequestMethod.POST})
+    @ResponseBody
+    @RequireRole({ROLE_AGENCY})
+    public CommonReturnType printReceipt() {
+        return CommonReturnType.create("Receipt has been printed");
+    }
 }
