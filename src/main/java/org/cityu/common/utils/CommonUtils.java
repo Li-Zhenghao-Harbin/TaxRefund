@@ -2,6 +2,7 @@ package org.cityu.common.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 
 public class CommonUtils {
@@ -58,5 +59,9 @@ public class CommonUtils {
                 .append(applicationFormNumber) // invoice related application form number
                 .append(".pdf");
         return stringBuilder.toString();
+    }
+
+    public static String encode(String str) {
+        return Base64.getEncoder().encodeToString(str.getBytes());
     }
 }

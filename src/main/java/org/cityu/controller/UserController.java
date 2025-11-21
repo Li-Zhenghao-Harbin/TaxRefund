@@ -1,5 +1,6 @@
 package org.cityu.controller;
 
+import org.cityu.common.utils.CommonUtils;
 import org.cityu.common.utils.JwtTokenUtils;
 import org.cityu.error.BusinessException;
 import org.cityu.error.EmBusinessError;
@@ -38,7 +39,7 @@ public class UserController {
                                      @RequestParam(name = "sellerTaxId") String sellerTaxId) {
         UserModel userModel = new UserModel();
         userModel.setName(name);
-        userModel.setPassword(encode(password));
+        userModel.setPassword(CommonUtils.encode(password));
         userModel.setRole(role);
         userModel.setAvailable(1);
         userModel.setSellerTaxId(sellerTaxId);
@@ -77,7 +78,7 @@ public class UserController {
         if (name.isEmpty() || password.isEmpty()) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
         }
-        UserModel userModel = userService.validateLogin(name, encode(password));
+        UserModel userModel = userService.validateLogin(name, CommonUtils.encode(password));
         // generate token
         String token = jwtTokenUtils.generateToken(userModel.getId(), userModel.getRole());
         Map<String, Object> result = new HashMap<>();
@@ -86,7 +87,9 @@ public class UserController {
         return CommonReturnType.create(result);
     }
 
-    public String encode(String str) {
-        return Base64.getEncoder().encodeToString(str.getBytes());
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonReturnType logout() {
+        return CommonReturnType.create("Logout");
     }
 }
