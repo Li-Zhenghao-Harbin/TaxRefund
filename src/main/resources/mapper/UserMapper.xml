@@ -27,11 +27,6 @@
       available = #{available,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, name, password, role, available
-    from b_user
-    where id = #{id,jdbcType=INTEGER}
-  </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, name, password, role, available
     from b_user

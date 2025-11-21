@@ -5,29 +5,10 @@
     <id column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
     <result column="seller_tax_id" jdbcType="VARCHAR" property="sellerTaxId" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from b_seller
-    where merchant_name = #{merchantName,jdbcType=INTEGER}
-  </delete>
   <insert id="insert" parameterType="org.cityu.dataobject.SellerDO">
     insert into b_seller (merchant_name, seller_tax_id
       )
     values (#{merchantName,jdbcType=VARCHAR}, #{sellerTaxId,jdbcType=VARCHAR}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="org.cityu.dataobject.SellerDO">
-    update b_seller
-    set merchant_name = #{merchantName,jdbcType=VARCHAR},
-      seller_tax_id = #{sellerTaxId,jdbcType=VARCHAR}
-    where merchant_name = #{merchantName,jdbcType=INTEGER}
-  </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select merchant_name, seller_tax_id
-    from b_seller
-    where merchant_name = #{merchantName,jdbcType=INTEGER}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select merchant_name, seller_tax_id
-    from b_seller
-  </select>
 </mapper>
