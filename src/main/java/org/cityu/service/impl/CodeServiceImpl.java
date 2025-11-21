@@ -18,4 +18,9 @@ public class CodeServiceImpl implements CodeService {
     public List<Object> getUserRoles() {
         return codeMapper.getUserRoles();
     }
+
+    @Override
+    public List<Object> getTaxRefundMethods() {
+        return codeMapper.getTaxRefundMethods();
+    }
 }

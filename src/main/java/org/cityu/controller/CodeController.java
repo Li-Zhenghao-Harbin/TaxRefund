@@ -32,4 +32,12 @@ public class CodeController {
         List<Object> result = codeService.getUserRoles();
         return CommonReturnType.create(result);
     }
+
+    @RequestMapping(value = "/getTaxRefundMethods", method = {RequestMethod.GET})
+    @ResponseBody
+    public CommonReturnType getTaxRefundMethods() {
+        List<Object> result = codeService.getTaxRefundMethods();
+        return CommonReturnType.create(result);
+    }
+
 }

@@ -5,4 +5,8 @@
     select code, title
     from c_role
   </select>
+  <select id="getTaxRefundMethods" resultType="java.util.Map">
+    select code, title
+    from c_tax_refund_method
+  </select>
 </mapper>
