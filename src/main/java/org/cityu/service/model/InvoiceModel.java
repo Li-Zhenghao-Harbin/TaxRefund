@@ -6,11 +6,13 @@ import java.util.List;
 
 public class InvoiceModel {
     private String invoiceNumber;
-    private String sellerTaxId;
     private BigDecimal totalAmount;
     private Date issueDate;
     private String applicationFormNumber;
     private Integer status;
+    private String issueMerchantName;
+    private String company;
+    private String sellerTaxId;
     private List<ItemModel> items;
 
     public String getInvoiceNumber() {
@@ -21,13 +23,6 @@ public class InvoiceModel {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public String getSellerTaxId() {
-        return sellerTaxId;
-    }
-
-    public void setSellerTaxId(String sellerTaxId) {
-        this.sellerTaxId = sellerTaxId;
-    }
 
     public BigDecimal getTotalAmount() {
         return totalAmount;
@@ -59,6 +54,30 @@ public class InvoiceModel {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getIssueMerchantName() {
+        return issueMerchantName;
+    }
+
+    public void setIssueMerchantName(String issueMerchantName) {
+        this.issueMerchantName = issueMerchantName;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getSellerTaxId() {
+        return sellerTaxId;
+    }
+
+    public void setSellerTaxId(String sellerTaxId) {
+        this.sellerTaxId = sellerTaxId;
     }
 
     public List<ItemModel> getItems() {

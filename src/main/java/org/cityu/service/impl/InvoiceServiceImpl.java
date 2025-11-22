@@ -3,9 +3,11 @@ package org.cityu.service.impl;
 import org.cityu.common.component.UserContext;
 import org.cityu.dao.InvoiceMapper;
 import org.cityu.dao.ItemMapper;
+import org.cityu.dao.SellerMapper;
 import org.cityu.dao.SequenceMapper;
 import org.cityu.dataobject.InvoiceDO;
 import org.cityu.dataobject.ItemDO;
+import org.cityu.dataobject.SellerDO;
 import org.cityu.error.BusinessException;
 import org.cityu.error.EmBusinessError;
 import org.cityu.service.InvoiceService;
@@ -19,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.cityu.common.utils.CommonUtils.generateInvoiceNumber;
 import static org.cityu.controller.BaseController.BUSINESS_INVOICE;
@@ -34,6 +38,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private SequenceMapper sequenceMapper;
+
+    @Autowired
+    private SellerMapper sellerMapper;
 
     @Override
     @Transactional
@@ -56,7 +63,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceDO.setTotalAmount(totalAmount);
         // set seller tax id
         UserModel currentUser = UserContext.getCurrentUser();
-        invoiceDO.setSellerTaxId(currentUser.getSellerTaxId());
+        invoiceDO.setIssueMerchantName(currentUser.getName());
         invoiceMapper.insert(invoiceDO);
     }
 
@@ -98,7 +105,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceModel.setItems(items);
         return invoiceModel;
     }
-
+    
     private List<ItemModel> convertFromItemDOList(List<ItemDO> itemDOS) {
         List<ItemModel> itemModels = new ArrayList<>();
         for (ItemDO itemDO : itemDOS) {

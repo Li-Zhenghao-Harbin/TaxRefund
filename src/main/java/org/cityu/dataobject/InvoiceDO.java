@@ -6,7 +6,7 @@ import java.util.Date;
 public class InvoiceDO {
     private String invoiceNumber;
 
-    private String sellerTaxId;
+    private String issueMerchantName;
 
     private BigDecimal totalAmount;
 
@@ -16,6 +16,10 @@ public class InvoiceDO {
 
     private Integer status;
 
+    private String company;
+
+    private String sellerTaxId;
+
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
@@ -24,12 +28,12 @@ public class InvoiceDO {
         this.invoiceNumber = invoiceNumber == null ? null : invoiceNumber.trim();
     }
 
-    public String getSellerTaxId() {
-        return sellerTaxId;
+    public String getIssueMerchantName() {
+        return issueMerchantName;
     }
 
-    public void setSellerTaxId(String sellerTaxId) {
-        this.sellerTaxId = sellerTaxId == null ? null : sellerTaxId.trim();
+    public void setIssueMerchantName(String issueMerchantName) {
+        this.issueMerchantName = issueMerchantName;
     }
 
     public BigDecimal getTotalAmount() {
@@ -62,5 +66,21 @@ public class InvoiceDO {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getSellerTaxId() {
+        return sellerTaxId;
+    }
+
+    public void setSellerTaxId(String sellerTaxId) {
+        this.sellerTaxId = sellerTaxId;
     }
 }

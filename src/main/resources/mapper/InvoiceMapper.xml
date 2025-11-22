@@ -3,17 +3,19 @@
 <mapper namespace="org.cityu.dao.InvoiceMapper">
   <resultMap id="BaseResultMap" type="org.cityu.dataobject.InvoiceDO">
     <id column="invoice_number" jdbcType="VARCHAR" property="invoiceNumber" />
-    <result column="seller_tax_id" jdbcType="VARCHAR" property="sellerTaxId" />
+    <result column="issue_merchant_name" jdbcType="VARCHAR" property="issueMerchantName" />
     <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
     <result column="issue_date" jdbcType="TIMESTAMP" property="issueDate" />
     <result column="application_form_number" jdbcType="VARCHAR" property="applicationFormNumber" />
     <result column="status" jdbcType="BIT" property="status" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="seller_tax_id" jdbcType="VARCHAR" property="sellerTaxId" />
   </resultMap>
   <insert id="insert" parameterType="org.cityu.dataobject.InvoiceDO">
-    insert into b_invoice (invoice_number, seller_tax_id,
+    insert into b_invoice (invoice_number, issue_merchant_name,
       total_amount, issue_date, application_form_number,
       status)
-    values (#{invoiceNumber,jdbcType=VARCHAR}, #{sellerTaxId,jdbcType=VARCHAR},
+    values (#{invoiceNumber,jdbcType=VARCHAR}, #{issueMerchantName,jdbcType=VARCHAR},
       #{totalAmount,jdbcType=DECIMAL}, #{issueDate,jdbcType=TIMESTAMP}, #{applicationFormNumber,jdbcType=VARCHAR},
       #{status,jdbcType=BIT})
   </insert>
@@ -26,13 +28,15 @@
     </foreach>
   </update>
   <select id="getInvoiceByApplicationFormNumber" resultMap="BaseResultMap">
-    select invoice_number, seller_tax_id, total_amount, issue_date, status
-    from b_invoice
+    select i.invoice_number, i.issue_merchant_name, i.total_amount, i.issue_date, i.status, i.application_form_number, s.company, s.seller_tax_id
+    from b_invoice i
+    left join b_seller s on i.issue_merchant_name = s.merchant_name
     where application_form_number = #{applicationFormNumber, jdbcType=VARCHAR}
   </select>
   <select id="getInvoiceByInvoiceNumber" resultMap="BaseResultMap">
-    select invoice_number, seller_tax_id, total_amount, issue_date, status
-    from b_invoice
+    select i.invoice_number, i.issue_merchant_name, i.total_amount, i.issue_date, i.status, i.application_form_number, s.company, s.seller_tax_id
+    from b_invoice i
+    left join b_seller s on i.issue_merchant_name = s.merchant_name
     where invoice_number = #{invoiceNumber, jdbcType=VARCHAR}
   </select>
 </mapper>

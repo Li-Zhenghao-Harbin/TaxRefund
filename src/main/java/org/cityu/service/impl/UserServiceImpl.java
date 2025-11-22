@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
         userMapper.insert(userDO);
         if (userModel.getRole() == 1 && userModel.getSellerTaxId() != null) {
             SellerDO sellerDO = new SellerDO();
+            sellerDO.setCompany(userModel.getCompany());
             sellerDO.setMerchantName(userModel.getName());
             sellerDO.setSellerTaxId(userModel.getSellerTaxId());
             sellerMapper.insert(sellerDO);
@@ -52,12 +53,12 @@ public class UserServiceImpl implements UserService {
     public UserModel validateLogin(String name, String encryptPassword) throws BusinessException {
         UserDO userDO = userMapper.selectByName(name);
         if (userDO == null) {
-            throw new BusinessException(EmBusinessError.USER_LOGIN_FAIL, "User not exist");
+            throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
         }
         UserModel userModel = convertFromUserDO(userDO);
         // check password
         if (!encryptPassword.equals(userModel.getPassword())) {
-            throw new BusinessException(EmBusinessError.USER_LOGIN_FAIL, "Password not match");
+            throw new BusinessException(EmBusinessError.PASSWORD_NOT_MATCH);
         }
         return userModel;
     }

@@ -6,6 +6,7 @@ public class UserModel {
     private String password;
     private Integer role;
     private Integer available;
+    private String company;
     private String sellerTaxId;
 
     public Integer getId() {
@@ -46,6 +47,14 @@ public class UserModel {
 
     public void setAvailable(Integer available) {
         this.available = available;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getSellerTaxId() {

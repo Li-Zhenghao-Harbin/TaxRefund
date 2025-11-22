@@ -38,12 +38,14 @@ public class UserController {
     public CommonReturnType register(@RequestParam(name = "name") String name,
                                      @RequestParam(name = "password") String password,
                                      @RequestParam(name = "role") Integer role,
+                                     @RequestParam(name = "company") String company,
                                      @RequestParam(name = "sellerTaxId") String sellerTaxId) {
         UserModel userModel = new UserModel();
         userModel.setName(name);
         userModel.setPassword(CommonUtils.encode(password));
         userModel.setRole(role);
         userModel.setAvailable(1);
+        userModel.setCompany(company);
         userModel.setSellerTaxId(sellerTaxId);
         userService.register(userModel);
         return CommonReturnType.create(null);

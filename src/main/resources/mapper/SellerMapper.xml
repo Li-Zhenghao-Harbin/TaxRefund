@@ -3,12 +3,13 @@
 <mapper namespace="org.cityu.dao.SellerMapper">
   <resultMap id="BaseResultMap" type="org.cityu.dataobject.SellerDO">
     <id column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
     <result column="seller_tax_id" jdbcType="VARCHAR" property="sellerTaxId" />
   </resultMap>
   <insert id="insert" parameterType="org.cityu.dataobject.SellerDO">
-    insert into b_seller (merchant_name, seller_tax_id
+    insert into b_seller (merchant_name, company, seller_tax_id
       )
-    values (#{merchantName,jdbcType=VARCHAR}, #{sellerTaxId,jdbcType=VARCHAR}
+    values (#{merchantName,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, #{sellerTaxId,jdbcType=VARCHAR}
       )
   </insert>
 </mapper>
