@@ -4,7 +4,7 @@ public enum EmBusinessError implements CommonError {
     PARAMETER_VALIDATION_ERROR(10000, "Parameters illegal"),
     UNKNOWN_ERROR(10001, "Not authorized or other unknown error"),
     // user
-    USER_NOT_EXIST(20000, "Failed to login"),
+    USER_NOT_EXIST(20000, "User not exist"),
     PASSWORD_NOT_MATCH(20001, "Password not match"),
     // invoice
     INVOICE_NOT_EXIST(30000, "Invoice not exist"),

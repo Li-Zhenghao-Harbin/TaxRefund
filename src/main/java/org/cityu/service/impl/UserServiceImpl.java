@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -41,6 +43,23 @@ public class UserServiceImpl implements UserService {
     public UserModel getUserByName(String name) {
         UserDO userDO = userMapper.getUserByName(name);
         return convertFromUserDO(userDO);
+    }
+
+    @Override
+    public List<UserModel> getAllUsers() {
+        List<UserDO> userDOs = userMapper.getAllUsers();
+        List<UserModel> userModels = convertFromUserDOs(userDOs);
+        return userModels;
+    }
+
+    private List<UserModel> convertFromUserDOs(List<UserDO> userDOs) {
+        List<UserModel> userModels = new ArrayList<>();
+        for (UserDO userDO : userDOs) {
+            UserModel userModel = new UserModel();
+            BeanUtils.copyProperties(userDO, userModel);
+            userModels.add(userModel);
+        }
+        return userModels;
     }
 
     @Override

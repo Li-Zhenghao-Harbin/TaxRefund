@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.cityu.controller.BaseController.*;
@@ -20,7 +21,7 @@ import static org.cityu.controller.BaseController.*;
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
-public class UserController {
+public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
@@ -50,11 +51,19 @@ public class UserController {
         return CommonReturnType.create(null);
     }
 
-    @RequestMapping(value = "/getUser", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getUserByName", method = {RequestMethod.GET})
     @ResponseBody
     @RequireRole({ROLE_MANAGER})
-    public CommonReturnType getUser(@RequestParam(name = "name") String name) {
+    public CommonReturnType getUserByName(@RequestParam(name = "name") String name) {
         UserModel userModel = userService.getUserByName(name);
+        return CommonReturnType.create(userModel);
+    }
+
+    @RequestMapping(value = "/getAllUsers", method = {RequestMethod.GET})
+    @ResponseBody
+    @RequireRole({ROLE_MANAGER})
+    public CommonReturnType getAllUsers() {
+        List<UserModel> userModel = userService.getAllUsers();
         return CommonReturnType.create(userModel);
     }
 

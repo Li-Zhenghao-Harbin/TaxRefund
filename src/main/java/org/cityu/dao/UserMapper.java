@@ -6,7 +6,7 @@ import org.cityu.dataobject.UserDO;
 public interface UserMapper {
     int insert(UserDO record);
 
-    List<UserDO> selectAll();
+    List<UserDO> getAllUsers();
 
     int updateByPrimaryKey(UserDO record);
 

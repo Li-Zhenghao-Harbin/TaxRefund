@@ -27,9 +27,10 @@
       available = #{available,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select name, password, role, available
-    from b_user
+  <select id="getAllUsers" resultMap="BaseResultMap">
+    select u.name, u.password, u.role, u.available, s.company, s.seller_tax_id
+    from b_user u
+    left join b_seller s on u.name = s.merchant_name
   </select>
   <select id="getUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select u.name, u.password, u.role, u.available, s.company, s.seller_tax_id
