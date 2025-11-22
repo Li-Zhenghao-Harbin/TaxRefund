@@ -10,9 +10,7 @@ public interface UserMapper {
 
     int updateByPrimaryKey(UserDO record);
 
-    UserDO selectByName(String name);
+    UserDO getUserByName(String name);
 
-    UserDO getUserById(Integer id);
-
-    int delete(Integer id);
+    int delete(String name);
 }

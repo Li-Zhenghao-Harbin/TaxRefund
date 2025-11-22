@@ -7,20 +7,20 @@
     <result column="applicant_id" jdbcType="VARCHAR" property="applicantId" />
     <result column="applicant_country" jdbcType="VARCHAR" property="applicantCountry" />
     <result column="issue_date" jdbcType="TIMESTAMP" property="issueDate" />
-    <result column="issue_merchant_id" jdbcType="INTEGER" property="issueMerchantId" />
+    <result column="issue_merchant_name" jdbcType="VARCHAR" property="issueMerchantName" />
     <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
     <result column="customs_confirm_amount" jdbcType="DECIMAL" property="customsConfirmAmount" />
   </resultMap>
   <insert id="insert" parameterType="org.cityu.dataobject.ApplicationFormDO">
     insert into b_application_form (application_form_number, applicant_name,
-      applicant_id, applicant_country, issue_date, issue_merchant_id,
+      applicant_id, applicant_country, issue_date, issue_merchant_name,
       total_amount, customs_confirm_amount, status)
     values (#{applicationFormNumber,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR},
       #{applicantId,jdbcType=VARCHAR}, #{applicantCountry,jdbcType=VARCHAR}, #{issueDate,jdbcType=TIMESTAMP},
-      #{issueMerchantId,jdbcType=INTEGER}, #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL}, 1)
+      #{issueMerchantName,jdbcType=INTEGER}, #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL}, 1)
   </insert>
   <select id="getApplicationForm" resultMap="BaseResultMap">
-    select application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_id, status
+    select application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_name, status
     from b_application_form
     where application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
   </select>

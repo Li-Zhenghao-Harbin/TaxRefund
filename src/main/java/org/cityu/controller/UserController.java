@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,21 +53,19 @@ public class UserController {
     @RequestMapping(value = "/getUser", method = {RequestMethod.GET})
     @ResponseBody
     @RequireRole({ROLE_MANAGER})
-    public CommonReturnType getUser(@RequestParam(name = "id") Integer id) {
-        UserModel userModel = userService.getUserById(id);
+    public CommonReturnType getUser(@RequestParam(name = "name") String name) {
+        UserModel userModel = userService.getUserByName(name);
         return CommonReturnType.create(userModel);
     }
 
     @RequestMapping(value = "/changeUserInfo", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
     @RequireRole({ROLE_MANAGER})
-    public CommonReturnType changeUserInfo(@RequestParam(name = "id") Integer id,
-                                           @RequestParam(name = "name") String name,
+    public CommonReturnType changeUserInfo(@RequestParam(name = "name") String name,
                                            @RequestParam(name = "password") String password,
                                            @RequestParam(name = "role") Integer role,
                                            @RequestParam(name = "available") Integer available) {
         UserModel userModel = new UserModel();
-        userModel.setId(id);
         userModel.setName(name);
         userModel.setPassword(password);
         userModel.setRole(role);
@@ -86,7 +83,7 @@ public class UserController {
         }
         UserModel userModel = userService.validateLogin(name, CommonUtils.encode(password));
         // generate token
-        String token = jwtTokenUtils.generateToken(userModel.getId(), userModel.getRole());
+        String token = jwtTokenUtils.generateToken(userModel.getName(), userModel.getRole());
         Map<String, Object> result = new HashMap<>();
         result.put("user", userModel);
         result.put("token", token);
@@ -102,8 +99,8 @@ public class UserController {
     @RequestMapping(value = "/delete", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
     @RequireRole({ROLE_MANAGER})
-    public CommonReturnType delete(@RequestParam(name = "id") Integer id) {
-        userService.delete(id);
+    public CommonReturnType delete(@RequestParam(name = "name") String name) {
+        userService.delete(name);
         return CommonReturnType.create(null);
     }
 }

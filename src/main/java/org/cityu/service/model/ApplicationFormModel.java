@@ -10,7 +10,7 @@ public class ApplicationFormModel {
     private String applicantId;
     private String applicantCountry;
     private Date issueDate;
-    private Integer issueMerchantId;
+    private String issueMerchantName;
     private BigDecimal totalAmount;
     private BigDecimal customsConfirmAmount;
     private Integer status;
@@ -56,12 +56,12 @@ public class ApplicationFormModel {
         this.issueDate = issueDate;
     }
 
-    public Integer getIssueMerchantId() {
-        return issueMerchantId;
+    public String getIssueMerchantName() {
+        return issueMerchantName;
     }
 
-    public void setIssueMerchantId(Integer issueMerchantId) {
-        this.issueMerchantId = issueMerchantId;
+    public void setIssueMerchantName(String issueMerchantName) {
+        this.issueMerchantName = issueMerchantName;
     }
 
     public BigDecimal getTotalAmount() {

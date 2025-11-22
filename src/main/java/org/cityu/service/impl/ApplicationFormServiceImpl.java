@@ -59,7 +59,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         applicationFormDO.setApplicationFormNumber(applicationFormNumber);
         // get merchant id
         UserModel currentUser = UserContext.getCurrentUser();
-        applicationFormDO.setIssueMerchantId(currentUser.getId());
+        applicationFormDO.setIssueMerchantName(currentUser.getName());
         // relate to invoices
         List<InvoiceModel> invoices = applicationFormModel.getInvoices();
         for (InvoiceModel invoice : invoices) {

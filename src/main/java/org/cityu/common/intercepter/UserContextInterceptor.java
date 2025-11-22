@@ -26,9 +26,9 @@ public class UserContextInterceptor implements HandlerInterceptor {
         // get token from request
         String token = getTokenFromRequest(request);
         if (token != null && jwtTokenUtils.validateToken(token)) {
-            Integer userId = jwtTokenUtils.getUserIdFromToken(token);
-            if (userId != null) {
-                UserModel userModel = userService.getUserById(userId);
+            String userName = jwtTokenUtils.getUserNameFromToken(token);
+            if (userName != null) {
+                UserModel userModel = userService.getUserByName(userName);
                 if (userModel != null) {
                     UserContext.setCurrentUser(userModel);
                 }

@@ -5,8 +5,8 @@ import org.cityu.service.model.UserModel;
 
 public interface UserService {
     void register(UserModel userModel);
-    UserModel getUserById(Integer id);
+    UserModel getUserByName(String name);
     void changeUserInfo(UserModel userModel);
     UserModel validateLogin(String name, String encryptPassword) throws BusinessException;
-    void delete(Integer id);
+    void delete(String name);
 }

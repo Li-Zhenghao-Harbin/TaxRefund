@@ -16,9 +16,9 @@ public class UserContext {
         CURRENT_USER.set(userModel);
     }
 
-    public static Integer getCurrentUserId() {
+    public static String getCurrentUserName() {
         UserModel user = getCurrentUser();
-        return user != null ? user.getId() : null;
+        return user != null ? user.getName() : null;
     }
 
     public static Integer getCurrentUserRole() {

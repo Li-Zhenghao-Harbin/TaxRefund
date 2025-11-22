@@ -31,9 +31,9 @@ public class JwtTokenUtils {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(Integer userId, Integer role) {
+    public String generateToken(String userName, Integer role) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);
+        claims.put("userName", userName);
         claims.put("role", role);
         return Jwts.builder()
                 .setClaims(claims)
@@ -43,9 +43,9 @@ public class JwtTokenUtils {
                 .compact();
     }
 
-    public Integer getUserIdFromToken(String token) {
+    public String getUserNameFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
-        return claims.get("userId", Integer.class);
+        return claims.get("userName", String.class);
     }
 
     public Integer getRoleFromToken(String token) {

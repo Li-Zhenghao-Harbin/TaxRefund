@@ -1,7 +1,6 @@
 package org.cityu.dataobject;
 
 public class UserDO {
-    private Integer id;
 
     private String name;
 
@@ -11,15 +10,9 @@ public class UserDO {
 
     private Integer available;
 
+    private String company;
+
     private String sellerTaxId;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -51,6 +44,14 @@ public class UserDO {
 
     public void setAvailable(Integer available) {
         this.available = available;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getSellerTaxId() {

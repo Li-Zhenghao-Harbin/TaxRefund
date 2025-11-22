@@ -2,7 +2,7 @@ package org.cityu.error;
 
 public enum EmBusinessError implements CommonError {
     PARAMETER_VALIDATION_ERROR(10000, "Parameters illegal"),
-    UNKNOWN_ERROR(10001, "Unknown error"),
+    UNKNOWN_ERROR(10001, "Not authorized or other unknown error"),
     // user
     USER_NOT_EXIST(20000, "Failed to login"),
     PASSWORD_NOT_MATCH(20001, "Password not match"),

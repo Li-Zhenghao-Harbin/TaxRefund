@@ -1,21 +1,12 @@
 package org.cityu.service.model;
 
 public class UserModel {
-    private Integer id;
     private String name;
     private String password;
     private Integer role;
     private Integer available;
     private String company;
     private String sellerTaxId;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

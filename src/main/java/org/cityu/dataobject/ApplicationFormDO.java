@@ -14,7 +14,7 @@ public class ApplicationFormDO {
 
     private Date issueDate;
 
-    private Integer issueMerchantId;
+    private String issueMerchantName;
 
     private BigDecimal totalAmount;
 
@@ -62,12 +62,12 @@ public class ApplicationFormDO {
         this.issueDate = issueDate;
     }
 
-    public Integer getIssueMerchantId() {
-        return issueMerchantId;
+    public String getIssueMerchantName() {
+        return issueMerchantName;
     }
 
-    public void setIssueMerchantId(Integer issueMerchantId) {
-        this.issueMerchantId = issueMerchantId;
+    public void setIssueMerchantName(String issueMerchantName) {
+        this.issueMerchantName = issueMerchantName;
     }
 
     public BigDecimal getTotalAmount() {

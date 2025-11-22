@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel getUserById(Integer id) {
-        UserDO userDO = userMapper.getUserById(id);
+    public UserModel getUserByName(String name) {
+        UserDO userDO = userMapper.getUserByName(name);
         return convertFromUserDO(userDO);
     }
 
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel validateLogin(String name, String encryptPassword) throws BusinessException {
-        UserDO userDO = userMapper.selectByName(name);
+        UserDO userDO = userMapper.getUserByName(name);
         if (userDO == null) {
             throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
         }
@@ -64,8 +64,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Integer id) {
-        userMapper.delete(id);
+    public void delete(String name) {
+        userMapper.delete(name);
     }
 
     private UserDO convertFromUserModel(UserModel userModel) {
