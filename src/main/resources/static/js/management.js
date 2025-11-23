@@ -16,6 +16,8 @@ window.onload = function() {
     // prepare functions
     buttonLogout();
     buttonAddUser();
+    buttonQueryUser();
+    buttonResetQuery();
     // get user roles
     $.ajax({
         type: "GET",
@@ -76,8 +78,6 @@ window.onload = function() {
 }
 
 function resetAddRoleModalLayout() {
-    $("#addUsername").val("");
-    $("#addPassword").val("");
     let currentRole = getUserRoleCode($("#addRole").val());
     if (currentRole == 1) {
         $("#addGroupCompany").show();
@@ -226,8 +226,63 @@ function initModal() {
 
 function buttonAddUser() {
     $('#addUser').on('click', function() {
+        $("#addUsername").val("");
+        $("#addPassword").val("");
         $("#addModal").fadeIn().addClass('active');
         resetAddRoleModalLayout();
+    });
+}
+
+function buttonQueryUser() {
+    $('#queryUser').on('click', function() {
+        var name = $("#inputSearchUser").val();
+        if (name == "" || name == null) {
+            getAllUsers();
+            return;
+        }
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8081/user/getUserByName",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            data: {
+                "name": name
+            },
+            xhrFields: { withCredentials: true },
+            success: function(data) {
+                if (data.status == "success") {
+                    users = [];
+                    users.push(data.data);
+                    let tableHTML = '';
+                    if (users[0] != null) {
+                        users.forEach((item, index) => {
+                            tableHTML += `
+                                <tr>
+                                    <td>${item.name}</td>
+                                    <td><span class="role-badge role-${item.role}">` + formatUserRole(item.role) + `</span></td>
+                                    <td><span style="color: ` + (item.status == 1 ? "#00b894" : "red") + `;">` + formatUserStatus(item.status) + `</span></td>
+                                    <td>
+                                        <div class="actions">
+                                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
+                                            <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                                            <button class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    }
+                    $("#tb").html(tableHTML);
+                    initTableOperations();
+                } else {
+                    alert(data.data.errorMessage);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(xhr.responseText || error);
+            }
+        });
     });
 }
 
@@ -256,6 +311,13 @@ function buttonLogout() {
     });
 }
 
+function buttonResetQuery() {
+    $('#resetQuery').on('click', function() {
+        $("#inputSearchUser").val("");
+        getAllUsers();
+    });
+}
+
 function getAllUsers() {
     $.ajax({
         type: "GET",
@@ -267,97 +329,28 @@ function getAllUsers() {
         success: function(data) {
             if (data.status == "success") {
                 users = data.data;
-                if (users == null) return;
                 let tableHTML = '';
-                users.forEach((item, index) => {
-                    tableHTML += `
-                        <tr>
-                            <td>${item.name}</td>
-                            <td><span class="role-badge role-${item.role}">` + formatUserRole(item.role) + `</span></td>
-                            <td><span style="color: ` + (item.status == 1 ? "#00b894" : "red") + `;">` + formatUserStatus(item.status) + `</span></td>
-                            <td>
-                                <div class="actions">
-                                    <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                                    <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                                    <button class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                });
+                if (users != null) {
+                    users.forEach((item, index) => {
+                        tableHTML += `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td><span class="role-badge role-${item.role}">` + formatUserRole(item.role) + `</span></td>
+                                <td><span style="color: ` + (item.status == 1 ? "#00b894" : "red") + `;">` + formatUserStatus(item.status) + `</span></td>
+                                <td>
+                                    <div class="actions">
+                                        <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
+                                        <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                                        <button class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                }
                 $("#tb").html(tableHTML);
-                document.querySelectorAll('.btn-view').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const username = this.closest('tr').querySelector('td:first-child').textContent;
-                        var user = getUserByName(username);
-                        var role = user.role;
-                        $('#viewUsername').val(user.name);
-                        $('#viewPassword').val(user.password);
-                        $('#viewRole').val(formatUserRole(role));
-                        $('#viewStatus').val(formatUserStatus(user.status));
-                        if (role != 1) {
-                            $("#viewGroupCompany").hide();
-                            $("#viewGroupSellerTaxId").hide();
-                        } else {
-                            $("#viewGroupCompany").show();
-                            $("#viewGroupSellerTaxId").show();
-                            $('#viewCompany').val(user.company);
-                            $('#viewSellerTaxId').val(user.sellerTaxId);
-                        }
-                        $("#viewModal").fadeIn().addClass('active');
-                    });
-                });
-                document.querySelectorAll('.btn-edit').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const username = this.closest('tr').querySelector('td:first-child').textContent;
-                        var user = getUserByName(username);
-                        var role = user.role;
-                        $('#editUsername').val(user.name);
-                        $('#editPassword').val(user.password);
-                        $('#editRole').val(formatUserRole(role));
-                        $('#editStatus').val(formatUserStatus(user.status));
-                        if (role != 1) {
-                            $("#editGroupCompany").hide();
-                            $("#editGroupSellerTaxId").hide();
-                        } else {
-                            $("#editGroupCompany").show();
-                            $("#editGroupSellerTaxId").show();
-                            $('#editCompany').val(user.company);
-                            $('#editSellerTaxId').val(user.sellerTaxId);
-                        }
-                        $("#editModal").fadeIn().addClass('active');
-                    });
-                });
-                document.querySelectorAll('.btn-delete').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const username = this.closest('tr').querySelector('td:first-child').textContent;
-                        if (confirm(`Are you sure you want to delete user: ${username}?`)) {
-                            $.ajax({
-                                type: "POST",
-                                contentType: "application/x-www-form-urlencoded",
-                                url: "http://localhost:8081/user/delete",
-                                headers: {
-                                    "Authorization": "Bearer " + token
-                                },
-                                data: {
-                                    "name": username
-                                },
-                                xhrFields: { withCredentials: true },
-                                success: function(data) {
-                                    if (data.status == "success") {
-                                        alert(`${username} has been deleted!`);
-                                        getAllUsers();
-                                    } else {
-                                        alert(data.data.errorMessage);
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    alert(xhr.responseText || error);
-                                }
-                            });
-                        }
-                    });
-                });
+                initTableOperations();
             } else {
                 alert(data.data.errorMessage);
             }
@@ -365,6 +358,81 @@ function getAllUsers() {
         error: function(xhr, status, error) {
             alert(xhr.responseText || error);
         }
+    });
+}
+
+function initTableOperations() {
+    document.querySelectorAll('.btn-view').forEach(button => {
+        button.addEventListener('click', function() {
+            const username = this.closest('tr').querySelector('td:first-child').textContent;
+            var user = getUserByName(username);
+            var role = user.role;
+            $('#viewUsername').val(user.name);
+            $('#viewPassword').val(user.password);
+            $('#viewRole').val(formatUserRole(role));
+            $('#viewStatus').val(formatUserStatus(user.status));
+            if (role != 1) {
+                $("#viewGroupCompany").hide();
+                $("#viewGroupSellerTaxId").hide();
+            } else {
+                $("#viewGroupCompany").show();
+                $("#viewGroupSellerTaxId").show();
+                $('#viewCompany').val(user.company);
+                $('#viewSellerTaxId').val(user.sellerTaxId);
+            }
+            $("#viewModal").fadeIn().addClass('active');
+        });
+    });
+    document.querySelectorAll('.btn-edit').forEach(button => {
+        button.addEventListener('click', function() {
+            const username = this.closest('tr').querySelector('td:first-child').textContent;
+            var user = getUserByName(username);
+            var role = user.role;
+            $('#editUsername').val(user.name);
+            $('#editPassword').val(user.password);
+            $('#editRole').val(formatUserRole(role));
+            $('#editStatus').val(formatUserStatus(user.status));
+            if (role != 1) {
+                $("#editGroupCompany").hide();
+                $("#editGroupSellerTaxId").hide();
+            } else {
+                $("#editGroupCompany").show();
+                $("#editGroupSellerTaxId").show();
+                $('#editCompany').val(user.company);
+                $('#editSellerTaxId').val(user.sellerTaxId);
+            }
+            $("#editModal").fadeIn().addClass('active');
+        });
+    });
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function() {
+            const username = this.closest('tr').querySelector('td:first-child').textContent;
+            if (confirm(`Are you sure you want to delete user: ${username}?`)) {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/x-www-form-urlencoded",
+                    url: "http://localhost:8081/user/delete",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    },
+                    data: {
+                        "name": username
+                    },
+                    xhrFields: { withCredentials: true },
+                    success: function(data) {
+                        if (data.status == "success") {
+                            alert(`${username} has been deleted!`);
+                            getAllUsers();
+                        } else {
+                            alert(data.data.errorMessage);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert(xhr.responseText || error);
+                    }
+                });
+            }
+        });
     });
 }
 

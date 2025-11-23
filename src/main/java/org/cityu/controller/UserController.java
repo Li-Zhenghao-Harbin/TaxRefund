@@ -64,9 +64,6 @@ public class UserController extends BaseController {
     @RequireRole({ROLE_MANAGER})
     public CommonReturnType getAllUsers() {
         List<UserModel> userModels = userService.getAllUsers();
-        for (UserModel  userModel : userModels) {
-            userModel.setPassword(CommonUtils.decode(userModel.getPassword()));
-        }
         return CommonReturnType.create(userModels);
     }
 

@@ -1,5 +1,6 @@
 package org.cityu.service.impl;
 
+import org.cityu.common.utils.CommonUtils;
 import org.cityu.dao.SellerMapper;
 import org.cityu.dao.UserMapper;
 import org.cityu.dataobject.SellerDO;
@@ -41,13 +42,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserModel getUserByName(String name) {
         UserDO userDO = userMapper.getUserByName(name);
-        return convertFromUserDO(userDO);
+        if (userDO == null) {
+            return null;
+        }
+        UserModel userModel = convertFromUserDO(userDO);
+        userModel.setPassword(CommonUtils.decode(userModel.getPassword()));
+        return userModel;
     }
 
     @Override
     public List<UserModel> getAllUsers() {
         List<UserDO> userDOs = userMapper.getAllUsers();
+        if (userDOs.isEmpty()) {
+            return null;
+        }
         List<UserModel> userModels = convertFromUserDOs(userDOs);
+        for (UserModel  userModel : userModels) {
+            userModel.setPassword(CommonUtils.decode(userModel.getPassword()));
+        }
         return userModels;
     }
 
