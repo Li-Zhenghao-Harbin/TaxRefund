@@ -23,4 +23,9 @@ public class CodeServiceImpl implements CodeService {
     public List<Object> getTaxRefundMethods() {
         return codeMapper.getTaxRefundMethods();
     }
+
+    @Override
+    public List<Object> getStatus(String business) {
+        return codeMapper.getStatus(business);
+    }
 }

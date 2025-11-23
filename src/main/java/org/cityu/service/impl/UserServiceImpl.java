@@ -74,6 +74,9 @@ public class UserServiceImpl implements UserService {
         if (userDO == null) {
             throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
         }
+        if (userDO.getStatus() == 0) {
+            throw new BusinessException(EmBusinessError.USER_UNAVAILABLE);
+        }
         UserModel userModel = convertFromUserDO(userDO);
         // check password
         if (!encryptPassword.equals(userModel.getPassword())) {

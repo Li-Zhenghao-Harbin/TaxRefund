@@ -1,0 +1,274 @@
+var token;
+var users;
+var userRolesMapper;
+var userStatusMapper;
+
+window.onload = function() {
+    token = localStorage.getItem("auth_token");
+    if (!token) {
+        alert("Please login");
+        window.location.href = "login.html";
+    }
+    // display user name
+    $("#current_user").text("Current User: " + JSON.parse(localStorage.getItem("user")).name);
+    // prepare layout
+    initModal();
+    // get user roles
+    $.ajax({
+        type: "GET",
+        contentType: "application/x-www-form-urlencoded",
+        url: "http://localhost:8081/code/getUserRoles",
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                userRolesMapper = data.data;
+            } else {
+                alert(data.data.errorMessage);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText || error);
+        }
+    });
+    // get user status
+    $.ajax({
+        type: "GET",
+        contentType: "application/x-www-form-urlencoded",
+        url: "http://localhost:8081/code/getStatus",
+        data: {
+            "business": "User"
+        },
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                userStatusMapper = data.data;
+            } else {
+                alert(data.data.errorMessage);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText || error);
+        }
+    });
+    // logout
+    document.querySelector('.logout-button').addEventListener('click', function() {
+        if (confirm('Are you sure you want to logout?')) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                url: "http://localhost:8081/user/logout",
+                xhrFields: { withCredentials: true },
+                success: function(data) {
+                    if (data.status == "success") {
+                        localStorage.removeItem('auth_token');
+                        window.location.href = "login.html";
+                    } else {
+                        alert(data.data.errorMessage);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(xhr.responseText || error);
+                }
+            });
+            return false;
+        }
+    });
+    getAllUsers();
+}
+
+function initModal() {
+    // close modal by button
+    $('.close-button, .btn-cancel').on('click', function() {
+        const modalOverlay = $(this).closest('.modal-overlay');
+        modalOverlay.removeClass('active');
+        setTimeout(() => {
+            modalOverlay.fadeOut();
+        }, 300);
+    });
+    // close modal by other region
+    $('.modal-overlay').on('click', function(e) {
+        if (e.target === this) {
+            $(this).removeClass('active');
+            setTimeout(() => {
+                $(this).fadeOut();
+            }, 300);
+        }
+    });
+    // save edited information
+    $('.btn-confirm').on('click', function() {
+        const userId = $('#editModal').data('editing-user');
+        const username = $('#editUsername').val();
+
+        // 在实际应用中，这里会有保存到服务器的逻辑
+        alert(`User ${username} information has been updated.`);
+        $('#editModal').removeClass('active');
+        setTimeout(() => {
+            $('#editModal').fadeOut();
+        }, 300);
+    });
+}
+
+function getAllUsers() {
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8081/user/getAllUsers",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                users = data.data;
+                if (users == null) return;
+                let tableHTML = '';
+                users.forEach((item, index) => {
+                    tableHTML += `
+                        <tr>
+                            <td>${item.name}</td>
+                            <td><span class="role-badge role-${item.role}">` + formatUserRole(item.role) + `</span></td>
+                            <td><span style="color: ` + (item.status == 1 ? "#00b894" : "red") + `;">` + formatUserStatus(item.status) + `</span></td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                $("#tb").html(tableHTML);
+                document.querySelectorAll('.btn-view').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const username = this.closest('tr').querySelector('td:first-child').textContent;
+                        var user = getUserByName(username);
+                        var role = user.role;
+                        $('#viewUsername').val(user.name);
+                        $('#viewPassword').val(user.password);
+                        $('#viewRole').val(formatUserRole(role));
+                        $('#viewStatus').val(formatUserStatus(user.status));
+                        if (role != 1) {
+                            $("#viewGroupCompany").hide();
+                            $("#viewGroupSellerTaxId").hide();
+                        } else {
+                            $("#viewGroupCompany").show();
+                            $("#viewGroupSellerTaxId").show();
+                            $('#viewCompany').val(user.company);
+                            $('#viewTaxId').val(user.sellerTaxId);
+                        }
+                        $("#viewModal").fadeIn().addClass('active');
+                    });
+                });
+                document.querySelectorAll('.btn-edit').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const username = this.closest('tr').querySelector('td:first-child').textContent;
+                        var user = getUserByName(username);
+                        var role = user.role;
+                        $('#editUsername').val(user.name);
+                        $('#editPassword').val(user.password);
+                        $('#editRole').val(formatUserRole(role));
+                        $('#editStatus').val(formatUserStatus(user.status));
+                        if (role != 1) {
+                            $("#editGroupCompany").hide();
+                            $("#editGroupSellerTaxId").hide();
+                        } else {
+                            $("#editGroupCompany").show();
+                            $("#editGroupSellerTaxId").show();
+                            $('#editCompany').val(user.company);
+                            $('#editTaxId').val(user.sellerTaxId);
+                        }
+                        $("#editModal").fadeIn().addClass('active');
+                    });
+                });
+                document.querySelectorAll('.btn-delete').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const username = this.closest('tr').querySelector('td:first-child').textContent;
+                        if (confirm(`Are you sure you want to delete user: ${username}?`)) {
+                            $.ajax({
+                                type: "POST",
+                                contentType: "application/x-www-form-urlencoded",
+                                url: "http://localhost:8081/user/delete",
+                                headers: {
+                                    "Authorization": "Bearer " + token
+                                },
+                                data: {
+                                    "name": username
+                                },
+                                xhrFields: { withCredentials: true },
+                                success: function(data) {
+                                    if (data.status == "success") {
+                                        alert(`${username} has been deleted!`);
+                                        getAllUsers();
+                                    } else {
+                                        alert(data.data.errorMessage);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    alert(xhr.responseText || error);
+                                }
+                            });
+                        }
+                    });
+                });
+            } else {
+                alert(data.data.errorMessage);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText || error);
+        }
+    });
+}
+
+function formatUserRole(role) {
+    return userRolesMapper[role].title;
+}
+
+function formatUserStatus(status) {
+    return userStatusMapper[status].title;
+}
+
+function getUserByName(name) {
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].name == name) {
+            return users[i];
+        }
+    }
+    return null;
+}
+
+
+//
+//// 搜索功能
+//document.querySelector('.search-button').addEventListener('click', function() {
+//    const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+//    const rows = document.querySelectorAll('.users-table tbody tr');
+//
+//    rows.forEach(row => {
+//        const username = row.querySelector('td:first-child').textContent.toLowerCase();
+//        const role = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+//
+//        if (username.includes(searchTerm) || role.includes(searchTerm)) {
+//            row.style.display = '';
+//        } else {
+//            row.style.display = 'none';
+//        }
+//    });
+//});
+//
+//// 分页按钮点击事件
+//document.querySelectorAll('.pagination button').forEach(button => {
+//    button.addEventListener('click', function() {
+//        document.querySelector('.pagination .active').classList.remove('active');
+//        this.classList.add('active');
+//        alert(`Loading page ${this.textContent}`);
+//        // 在实际应用中，这里会有加载对应页数据的逻辑
+//    });
+//});
+//
+//// 添加用户按钮
+//document.querySelector('.add-user-button').addEventListener('click', function() {
+//    alert('Opening add user form...');
+//    // 在实际应用中，这里会打开添加用户的表单
+//});
+

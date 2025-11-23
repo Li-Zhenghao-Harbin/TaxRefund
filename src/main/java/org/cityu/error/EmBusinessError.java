@@ -6,6 +6,7 @@ public enum EmBusinessError implements CommonError {
     // user
     USER_NOT_EXIST(20000, "User not exist"),
     PASSWORD_NOT_MATCH(20001, "Password not match"),
+    USER_UNAVAILABLE(20002, "User unavailable"),
     // invoice
     INVOICE_NOT_EXIST(30000, "Invoice not exist"),
     IMPROPER_INVOICE_STATUS(30001, "Improper invoice status"),

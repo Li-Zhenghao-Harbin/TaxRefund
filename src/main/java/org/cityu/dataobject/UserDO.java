@@ -8,7 +8,7 @@ public class UserDO {
 
     private Integer role;
 
-    private Integer available;
+    private Integer status;
 
     private String company;
 
@@ -38,12 +38,12 @@ public class UserDO {
         this.role = role;
     }
 
-    public Integer getAvailable() {
-        return available;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setAvailable(Integer available) {
-        this.available = available;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getCompany() {

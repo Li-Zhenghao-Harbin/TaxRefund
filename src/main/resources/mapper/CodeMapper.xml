@@ -9,4 +9,9 @@
     select code, title
     from c_tax_refund_method
   </select>
+  <select id="getStatus" parameterType="java.lang.String" resultType="java.util.Map">
+    select code, title
+    from c_status
+    where business = #{business,jdbcType=VARCHAR}
+  </select>
 </mapper>

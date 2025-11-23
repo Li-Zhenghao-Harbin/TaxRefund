@@ -5,35 +5,35 @@
     <id column="name" jdbcType="VARCHAR" property="name" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="role" jdbcType="VARCHAR" property="role" />
-    <result column="available" jdbcType="INTEGER" property="available" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="company" jdbcType="INTEGER" property="company" />
     <result column="seller_tax_id" jdbcType="INTEGER" property="sellerTaxId" />
   </resultMap>
-  <delete id="delete" parameterType="java.lang.Integer">
+  <delete id="delete" parameterType="java.lang.String">
     delete from b_user
     where name = #{name,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="org.cityu.dataobject.UserDO">
     insert into b_user (name, password,
-      role, available)
+      role, status)
     values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-      #{role,jdbcType=VARCHAR}, #{available,jdbcType=BIT})
+      #{role,jdbcType=VARCHAR}, #{status,jdbcType=BIT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="org.cityu.dataobject.UserDO">
     update b_user
     set name = #{name,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       role = #{role,jdbcType=VARCHAR},
-      available = #{available,jdbcType=BIT}
+    status = #{status,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getAllUsers" resultMap="BaseResultMap">
-    select u.name, u.password, u.role, u.available, s.company, s.seller_tax_id
+    select u.name, u.password, u.role, u.status, s.company, s.seller_tax_id
     from b_user u
     left join b_seller s on u.name = s.merchant_name
   </select>
   <select id="getUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select u.name, u.password, u.role, u.available, s.company, s.seller_tax_id
+    select u.name, u.password, u.role, u.status, s.company, s.seller_tax_id
     from b_user u
     left join b_seller s on u.name = s.merchant_name
     where u.name = #{name,jdbcType=VARCHAR}

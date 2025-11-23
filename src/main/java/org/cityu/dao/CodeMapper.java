@@ -6,4 +6,5 @@ import java.util.Map;
 public interface CodeMapper {
     List<Object> getUserRoles();
     List<Object> getTaxRefundMethods();
+    List<Object> getStatus(String business);
 }

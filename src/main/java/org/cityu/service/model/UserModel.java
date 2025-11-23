@@ -4,7 +4,7 @@ public class UserModel {
     private String name;
     private String password;
     private Integer role;
-    private Integer available;
+    private Integer status;
     private String company;
     private String sellerTaxId;
 
@@ -32,12 +32,12 @@ public class UserModel {
         this.role = role;
     }
 
-    public Integer getAvailable() {
-        return available;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setAvailable(Integer available) {
-        this.available = available;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getCompany() {

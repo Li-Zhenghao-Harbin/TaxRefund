@@ -39,4 +39,11 @@ public class CodeController {
         List<Object> result = codeService.getTaxRefundMethods();
         return CommonReturnType.create(result);
     }
+
+    @RequestMapping(value = "/getStatus", method = {RequestMethod.GET})
+    @ResponseBody
+    public CommonReturnType getStatus(@RequestParam(name = "business") String business) {
+        List<Object> result = codeService.getStatus(business);
+        return CommonReturnType.create(result);
+    }
 }

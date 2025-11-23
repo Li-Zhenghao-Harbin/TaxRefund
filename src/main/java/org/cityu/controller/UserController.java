@@ -44,7 +44,7 @@ public class UserController extends BaseController {
         userModel.setName(name);
         userModel.setPassword(CommonUtils.encode(password));
         userModel.setRole(role);
-        userModel.setAvailable(1);
+        userModel.setStatus(1);
         userModel.setCompany(company);
         userModel.setSellerTaxId(sellerTaxId);
         userService.register(userModel);
@@ -73,12 +73,12 @@ public class UserController extends BaseController {
     public CommonReturnType changeUserInfo(@RequestParam(name = "name") String name,
                                            @RequestParam(name = "password") String password,
                                            @RequestParam(name = "role") Integer role,
-                                           @RequestParam(name = "available") Integer available) {
+                                           @RequestParam(name = "status") Integer status) {
         UserModel userModel = new UserModel();
         userModel.setName(name);
         userModel.setPassword(password);
         userModel.setRole(role);
-        userModel.setAvailable(available);
+        userModel.setStatus(status);
         userService.changeUserInfo(userModel);
         return CommonReturnType.create(null);
     }
