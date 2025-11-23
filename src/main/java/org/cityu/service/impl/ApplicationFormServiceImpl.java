@@ -84,9 +84,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public ApplicationFormModel getApplicationForm(String applicationFormNumber) throws BusinessException {
-        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationForm(applicationFormNumber);
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public ApplicationFormModel getApplicationFormByApplicationNumber(String applicationFormNumber) throws BusinessException {
+        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationFormByApplicationNumber(applicationFormNumber);
         if (applicationFormDO == null) {
             throw new BusinessException(EmBusinessError.APPLICATION_FORM_NOT_EXIST);
         }
@@ -97,9 +97,35 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<ApplicationFormModel> getAllApplicationForms() throws BusinessException {
+        List<ApplicationFormDO> applicationFormDOs = applicationFormMapper.getAllApplicationForms();
+        if (applicationFormDOs.isEmpty()) {
+            return null;
+        }
+        List<ApplicationFormModel> applicationFormModels = convertFromApplicationFormDOs(applicationFormDOs);
+        for  (ApplicationFormModel applicationFormModel : applicationFormModels) {
+            String applicationFormNumber = applicationFormModel.getApplicationFormNumber();
+            List<InvoiceModel> invoices = invoiceService.getInvoiceByApplicationFormNumber(applicationFormNumber);
+            applicationFormModel.setInvoices(invoices);
+        }
+        return applicationFormModels;
+    }
+
+    private List<ApplicationFormModel> convertFromApplicationFormDOs(List<ApplicationFormDO> applicationFormDOs) {
+        List<ApplicationFormModel> applicationFormModels = new ArrayList<>();
+        for (ApplicationFormDO applicationFormDO : applicationFormDOs) {
+            ApplicationFormModel applicationFormModel = new ApplicationFormModel();
+            BeanUtils.copyProperties(applicationFormDO, applicationFormModel);
+            applicationFormModels.add(applicationFormModel);
+        }
+        return applicationFormModels;
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void reviewApplicationForm(String applicationFormNumber, List<ItemModel> rejectedItems) throws BusinessException {
-        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationForm(applicationFormNumber);
+        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationFormByApplicationNumber(applicationFormNumber);
         if (applicationFormDO == null) {
             throw new BusinessException(EmBusinessError.APPLICATION_FORM_NOT_EXIST);
         }

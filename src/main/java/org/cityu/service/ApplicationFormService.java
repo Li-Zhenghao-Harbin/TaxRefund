@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface ApplicationFormService {
     void createApplicationForm(ApplicationFormModel applicationFormModel) throws BusinessException;
-    ApplicationFormModel getApplicationForm(String applicationFormNumber) throws BusinessException;
+    ApplicationFormModel getApplicationFormByApplicationNumber(String applicationFormNumber) throws BusinessException;
+    List<ApplicationFormModel> getAllApplicationForms() throws BusinessException;
     void reviewApplicationForm(String applicationFormNumber, List<ItemModel> rejectedItems) throws BusinessException;
 }

@@ -50,7 +50,7 @@ public class TaxRefundServiceImpl implements TaxRefundService {
     private void commonTaxRefund(TaxRefundModel taxRefundModel) throws BusinessException {
         String applicationFormNumber = taxRefundModel.getApplicationFormNumber();
         // check application form status
-        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationForm(applicationFormNumber);
+        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationFormByApplicationNumber(applicationFormNumber);
         if (applicationFormDO == null) {
             throw new BusinessException(EmBusinessError.APPLICATION_FORM_NOT_EXIST);
         }

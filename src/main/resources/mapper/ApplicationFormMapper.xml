@@ -19,10 +19,15 @@
       #{applicantId,jdbcType=VARCHAR}, #{applicantCountry,jdbcType=VARCHAR}, #{issueDate,jdbcType=TIMESTAMP},
       #{issueMerchantName,jdbcType=INTEGER}, #{totalAmount,jdbcType=DECIMAL}, #{customsConfirmAmount,jdbcType=DECIMAL}, 1)
   </insert>
-  <select id="getApplicationForm" resultMap="BaseResultMap">
+  <select id="getApplicationFormByApplicationNumber" resultMap="BaseResultMap">
     select application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_name, status
     from b_application_form
     where application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
+  </select>
+  <select id="getAllApplicationForms" resultMap="BaseResultMap">
+    select application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_name, status
+    from b_application_form
+    order by issue_date desc
   </select>
   <update id="updateReviewedApplicationForm">
     update b_application_form
