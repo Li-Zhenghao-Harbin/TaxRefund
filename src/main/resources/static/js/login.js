@@ -26,8 +26,14 @@ jQuery(document).ready(function() {
                     localStorage.setItem("auth_token", token);
                     localStorage.setItem("user", JSON.stringify(data.data.user));
                     console.log("login with token");
-                    if (data.data.user.role == "0") {
-                        window.location.href = 'management.html';
+                    var role = data.data.user.role;
+                    switch (role) {
+                        case 0:
+                            window.location.href = 'management.html';
+                            break;
+                        case 1:
+                            window.location.href = 'merchant.html';
+                            break;
                     }
                 } else {
                     alert(data.data.errorMessage);
