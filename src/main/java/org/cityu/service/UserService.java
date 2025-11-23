@@ -9,7 +9,7 @@ public interface UserService {
     void register(UserModel userModel);
     UserModel getUserByName(String name);
     List<UserModel> getAllUsers();
-    void changeUserInfo(UserModel userModel);
+    void updateUser(UserModel userModel);
     UserModel validateLogin(String name, String encryptPassword) throws BusinessException;
     void delete(String name);
 }

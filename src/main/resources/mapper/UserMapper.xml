@@ -19,13 +19,12 @@
     values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
       #{role,jdbcType=VARCHAR}, #{status,jdbcType=BIT})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="org.cityu.dataobject.UserDO">
+  <update id="updateUserInfo" parameterType="org.cityu.dataobject.UserDO">
     update b_user
-    set name = #{name,jdbcType=VARCHAR},
+    set
       password = #{password,jdbcType=VARCHAR},
-      role = #{role,jdbcType=VARCHAR},
-    status = #{status,jdbcType=BIT}
-    where id = #{id,jdbcType=INTEGER}
+      status = #{status,jdbcType=BIT}
+    where name = #{name,jdbcType=INTEGER}
   </update>
   <select id="getAllUsers" resultMap="BaseResultMap">
     select u.name, u.password, u.role, u.status, s.company, s.seller_tax_id

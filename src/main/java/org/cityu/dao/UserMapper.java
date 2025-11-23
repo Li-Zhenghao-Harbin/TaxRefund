@@ -8,7 +8,7 @@ public interface UserMapper {
 
     List<UserDO> getAllUsers();
 
-    int updateByPrimaryKey(UserDO record);
+    int updateUserInfo(UserDO record);
 
     UserDO getUserByName(String name);
 

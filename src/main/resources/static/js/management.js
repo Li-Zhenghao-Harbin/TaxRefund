@@ -22,6 +22,14 @@ window.onload = function() {
         success: function(data) {
             if (data.status == "success") {
                 userRolesMapper = data.data;
+                // load options
+//                var editRoleHtml;
+//                userRolesMapper.forEach(item => {
+//                    editRoleHtml += `
+//                            <option value="` + item.title + `">` + item.title + `</option>
+//                        `;
+//                });
+//                $("#editRole").html(editRoleHtml);
             } else {
                 alert(data.data.errorMessage);
             }
@@ -42,6 +50,14 @@ window.onload = function() {
         success: function(data) {
             if (data.status == "success") {
                 userStatusMapper = data.data;
+                // load options
+                var editStatusHtml;
+                userStatusMapper.forEach(item => {
+                    editStatusHtml += `
+                            <option value="` + item.title + `">` + item.title + `</option>
+                        `;
+                });
+                $("#editStatus").html(editStatusHtml);
             } else {
                 alert(data.data.errorMessage);
             }
@@ -96,11 +112,55 @@ function initModal() {
     });
     // save edited information
     $('.btn-confirm').on('click', function() {
-        const userId = $('#editModal').data('editing-user');
-        const username = $('#editUsername').val();
-
-        // 在实际应用中，这里会有保存到服务器的逻辑
-        alert(`User ${username} information has been updated.`);
+        let userName = $("#editUsername").val();
+        let password = $("#editPassword").val();
+        let role = getUserByName(userName).role;
+        let status = getUserStatusCode($("#editStatus").val());
+        let company = $("#editCompany").val();
+        let sellerTaxId = $("#editSellerTaxId").val();
+        if (password == "" || password == null) {
+            alert("Password can not be null!");
+            return;
+        }
+        if (role != 1) {
+            company = sellerTaxId = "";
+        } else {
+            if (company == "" || company == null) {
+                alert("Company can not be null!");
+                return;
+            }
+            if (sellerTaxId == "" || sellerTaxId == null) {
+                alert("Seller tax id can not be null!");
+                return;
+            }
+        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
+            url: "http://localhost:8081/user/updateUser",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            data: {
+                name: userName,
+                password: password,
+                role: role,
+                status: status,
+                company: company,
+                sellerTaxId: sellerTaxId
+            },
+            xhrFields: { withCredentials: true },
+            success: function(data) {
+                if (data.status == "success") {
+                    getAllUsers();
+                } else {
+                    alert(data.data.errorMessage);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(xhr.responseText || error);
+            }
+        });
         $('#editModal').removeClass('active');
         setTimeout(() => {
             $('#editModal').fadeOut();
@@ -154,7 +214,7 @@ function getAllUsers() {
                             $("#viewGroupCompany").show();
                             $("#viewGroupSellerTaxId").show();
                             $('#viewCompany').val(user.company);
-                            $('#viewTaxId').val(user.sellerTaxId);
+                            $('#viewSellerTaxId').val(user.sellerTaxId);
                         }
                         $("#viewModal").fadeIn().addClass('active');
                     });
@@ -175,7 +235,7 @@ function getAllUsers() {
                             $("#editGroupCompany").show();
                             $("#editGroupSellerTaxId").show();
                             $('#editCompany').val(user.company);
-                            $('#editTaxId').val(user.sellerTaxId);
+                            $('#editSellerTaxId').val(user.sellerTaxId);
                         }
                         $("#editModal").fadeIn().addClass('active');
                     });
@@ -226,6 +286,15 @@ function formatUserRole(role) {
 
 function formatUserStatus(status) {
     return userStatusMapper[status].title;
+}
+
+function getUserStatusCode(status) {
+    for (var i = 0; i < userStatusMapper.length; i++) {
+        if (userStatusMapper[i].title == status) {
+            return userStatusMapper[i].code;
+        }
+    }
+    return null;
 }
 
 function getUserByName(name) {

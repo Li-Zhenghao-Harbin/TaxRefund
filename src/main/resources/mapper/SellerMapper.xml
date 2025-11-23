@@ -12,4 +12,9 @@
     values (#{merchantName,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, #{sellerTaxId,jdbcType=VARCHAR}
       )
   </insert>
+  <update id="updateSellerInfo" parameterType="org.cityu.dataobject.SellerDO">
+    update b_seller
+    set company = #{company,jdbcType=VARCHAR}, seller_tax_id = #{sellerTaxId,jdbcType=VARCHAR}
+    where merchant_name = #{merchantName,jdbcType=VARCHAR}
+  </update>
 </mapper>

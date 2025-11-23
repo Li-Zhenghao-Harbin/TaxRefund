@@ -64,4 +64,13 @@ public class CommonUtils {
     public static String encode(String str) {
         return Base64.getEncoder().encodeToString(str.getBytes());
     }
+
+    public static String decode(String str) {
+        try {
+            byte[] decodedBytes = Base64.getDecoder().decode(str);
+            return new String(decodedBytes);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 }

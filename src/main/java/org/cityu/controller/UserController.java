@@ -63,23 +63,30 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequireRole({ROLE_MANAGER})
     public CommonReturnType getAllUsers() {
-        List<UserModel> userModel = userService.getAllUsers();
-        return CommonReturnType.create(userModel);
+        List<UserModel> userModels = userService.getAllUsers();
+        for (UserModel  userModel : userModels) {
+            userModel.setPassword(CommonUtils.decode(userModel.getPassword()));
+        }
+        return CommonReturnType.create(userModels);
     }
 
-    @RequestMapping(value = "/changeUserInfo", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
+    @RequestMapping(value = "/updateUser", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
     @RequireRole({ROLE_MANAGER})
-    public CommonReturnType changeUserInfo(@RequestParam(name = "name") String name,
-                                           @RequestParam(name = "password") String password,
-                                           @RequestParam(name = "role") Integer role,
-                                           @RequestParam(name = "status") Integer status) {
+    public CommonReturnType updateUser(@RequestParam(name = "name") String name,
+                                       @RequestParam(name = "password") String password,
+                                       @RequestParam(name = "role") Integer role,
+                                       @RequestParam(name = "status") Integer status,
+                                       @RequestParam(name = "company") String company,
+                                       @RequestParam(name = "sellerTaxId") String sellerTaxId) {
         UserModel userModel = new UserModel();
         userModel.setName(name);
-        userModel.setPassword(password);
+        userModel.setPassword(CommonUtils.encode(password));
         userModel.setRole(role);
         userModel.setStatus(status);
-        userService.changeUserInfo(userModel);
+        userModel.setCompany(company);
+        userModel.setSellerTaxId(sellerTaxId);
+        userService.updateUser(userModel);
         return CommonReturnType.create(null);
     }
 

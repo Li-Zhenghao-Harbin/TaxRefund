@@ -128,7 +128,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Password</label>
-                <input type="password" class="form-input" id="viewPassword" readonly>
+                <input type="text" class="form-input" id="viewPassword" readonly>
             </div>
             <div class="form-group">
                 <label class="form-label">Role</label>
@@ -144,7 +144,7 @@
             </div>
             <div class="form-group" id="viewGroupSellerTaxId">
                 <label class="form-label">Seller Tax ID</label>
-                <input type="text" class="form-input" id="viewTaxId" readonly>
+                <input type="text" class="form-input" id="viewSellerTaxId" readonly>
             </div>
         </div>
         <div class="modal-footer">
@@ -163,25 +163,23 @@
         <div class="modal-body">
             <div class="form-group">
                 <label class="form-label">Username</label>
-                <input type="text" class="form-input" id="editUsername">
+                <input type="text" class="form-input" id="editUsername" readonly>
             </div>
             <div class="form-group">
                 <label class="form-label">Password</label>
-                <input type="password" class="form-input" id="editPassword">
+                <input type="text" class="form-input" id="editPassword">
             </div>
             <div class="form-group">
                 <label class="form-label">Role</label>
-                <select class="form-select" id="editRole">
-                    <option value="Admin">Admin</option>
-                    <option value="Editor">Editor</option>
-                    <option value="User">User</option>
-                </select>
+                <input type="text" class="form-input" id="editRole" readonly>
+<!--                <select class="form-select" id="editRole" readonly>-->
+
+<!--                </select>-->
             </div>
             <div class="form-group">
                 <label class="form-label">Status</label>
                 <select class="form-select" id="editStatus">
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
+
                 </select>
             </div>
             <div class="form-group" id="editGroupCompany">
@@ -190,7 +188,7 @@
             </div>
             <div class="form-group" id="editGroupSellerTaxId">
                 <label class="form-label">Seller Tax ID</label>
-                <input type="text" class="form-input" id="editTaxId">
+                <input type="text" class="form-input" id="editSellerTaxId">
             </div>
         </div>
         <div class="modal-footer">

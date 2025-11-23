@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -30,7 +29,7 @@ public class UserServiceImpl implements UserService {
     public void register(UserModel userModel) {
         UserDO userDO = convertFromUserModel(userModel);
         userMapper.insert(userDO);
-        if (userModel.getRole() == 1 && userModel.getSellerTaxId() != null) {
+        if (userModel.getRole() == 1) {
             SellerDO sellerDO = new SellerDO();
             sellerDO.setCompany(userModel.getCompany());
             sellerDO.setMerchantName(userModel.getName());
@@ -63,9 +62,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeUserInfo(UserModel userModel) {
+    @Transactional
+    public void updateUser(UserModel userModel) {
         UserDO userDO = convertFromUserModel(userModel);
-        userMapper.updateByPrimaryKey(userDO);
+        if (userDO.getStatus() == 1) {
+            SellerDO sellerDO = new SellerDO();
+            sellerDO.setMerchantName(userModel.getName());
+            sellerDO.setCompany(userModel.getCompany());
+            sellerDO.setSellerTaxId(userModel.getSellerTaxId());
+            sellerMapper.updateSellerInfo(sellerDO);
+        }
+        userMapper.updateUserInfo(userDO);
     }
 
     @Override
