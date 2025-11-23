@@ -21,7 +21,7 @@ import static org.cityu.controller.BaseController.*;
 @RestController
 @RequestMapping("/invoice")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
-public class InvoiceController extends BaseController {
+public class InvoiceController {
 
     @Autowired
     private InvoiceService invoiceService;
@@ -45,5 +45,13 @@ public class InvoiceController extends BaseController {
     public CommonReturnType getInvoiceByInvoiceNumber(@RequestParam(name = "invoiceNumber") String invoiceNumber) throws BusinessException {
         InvoiceModel invoiceModel = invoiceService.getInvoiceByInvoiceNumber(invoiceNumber);
         return CommonReturnType.create(invoiceModel);
+    }
+
+    @RequestMapping(value = "/getInvoicesByIssueMerchantName", method = {RequestMethod.GET})
+    @ResponseBody
+    @RequireRole({ROLE_MERCHANT, ROLE_CUSTOMS})
+    public CommonReturnType getInvoicesByIssueMerchantName(@RequestParam(name = "issueMerchantName") String issueMerchantName) throws BusinessException {
+        List<InvoiceModel> invoiceModels = invoiceService.getInvoicesByIssueMerchantName(issueMerchantName);
+        return CommonReturnType.create(invoiceModels);
     }
 }

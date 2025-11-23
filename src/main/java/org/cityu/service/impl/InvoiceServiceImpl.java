@@ -105,7 +105,23 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceModel.setItems(items);
         return invoiceModel;
     }
-    
+
+    @Override
+    public List<InvoiceModel> getInvoicesByIssueMerchantName(String issueMerchantName) {
+        List<InvoiceDO> invoiceDOs = invoiceMapper.getInvoicesByIssueMerchantName(issueMerchantName);
+        if (invoiceDOs.isEmpty()) {
+            return null;
+        }
+        List<InvoiceModel> invoiceModels = convertFromInvoiceDOList(invoiceDOs);
+        for (InvoiceModel invoiceModel : invoiceModels) {
+            String invoiceNumber = invoiceModel.getInvoiceNumber();
+            List<ItemDO> itemDOs = itemMapper.getItemByInvoiceNumber(invoiceNumber);
+            List<ItemModel> itemModels = convertFromItemDOList(itemDOs);
+            invoiceModel.setItems(itemModels);
+        }
+        return invoiceModels;
+    }
+
     private List<ItemModel> convertFromItemDOList(List<ItemDO> itemDOS) {
         List<ItemModel> itemModels = new ArrayList<>();
         for (ItemDO itemDO : itemDOS) {

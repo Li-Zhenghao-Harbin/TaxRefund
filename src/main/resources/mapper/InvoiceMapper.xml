@@ -39,4 +39,11 @@
     left join b_seller s on i.issue_merchant_name = s.merchant_name
     where invoice_number = #{invoiceNumber, jdbcType=VARCHAR}
   </select>
+  <select id="getInvoicesByIssueMerchantName" resultMap="BaseResultMap">
+    select i.invoice_number, i.issue_merchant_name, i.total_amount, i.issue_date, i.status, i.application_form_number, s.company, s.seller_tax_id
+    from b_invoice i
+    left join b_seller s on i.issue_merchant_name = s.merchant_name
+    where i.issue_merchant_name = #{issueMerchantName, jdbcType=VARCHAR}
+    order by i.issue_date desc
+  </select>
 </mapper>

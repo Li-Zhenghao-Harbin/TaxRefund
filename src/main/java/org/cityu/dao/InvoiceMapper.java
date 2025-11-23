@@ -8,4 +8,5 @@ public interface InvoiceMapper {
     int updateInvoiceToRelatedApplicationForm(String applicationFormNumber, List<String> invoiceNumbers);
     List<InvoiceDO> getInvoiceByApplicationFormNumber(String applicationFormNumber);
     InvoiceDO getInvoiceByInvoiceNumber(String invoiceNumber);
+    List<InvoiceDO> getInvoicesByIssueMerchantName(String issueMerchantName);
 }

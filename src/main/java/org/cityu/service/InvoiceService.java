@@ -10,4 +10,5 @@ public interface InvoiceService {
     void createInvoice(InvoiceModel invoiceModel);
     List<InvoiceModel> getInvoiceByApplicationFormNumber(String applicationFormNumber) throws BusinessException;
     InvoiceModel getInvoiceByInvoiceNumber(String invoiceNumber) throws BusinessException;
+    List<InvoiceModel> getInvoicesByIssueMerchantName(String issueMerchantName);
 }
