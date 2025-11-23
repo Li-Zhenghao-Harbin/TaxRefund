@@ -97,7 +97,23 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public List<ApplicationFormModel> getApplicationFormByIssueMerchantName(String issueMerchantName) throws BusinessException {
+        List<ApplicationFormDO> applicationFormDOs = applicationFormMapper.getApplicationFormByIssueMerchantName(issueMerchantName);
+        if (applicationFormDOs.isEmpty()) {
+            return null;
+        }
+        List<ApplicationFormModel> applicationFormModels = convertFromApplicationFormDOs(applicationFormDOs);
+        for  (ApplicationFormModel applicationFormModel : applicationFormModels) {
+            String applicationFormNumber = applicationFormModel.getApplicationFormNumber();
+            List<InvoiceModel> invoices = invoiceService.getInvoiceByApplicationFormNumber(applicationFormNumber);
+            applicationFormModel.setInvoices(invoices);
+        }
+        return applicationFormModels;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public List<ApplicationFormModel> getAllApplicationForms() throws BusinessException {
         List<ApplicationFormDO> applicationFormDOs = applicationFormMapper.getAllApplicationForms();
         if (applicationFormDOs.isEmpty()) {
