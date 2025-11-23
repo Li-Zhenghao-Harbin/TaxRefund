@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateUser(UserModel userModel) {
         UserDO userDO = convertFromUserModel(userModel);
-        if (userDO.getStatus() == 1) {
+        if (userDO.getRole() == 1) {
             SellerDO sellerDO = new SellerDO();
             sellerDO.setMerchantName(userModel.getName());
             sellerDO.setCompany(userModel.getCompany());

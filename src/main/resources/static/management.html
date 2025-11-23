@@ -17,7 +17,7 @@
         </div>
         <div class="user-info">
             <span id="current_user">Admin User</span>
-            <button class="logout-button">Logout</button>
+            <button class="logout-button" id="logout">Logout</button>
         </div>
     </header>
 
@@ -27,7 +27,7 @@
             <div class="search-box">
                 <input type="text" class="search-input" placeholder="Search users...">
                 <button class="search-button">Search</button>
-                <button class="add-user-button">Add User</button>
+                <button class="add-user-button" id="addUser">Add User</button>
             </div>
         </div>
 
@@ -41,66 +41,7 @@
             </tr>
             </thead>
             <tbody id="tb">
-                <tr>
-                    <td>john_doe</td>
-                    <td><span class="role-badge role-admin">Admin</span></td>
-                    <td><span style="color: #00b894;">Active</span></td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                            <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>sarah_smith</td>
-                    <td><span class="role-badge role-editor">Editor</span></td>
-                    <td><span style="color: #00b894;">Active</span></td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                            <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>mike_jones</td>
-                    <td><span class="role-badge role-user">User</span></td>
-                    <td><span style="color: #e74c3c;">Inactive</span></td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                            <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>emily_wilson</td>
-                    <td><span class="role-badge role-user">User</span></td>
-                    <td><span style="color: #00b894;">Active</span></td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                            <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>alex_carter</td>
-                    <td><span class="role-badge role-editor">Editor</span></td>
-                    <td><span style="color: #00b894;">Active</span></td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                            <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn btn-delete"><i class="fas fa-trash"></i> Delete</button>
-                        </div>
-                    </td>
-                </tr>
+
             </tbody>
         </table>
 
@@ -193,7 +134,51 @@
         </div>
         <div class="modal-footer">
             <button class="btn-cancel">Cancel</button>
-            <button class="btn-confirm">Save Changes</button>
+            <button class="btn-confirm" id="update">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Add User</h2>
+            <button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-input" id="addUsername">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="text" class="form-input" id="addPassword">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Role</label>
+                <select class="form-select" id="addRole">
+
+                </select>
+            </div>
+<!--            <div class="form-group">-->
+<!--                <label class="form-label">Status</label>-->
+<!--                <select class="form-select" id="addStatus">-->
+
+<!--                </select>-->
+<!--            </div>-->
+            <div class="form-group" id="addGroupCompany">
+                <label class="form-label">Company</label>
+                <input type="text" class="form-input" id="addCompany">
+            </div>
+            <div class="form-group" id="addGroupSellerTaxId">
+                <label class="form-label">Seller Tax ID</label>
+                <input type="text" class="form-input" id="addSellerTaxId">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel">Close</button>
+            <button class="btn-confirm" id="add">Add user</button>
         </div>
     </div>
 </div>
