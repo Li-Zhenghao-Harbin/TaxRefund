@@ -45,11 +45,11 @@ public class ApplicationFormController extends BaseController {
         return CommonReturnType.create(null);
     }
 
-    @RequestMapping(value = "/getApplicationFormByApplicationNumber", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getApplicationFormByApplicationFormNumber", method = {RequestMethod.GET})
     @ResponseBody
     @RequireRole({ROLE_MERCHANT, ROLE_CUSTOMS})
-    public CommonReturnType getApplicationFormByApplicationNumber(@RequestParam(name = "applicationFormNumber") String applicationFormNumber) throws BusinessException {
-        ApplicationFormModel applicationFormModel = applicationFormService.getApplicationFormByApplicationNumber(applicationFormNumber);
+    public CommonReturnType getApplicationFormByApplicationFormNumber(@RequestParam(name = "applicationFormNumber") String applicationFormNumber) throws BusinessException {
+        ApplicationFormModel applicationFormModel = applicationFormService.getApplicationFormByApplicationFormNumber(applicationFormNumber);
         return CommonReturnType.create(applicationFormModel);
     }
 

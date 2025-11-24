@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
     void register(UserModel userModel);
-    UserModel getUserByName(String name);
+    UserModel getUserByName(String name) throws BusinessException;
     List<UserModel> getAllUsers();
     void updateUser(UserModel userModel);
     UserModel validateLogin(String name, String encryptPassword) throws BusinessException;

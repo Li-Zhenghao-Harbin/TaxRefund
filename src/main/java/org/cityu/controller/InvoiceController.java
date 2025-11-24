@@ -21,7 +21,7 @@ import static org.cityu.controller.BaseController.*;
 @RestController
 @RequestMapping("/invoice")
 @CrossOrigin(allowCredentials = "true", allowedHeaders = "*", originPatterns = "*")
-public class InvoiceController {
+public class InvoiceController extends BaseController {
 
     @Autowired
     private InvoiceService invoiceService;

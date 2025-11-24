@@ -54,7 +54,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/getUserByName", method = {RequestMethod.GET})
     @ResponseBody
     @RequireRole({ROLE_MANAGER})
-    public CommonReturnType getUserByName(@RequestParam(name = "name") String name) {
+    public CommonReturnType getUserByName(@RequestParam(name = "name") String name) throws BusinessException {
         UserModel userModel = userService.getUserByName(name);
         return CommonReturnType.create(userModel);
     }

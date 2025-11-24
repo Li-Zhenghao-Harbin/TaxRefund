@@ -40,10 +40,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel getUserByName(String name) {
+    public UserModel getUserByName(String name) throws BusinessException {
         UserDO userDO = userMapper.getUserByName(name);
         if (userDO == null) {
-            return null;
+            throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
         }
         UserModel userModel = convertFromUserDO(userDO);
         userModel.setPassword(CommonUtils.decode(userModel.getPassword()));

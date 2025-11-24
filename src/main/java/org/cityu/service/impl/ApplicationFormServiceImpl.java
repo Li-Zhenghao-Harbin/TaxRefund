@@ -84,8 +84,8 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public ApplicationFormModel getApplicationFormByApplicationNumber(String applicationFormNumber) throws BusinessException {
-        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationFormByApplicationNumber(applicationFormNumber);
+    public ApplicationFormModel getApplicationFormByApplicationFormNumber(String applicationFormNumber) throws BusinessException {
+        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationFormByApplicationFormNumber(applicationFormNumber);
         if (applicationFormDO == null) {
             throw new BusinessException(EmBusinessError.APPLICATION_FORM_NOT_EXIST);
         }
@@ -140,7 +140,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void reviewApplicationForm(String applicationFormNumber, List<ItemModel> rejectedItems) throws BusinessException {
-        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationFormByApplicationNumber(applicationFormNumber);
+        ApplicationFormDO applicationFormDO = applicationFormMapper.getApplicationFormByApplicationFormNumber(applicationFormNumber);
         if (applicationFormDO == null) {
             throw new BusinessException(EmBusinessError.APPLICATION_FORM_NOT_EXIST);
         }

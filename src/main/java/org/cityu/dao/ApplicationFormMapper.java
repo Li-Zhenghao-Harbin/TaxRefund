@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ApplicationFormMapper {
     int insert(ApplicationFormDO record);
-    ApplicationFormDO getApplicationFormByApplicationNumber(String applicationFormNumber);
+    ApplicationFormDO getApplicationFormByApplicationFormNumber(String applicationFormNumber);
     List<ApplicationFormDO> getApplicationFormsByIssueMerchantName(String issueMerchantName);
     List<ApplicationFormDO> getAllApplicationForms();
     int updateReviewedApplicationForm(String applicationFormNumber, BigDecimal customsConfirmAmount, Integer status);

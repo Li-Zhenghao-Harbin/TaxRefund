@@ -51,20 +51,109 @@ $(document).ready(function() {
     });
     // search
     $('.search-button').on('click', function() {
-        const tabContent = $(this).closest('.tab-content');
-        const searchTerm = tabContent.find('.search-input').val().toLowerCase();
-        const isInvoice = tabContent.attr('id') === 'invoices-tab';
-
-        tabContent.find('.data-table tbody tr').each(function() {
-            const firstCell = $(this).find('td:first-child').text().toLowerCase();
-            const secondCell = $(this).find('td:nth-child(2)').text().toLowerCase();
-
-            if (firstCell.includes(searchTerm) || secondCell.includes(searchTerm)) {
-                $(this).show();
-            } else {
-                $(this).hide();
+        if (currentTabId == "invoices") {
+            var searchNumber = $("#invoiceSearchInput").val();
+            if (searchNumber == "" || searchNumber == null) {
+                getAllInvoices();
+                return;
             }
-        });
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8081/invoice/getInvoiceByInvoiceNumber",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                data: {
+                    "invoiceNumber": searchNumber
+                },
+                xhrFields: { withCredentials: true },
+                success: function(data) {
+                    if (data.status == "success") {
+                        invoices = [];
+                        invoices.push(data.data);
+                        let tableHTML = '';
+                        if (invoices != null) {
+                            invoices.forEach((item, index) => {
+                                tableHTML += `
+                                    <tr>
+                                        <td>` + item.invoiceNumber +`</td>
+                                        <td>` + formatAmount(item.totalAmount) + `</td>
+                                        <td>` + formatDate(item.issueDate) + `</td>
+                                        <td><span class="status-badge status-`+ item.status +`">` + formatInvoiceStatus(item.status) + `</span></td>
+                                        <td>
+                                            <div class="actions">
+                                                <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>`;
+                                                if (item.status != -1) {
+                                                    tableHTML += `<button class="btn btn-discard"><i class="fas fa-times"></i> Discard</button>`;
+                                                }
+                                            tableHTML +=
+                                            `</div>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                        }
+                        $("#invoicesTable").html(tableHTML);
+                        initTableOperations();
+                    } else {
+                        alert(data.data.errorMessage);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(xhr.responseText || error);
+                }
+            });
+        } else {
+            var searchNumber = $("#applicationFormSearchInput").val();
+            if (searchNumber == "" || searchNumber == null) {
+                getAllApplicationForms();
+                return;
+            }
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8081/applicationForm/getApplicationFormByApplicationFormNumber",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                data: {
+                    "applicationFormNumber": searchNumber
+                },
+                xhrFields: { withCredentials: true },
+                success: function(data) {
+                    if (data.status == "success") {
+                        applicationForms = [];
+                        applicationForms.push(data.data);
+                        let tableHTML = '';
+                        if (applicationForms != null) {
+                            applicationForms.forEach((item, index) => {
+                                tableHTML += `
+                                    <tr>
+                                        <td>` + item.applicationFormNumber +`</td>
+                                        <td>` + item.applicantName + `</td>
+                                        <td>` + item.applicantId + `</td>
+                                        <td>` + item.applicantCountry + `</td>
+                                        <td>` + formatDate(item.issueDate) + `</td>
+                                        <td>` + formatAmount(item.totalAmount) + `</td>
+                                        <td>
+                                            <div class="actions">
+                                                <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                        }
+                        $("#applicationFormTable").html(tableHTML);
+                        initTableOperations();
+                    } else {
+                        alert(data.data.errorMessage);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(xhr.responseText || error);
+                }
+            });
+        }
     });
     // split page
     $('.pagination button').on('click', function() {
@@ -168,7 +257,7 @@ function getAllApplicationForms() {
     let issueMerchantName = JSON.parse(localStorage.getItem("user")).name;
     $.ajax({
         type: "GET",
-        url: "http://localhost:8081/applicationForm/getApplicationFormByIssueMerchantName",
+        url: "http://localhost:8081/applicationForm/getApplicationFormsByIssueMerchantName",
         headers: {
             "Authorization": "Bearer " + token
         },
