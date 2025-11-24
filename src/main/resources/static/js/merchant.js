@@ -50,110 +50,118 @@ $(document).ready(function() {
         }
     });
     // search
-    $('.search-button').on('click', function() {
-        if (currentTabId == "invoices") {
-            var searchNumber = $("#invoiceSearchInput").val();
-            if (searchNumber == "" || searchNumber == null) {
-                getAllInvoices();
-                return;
-            }
-            $.ajax({
-                type: "GET",
-                url: "http://localhost:8081/invoice/getInvoiceByInvoiceNumber",
-                headers: {
-                    "Authorization": "Bearer " + token
-                },
-                data: {
-                    "invoiceNumber": searchNumber
-                },
-                xhrFields: { withCredentials: true },
-                success: function(data) {
-                    if (data.status == "success") {
-                        invoices = [];
-                        invoices.push(data.data);
-                        let tableHTML = '';
-                        if (invoices != null) {
-                            invoices.forEach((item, index) => {
-                                tableHTML += `
-                                    <tr>
-                                        <td>` + item.invoiceNumber +`</td>
-                                        <td>` + formatAmount(item.totalAmount) + `</td>
-                                        <td>` + formatDate(item.issueDate) + `</td>
-                                        <td><span class="status-badge status-`+ item.status +`">` + formatInvoiceStatus(item.status) + `</span></td>
-                                        <td>
-                                            <div class="actions">
-                                                <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>`;
-                                                if (item.status != -1) {
-                                                    tableHTML += `<button class="btn btn-discard"><i class="fas fa-times"></i> Discard</button>`;
-                                                }
-                                            tableHTML +=
-                                            `</div>
-                                        </td>
-                                    </tr>
-                                `;
-                            });
-                        }
-                        $("#invoicesTable").html(tableHTML);
-                        initTableOperations();
-                    } else {
-                        alert(data.data.errorMessage);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert(xhr.responseText || error);
-                }
-            });
-        } else {
-            var searchNumber = $("#applicationFormSearchInput").val();
-            if (searchNumber == "" || searchNumber == null) {
-                getAllApplicationForms();
-                return;
-            }
-            $.ajax({
-                type: "GET",
-                url: "http://localhost:8081/applicationForm/getApplicationFormByApplicationFormNumber",
-                headers: {
-                    "Authorization": "Bearer " + token
-                },
-                data: {
-                    "applicationFormNumber": searchNumber
-                },
-                xhrFields: { withCredentials: true },
-                success: function(data) {
-                    if (data.status == "success") {
-                        applicationForms = [];
-                        applicationForms.push(data.data);
-                        let tableHTML = '';
-                        if (applicationForms != null) {
-                            applicationForms.forEach((item, index) => {
-                                tableHTML += `
-                                    <tr>
-                                        <td>` + item.applicationFormNumber +`</td>
-                                        <td>` + item.applicantName + `</td>
-                                        <td>` + item.applicantId + `</td>
-                                        <td>` + item.applicantCountry + `</td>
-                                        <td>` + formatDate(item.issueDate) + `</td>
-                                        <td>` + formatAmount(item.totalAmount) + `</td>
-                                        <td>
-                                            <div class="actions">
-                                                <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `;
-                            });
-                        }
-                        $("#applicationFormTable").html(tableHTML);
-                        initTableOperations();
-                    } else {
-                        alert(data.data.errorMessage);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert(xhr.responseText || error);
-                }
-            });
+    $("#searchInvoice").on('click', function() {
+        var searchNumber = $("#invoiceSearchInput").val();
+        if (searchNumber == "" || searchNumber == null) {
+            getAllInvoices();
+            return;
         }
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8081/invoice/getInvoiceByInvoiceNumber",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            data: {
+                "invoiceNumber": searchNumber
+            },
+            xhrFields: { withCredentials: true },
+            success: function(data) {
+                if (data.status == "success") {
+                    invoices = [];
+                    invoices.push(data.data);
+                    let tableHTML = '';
+                    if (invoices != null) {
+                        invoices.forEach((item, index) => {
+                            tableHTML += `
+                                <tr>
+                                    <td>` + item.invoiceNumber +`</td>
+                                    <td>` + formatAmount(item.totalAmount) + `</td>
+                                    <td>` + formatDate(item.issueDate) + `</td>
+                                    <td><span class="status-badge status-`+ item.status +`">` + formatInvoiceStatus(item.status) + `</span></td>
+                                    <td>
+                                        <div class="actions">
+                                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>`;
+                                            if (item.status != -1) {
+                                                tableHTML += `<button class="btn btn-discard"><i class="fas fa-times"></i> Discard</button>`;
+                                            }
+                                        tableHTML +=
+                                        `</div>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    }
+                    $("#invoicesTable").html(tableHTML);
+                    initTableOperations();
+                } else {
+                    alert(data.data.errorMessage);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(xhr.responseText || error);
+            }
+        });
+    });
+    $("#searchApplicationForm").on('click', function() {
+        var searchNumber = $("#applicationFormSearchInput").val();
+        if (searchNumber == "" || searchNumber == null) {
+            getAllApplicationForms();
+            return;
+        }
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8081/applicationForm/getApplicationFormByApplicationFormNumber",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            data: {
+                "applicationFormNumber": searchNumber
+            },
+            xhrFields: { withCredentials: true },
+            success: function(data) {
+                if (data.status == "success") {
+                    applicationForms = [];
+                    applicationForms.push(data.data);
+                    let tableHTML = '';
+                    if (applicationForms != null) {
+                        applicationForms.forEach((item, index) => {
+                            tableHTML += `
+                                <tr>
+                                    <td>` + item.applicationFormNumber +`</td>
+                                    <td>` + item.applicantName + `</td>
+                                    <td>` + item.applicantId + `</td>
+                                    <td>` + item.applicantCountry + `</td>
+                                    <td>` + formatDate(item.issueDate) + `</td>
+                                    <td>` + formatAmount(item.totalAmount) + `</td>
+                                    <td>
+                                        <div class="actions">
+                                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    }
+                    $("#applicationFormTable").html(tableHTML);
+                    initTableOperations();
+                } else {
+                    alert(data.data.errorMessage);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(xhr.responseText || error);
+            }
+        });
+    });
+    // reset
+    $('#resetInvoiceQuery').on('click', function() {
+        $("#invoiceSearchInput").val("");
+        getAllInvoices();
+    });
+    $('#resetApplicationFormQuery').on('click', function() {
+        $("#applicationFormSearchInput").val("");
+        getAllApplicationForms();
     });
     // split page
     $('.pagination button').on('click', function() {
