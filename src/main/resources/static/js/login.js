@@ -34,6 +34,9 @@ jQuery(document).ready(function() {
                         case 1:
                             window.location.href = 'merchant.html';
                             break;
+                        case 2:
+                            window.location.href = 'customs.html';
+                            break;
                     }
                 } else {
                     alert(data.data.errorMessage);

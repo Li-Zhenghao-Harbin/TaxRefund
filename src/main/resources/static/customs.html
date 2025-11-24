@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customs Review System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/customs.css">
+    <script src="js/common/jquery-1.11.0.min.js"></script>
+    <script src="js/common/utils.js"></script>
+    <script src="js/customs.js"></script>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="logo">
+            <h1>Customs Review System</h1>
+        </div>
+        <div class="user-info">
+            <span id="currentUser"></span>
+            <button class="logout-button">Logout</button>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="search-section">
+            <h2 class="search-title">Search Application Form</h2>
+            <div class="search-box">
+                <div class="form-group">
+                    <label class="form-label">Application Form Number</label>
+                    <input type="text" class="form-input" id="applicationFormNumberSearchInput" placeholder="Enter application form number">
+                </div>
+                <button class="search-button" id="search">Search</button>
+                <button class="search-button" id="reset">Reset</button>
+            </div>
+        </div>
+
+        <div class="content-section" id="applicationInfo" style="display: none;">
+            <div class="content-header">
+                <h2>Application Items</h2>
+                <button class="review-button" id="reviewBtn">Submit Review</button>
+            </div>
+
+            <!-- Application Information -->
+            <div class="application-info">
+                <div class="info-row">
+                    <div class="info-label">Application Form Number:</div>
+                    <div class="info-value" id="applicationFormNumber"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Applicant Name:</div>
+                    <div class="info-value" id="applicantName"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Applicant ID:</div>
+                    <div class="info-value" id="applicantId"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Applicant Country:</div>
+                    <div class="info-value" id="applicantCountry"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Issue Date:</div>
+                    <div class="info-value" id="applicationFormIssueDate"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Total Amount:</div>
+                    <div class="info-value" id="applicationFormTotalAmount"></div>
+                </div>
+            </div>
+
+            <!-- Items Table -->
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                    <th>Reject</th>
+                </tr>
+                </thead>
+                <tbody id="itemsTableBody">
+<!--                <tr class="no-data">-->
+<!--                    <td colspan="5">No application data found. Please search for an application form.</td>-->
+<!--                </tr>-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -172,7 +172,6 @@ $(document).ready(function() {
         alert(`Loading page ${$(this).text()}`);
 
     });
-
     // logout
     $('.logout-button').on('click', function() {
         if (confirm('Are you sure to logout?')) {
