@@ -49,7 +49,7 @@ public class InvoiceController {
 
     @RequestMapping(value = "/getInvoicesByIssueMerchantName", method = {RequestMethod.GET})
     @ResponseBody
-    @RequireRole({ROLE_MERCHANT, ROLE_CUSTOMS})
+    @RequireRole({ROLE_MERCHANT})
     public CommonReturnType getInvoicesByIssueMerchantName(@RequestParam(name = "issueMerchantName") String issueMerchantName) throws BusinessException {
         List<InvoiceModel> invoiceModels = invoiceService.getInvoicesByIssueMerchantName(issueMerchantName);
         return CommonReturnType.create(invoiceModels);

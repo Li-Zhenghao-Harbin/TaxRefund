@@ -70,6 +70,7 @@ const applicationData = {
 
 var token;
 var invoices;
+var invoiceStatusMapper;
 
 $(document).ready(function() {
     token = localStorage.getItem("auth_token");
@@ -79,6 +80,26 @@ $(document).ready(function() {
     }
     // prepare layout
     getAllInvoices();
+    // get invoice status
+    $.ajax({
+        type: "GET",
+        contentType: "application/x-www-form-urlencoded",
+        url: "http://localhost:8081/code/getStatus",
+        data: {
+            "business": "Invoice"
+        },
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                invoiceStatusMapper = data.data;
+            } else {
+                alert(data.data.errorMessage);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText || error);
+        }
+    });
     // display user name
     $("#currentUser").text("Current User: " + JSON.parse(localStorage.getItem("user")).name);
     // switch tab
@@ -244,20 +265,23 @@ function getAllInvoices() {
                         tableHTML += `
                             <tr>
                                 <td>` + item.invoiceNumber +`</td>
-                                <td>` + item.totalAmount + `</td>
-                                <td>` + item.issueDate + `</td>
-                                <td><span class="status-badge status-paid">Paid</span></td>
+                                <td>` + formatAmount(item.totalAmount) + `</td>
+                                <td>` + formatDate(item.issueDate) + `</td>
+                                <td><span class="status-badge status-`+ item.status +`">` + formatInvoiceStatus(item.status) + `</span></td>
                                 <td>
                                     <div class="actions">
-                                        <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                                        <button class="btn btn-discard"><i class="fas fa-times"></i> Discard</button>
-                                    </div>
+                                        <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>`;
+                                        if (item.status != -1) {
+                                            tableHTML += `<button class="btn btn-discard"><i class="fas fa-times"></i> Discard</button>`;
+                                        }
+                                    tableHTML +=
+                                    `</div>
                                 </td>
                             </tr>
                         `;
                     });
                 }
-                $("#tbInvoices").html(tableHTML);
+                $("#invoicesTable").html(tableHTML);
                 initTableOperations();
             } else {
                 alert(data.data.errorMessage);
@@ -273,7 +297,45 @@ function initTableOperations() {
     document.querySelectorAll('.btn-view').forEach(button => {
         button.addEventListener('click', function() {
             const invoiceNumber = this.closest('tr').querySelector('td:first-child').textContent;
-            // TODO
+            var invoice = getInvoiceFromLocalInvoicesByInvoiceNumber(invoiceNumber);
+            $("#viewInvoiceNumber").val(invoiceNumber);
+            $("#viewInvoiceTotalAmount").val(formatAmount(invoice.totalAmount));
+            $("#viewInvoiceIssueDate").val(formatDate(invoice.issueDate));
+            $("#viewInvoiceStatus").val(formatInvoiceStatus(invoice.status));
+            $("#viewInvoiceCompany").val(invoice.company);
+            $("#viewInvoiceSellerTaxId").val(invoice.sellerTaxId);
+            $("#invoiceViewModal").fadeIn().addClass('active');
+            // items table
+            var itemsTableHtml = "";
+            invoice.items.forEach(item => {
+                itemsTableHtml += `
+                    <tr>
+                       <td>` + item.itemName +`</td>
+                       <td>` + item.quantity + `</td>
+                       <td>` + formatAmount(item.unitPrice) + `</td>
+                       <td>` + formatAmount(item.quantity * item.unitPrice) + `</td>
+                   </tr>
+                `;
+            });
+            $("#invoiceItemsTable").html(itemsTableHtml);
         });
     });
+}
+
+function getInvoiceFromLocalInvoicesByInvoiceNumber(invoiceNumber) {
+    for (var i = 0; i < invoices.length; i++) {
+        if (invoices[i].invoiceNumber == invoiceNumber) {
+            return invoices[i];
+        }
+    }
+    return null;
+}
+
+function formatInvoiceStatus(code) {
+    for (var i = 0; i < invoiceStatusMapper.length; i++) {
+        if (invoiceStatusMapper[i].code == code) {
+            return invoiceStatusMapper[i].title;
+        }
+    }
+    return null;
 }
