@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merchant Management System</title>
+    <title>Merchant Work Station</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/merchant.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -15,7 +15,7 @@
 <div class="container">
     <header>
         <div class="logo">
-            <h1>Merchant Management System</h1>
+            <h1>Merchant Work Station</h1>
         </div>
         <div class="user-info">
             <span id="currentUser">Merchant User</span>
@@ -82,64 +82,19 @@
                     <th>Applicant Country</th>
                     <th>Issue Date</th>
                     <th>Total Amount</th>
-                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr data-id="1">
-                    <td>APP-2023-001</td>
-                    <td>John Smith</td>
-                    <td>APP-001</td>
-                    <td>United States</td>
-                    <td>2023-05-10</td>
-                    <td>$500.00</td>
-                    <td><span class="status-badge status-approved">Approved</span></td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                            <button class="btn btn-discard"><i class="fas fa-times"></i> Discard</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr data-id="2">
-                    <td>APP-2023-002</td>
-                    <td>Maria Garcia</td>
-                    <td>APP-002</td>
-                    <td>Spain</td>
-                    <td>2023-05-12</td>
-                    <td>$750.00</td>
-                    <td><span class="status-badge status-pending">Pending</span></td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                            <button class="btn btn-discard"><i class="fas fa-times"></i> Discard</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr data-id="3">
-                    <td>APP-2023-003</td>
-                    <td>David Johnson</td>
-                    <td>APP-003</td>
-                    <td>Canada</td>
-                    <td>2023-05-14</td>
-                    <td>$1,200.00</td>
-                    <td><span class="status-badge status-rejected">Rejected</span></td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
-                            <button class="btn btn-discard"><i class="fas fa-times"></i> Discard</button>
-                        </div>
-                    </td>
-                </tr>
+                <tbody id="applicationFormTable">
+
                 </tbody>
             </table>
 
-            <div class="pagination">
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-            </div>
+<!--            <div class="pagination">-->
+<!--                <button class="active">1</button>-->
+<!--                <button>2</button>-->
+<!--                <button>3</button>-->
+<!--            </div>-->
         </div>
     </div>
 </div>
@@ -181,7 +136,6 @@
             <table class="items-table">
                 <thead>
                 <tr>
-<!--                    <th>ID</th>-->
                     <th>Name</th>
                     <th>Quantity</th>
                     <th>Unit Price</th>
@@ -189,7 +143,7 @@
                 </tr>
                 </thead>
                 <tbody id="invoiceItemsTable">
-                <!-- Items will be populated by JavaScript -->
+
                 </tbody>
             </table>
         </div>
@@ -200,7 +154,7 @@
 </div>
 
 <!-- Application View Modal -->
-<div class="modal-overlay" id="applicationViewModal">
+<div class="modal-overlay" id="applicationFormViewModal">
     <div class="modal">
         <div class="modal-header">
             <h2 class="modal-title">Application Form Details</h2>
@@ -209,32 +163,41 @@
         <div class="modal-body">
             <div class="form-group">
                 <label class="form-label">Application Form Number</label>
-                <input type="text" class="form-input" id="viewAppNumber" readonly>
+                <input type="text" class="form-input" id="viewApplicationFormNumber" readonly>
             </div>
             <div class="form-group">
                 <label class="form-label">Applicant Name</label>
-                <input type="text" class="form-input" id="viewAppName" readonly>
+                <input type="text" class="form-input" id="viewApplicantName" readonly>
             </div>
             <div class="form-group">
                 <label class="form-label">Applicant ID</label>
-                <input type="text" class="form-input" id="viewAppId" readonly>
+                <input type="text" class="form-input" id="viewApplicantId" readonly>
             </div>
             <div class="form-group">
                 <label class="form-label">Applicant Country</label>
-                <input type="text" class="form-input" id="viewAppCountry" readonly>
+                <input type="text" class="form-input" id="viewApplicantCountry" readonly>
             </div>
             <div class="form-group">
                 <label class="form-label">Issue Date</label>
-                <input type="text" class="form-input" id="viewAppDate" readonly>
+                <input type="text" class="form-input" id="viewApplicationFormIssueDate" readonly>
             </div>
             <div class="form-group">
                 <label class="form-label">Total Amount</label>
-                <input type="text" class="form-input" id="viewAppAmount" readonly>
+                <input type="text" class="form-input" id="viewApplicationFormTotalAmount" readonly>
             </div>
-            <div class="form-group">
-                <label class="form-label">Status</label>
-                <input type="text" class="form-input" id="viewAppStatus" readonly>
-            </div>
+            <h3 style="margin: 20px 0 10px 0;">Invoice Items</h3>
+            <table class="items-table">
+                <thead>
+                <tr>
+                    <th>Invoice Number</th>
+                    <th>total Amount</th>
+                    <th>Issue Date</th>
+                </tr>
+                </thead>
+                <tbody id="applicationFormInvoicesTable">
+
+                </tbody>
+            </table>
         </div>
         <div class="modal-footer">
             <button class="btn-cancel">Close</button>
