@@ -99,6 +99,11 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public List<ApplicationFormModel> getApplicationFormsByIssueMerchantName(String issueMerchantName) throws BusinessException {
         List<ApplicationFormDO> applicationFormDOs = applicationFormMapper.getApplicationFormsByIssueMerchantName(issueMerchantName);
+        return getApplicationFormModels(applicationFormDOs);
+    }
+
+    @Transactional
+    private List<ApplicationFormModel> getApplicationFormModels(List<ApplicationFormDO> applicationFormDOs) throws BusinessException {
         if (applicationFormDOs.isEmpty()) {
             return null;
         }
@@ -113,18 +118,16 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public List<ApplicationFormModel> getApplicationFormsByApplicant(String applicantName, String applicantId, String applicantCountry) throws BusinessException {
+        List<ApplicationFormDO> applicationFormDOs = applicationFormMapper.getApplicationFormsByApplicant(applicantName, applicantId, applicantCountry);
+        return getApplicationFormModels(applicationFormDOs);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public List<ApplicationFormModel> getAllApplicationForms() throws BusinessException {
         List<ApplicationFormDO> applicationFormDOs = applicationFormMapper.getAllApplicationForms();
-        if (applicationFormDOs.isEmpty()) {
-            return null;
-        }
-        List<ApplicationFormModel> applicationFormModels = convertFromApplicationFormDOs(applicationFormDOs);
-        for  (ApplicationFormModel applicationFormModel : applicationFormModels) {
-            String applicationFormNumber = applicationFormModel.getApplicationFormNumber();
-            List<InvoiceModel> invoices = invoiceService.getInvoiceByApplicationFormNumber(applicationFormNumber);
-            applicationFormModel.setInvoices(invoices);
-        }
-        return applicationFormModels;
+        return getApplicationFormModels(applicationFormDOs);
     }
 
     private List<ApplicationFormModel> convertFromApplicationFormDOs(List<ApplicationFormDO> applicationFormDOs) {

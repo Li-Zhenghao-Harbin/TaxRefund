@@ -1,6 +1,8 @@
 package org.cityu.dao;
 
 import org.cityu.dataobject.ApplicationFormDO;
+import org.cityu.error.BusinessException;
+import org.cityu.service.model.ApplicationFormModel;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,6 +11,7 @@ public interface ApplicationFormMapper {
     int insert(ApplicationFormDO record);
     ApplicationFormDO getApplicationFormByApplicationFormNumber(String applicationFormNumber);
     List<ApplicationFormDO> getApplicationFormsByIssueMerchantName(String issueMerchantName);
+    List<ApplicationFormDO> getApplicationFormsByApplicant(String applicantName, String applicantId, String applicantCountry) throws BusinessException;
     List<ApplicationFormDO> getAllApplicationForms();
     int updateReviewedApplicationForm(String applicationFormNumber, BigDecimal customsConfirmAmount, Integer status);
     BigDecimal calculateCustomsConfirmAmount(String applicationFormNumber);

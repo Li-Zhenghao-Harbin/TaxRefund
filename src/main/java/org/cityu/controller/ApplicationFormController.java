@@ -61,6 +61,16 @@ public class ApplicationFormController extends BaseController {
         return CommonReturnType.create(applicationFormModel);
     }
 
+    @RequestMapping(value = "/getApplicationFormsByApplicant", method = {RequestMethod.GET})
+    @ResponseBody
+    @RequireRole({ROLE_MERCHANT, ROLE_CUSTOMS})
+    public CommonReturnType getApplicationFormsByApplicant(@RequestParam(name = "applicantName") String applicantName,
+                                                           @RequestParam(name = "applicantId") String applicantId,
+                                                           @RequestParam(name = "applicantCountry") String applicantCountry) throws BusinessException {
+        List<ApplicationFormModel> applicationFormModel = applicationFormService.getApplicationFormsByApplicant(applicantName, applicantId, applicantCountry);
+        return CommonReturnType.create(applicationFormModel);
+    }
+
     @RequestMapping(value = "/getAllApplicationForms", method = {RequestMethod.GET})
     @ResponseBody
     @RequireRole({ROLE_MERCHANT, ROLE_CUSTOMS})

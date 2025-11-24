@@ -30,6 +30,14 @@
     where issue_merchant_name = #{issueMerchantName,jdbcType=VARCHAR}
     order by issue_date desc
   </select>
+  <select id="getApplicationFormsByApplicant" resultMap="BaseResultMap">
+    select application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_name, status
+    from b_application_form
+    where applicant_name = #{applicantName,jdbcType=VARCHAR}
+    and applicant_id = #{applicantId,jdbcType=VARCHAR}
+    and applicant_country = #{applicantCountry,jdbcType=VARCHAR}
+    order by issue_date desc
+  </select>
   <select id="getAllApplicationForms" resultMap="BaseResultMap">
     select application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_name, status
     from b_application_form

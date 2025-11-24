@@ -10,6 +10,7 @@ public interface ApplicationFormService {
     void createApplicationForm(ApplicationFormModel applicationFormModel) throws BusinessException;
     ApplicationFormModel getApplicationFormByApplicationFormNumber(String applicationFormNumber) throws BusinessException;
     List<ApplicationFormModel> getApplicationFormsByIssueMerchantName(String issueMerchantName) throws BusinessException;
+    List<ApplicationFormModel> getApplicationFormsByApplicant(String applicantName, String applicantId, String applicantCountry) throws BusinessException;
     List<ApplicationFormModel> getAllApplicationForms() throws BusinessException;
     void reviewApplicationForm(String applicationFormNumber, List<ItemModel> rejectedItems) throws BusinessException;
 }
