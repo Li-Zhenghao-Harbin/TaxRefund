@@ -5,6 +5,7 @@ var invoiceStatusMapper;
 var applicationFormStatusMapper;
 var currentTabId = "invoices";
 var itemCount = 0;
+var invoiceCount = 0;
 
 $(document).ready(function() {
     token = localStorage.getItem("auth_token");
@@ -214,22 +215,21 @@ $(document).ready(function() {
             $('#createInvoiceSellerTaxId').val(currentUser.sellerTaxId);
             $('#createInvoiceModal').fadeIn().addClass('active');
         } else {
-            // TODO
-            alert('Opening create application form...');
+            $('#ApplicationFormInvoices').empty();
+            addInvoiceRow();
+            $('#createApplicationFormModal').fadeIn().addClass('active');
         }
     });
     $('#addItemBtn').on('click', addItemRow);
+    $('#addInvoiceBtn').on('click', addInvoiceRow);
     // delete item
     $(document).on('click', '.delete-item-button', function() {
         const rowId = $(this).data('row');
-        deleteItemRow(rowId);
-    });
-    // close create invoice modal
-    $('#createInvoiceModal .btn-cancel').on('click', function() {
-        $('#createInvoiceModal').removeClass('active');
-        setTimeout(() => {
-            $('#createInvoiceModal').fadeOut();
-        }, 300);
+        if (currentTabId == "invoices") {
+            deleteItemRow(rowId);
+        } else {
+            deleteInvoiceRow(rowId);
+        }
     });
     // confirm create invoice
     $('#createInvoiceModal .btn-confirm').on('click', function() {
@@ -272,7 +272,7 @@ $(document).ready(function() {
             xhrFields: { withCredentials: true },
             success: function(data) {
                 if (data.status == "success") {
-                    alert('Invoice created successfully!');
+                    alert('Invoice successfully created!');
                     getAllInvoices();
                 } else {
                     alert(data.data.errorMessage);
@@ -285,6 +285,74 @@ $(document).ready(function() {
         $('#createInvoiceModal').removeClass('active');
         setTimeout(() => {
             $('#createInvoiceModal').fadeOut();
+        }, 300);
+    });
+    // confirm create application form
+    $('#createApplicationFormModal .btn-confirm').on('click', function() {
+        var relatedInvoices = []; // invoices in the application form
+        // check invoice count
+        if ($('#ApplicationFormInvoices tr').length === 0) {
+            alert('There are no invoices in the application form!');
+            return;
+        }
+        // check applicant information
+        var applicantName = $("#createApplicationFormApplicantName").val();
+        var applicantId = $("#createApplicationFormApplicantId").val();
+        var applicantCountry = $("#createApplicationFormApplicantCountry").val();
+        if (applicantName == "" || applicantName == null) {
+            alert("Applicant name can not be null!");
+            return;
+        }
+        if (applicantId == "" || applicantId == null) {
+            alert("Applicant id can not be null");
+            return;
+        }
+        if (applicantCountry == "" || applicantCountry == null) {
+            alert("Applicant country can not be null!");
+            return;
+        }
+        // check invoice filled
+        var validInvoices = true;
+        $('#ApplicationFormInvoices tr').each(function() {
+            var invoiceNumber = $(this).find('.invoice-number').val();
+            if (invoiceNumber == "" || invoiceNumber == null) {
+                validItems = false;
+            }
+            relatedInvoices.push(invoiceNumber);
+        });
+        if (!validInvoices) {
+            alert('Invoice information not fulfilled!');
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "http://localhost:8081/applicationForm/createApplicationForm",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            data: JSON.stringify({
+                "applicantName": applicantName,
+                "applicantId": applicantId,
+                "applicantCountry": applicantCountry,
+                "invoices": relatedInvoices
+            }),
+            xhrFields: { withCredentials: true },
+            success: function(data) {
+                if (data.status == "success") {
+                    alert('Application form successfully created!');
+                    getAllApplicationForms();
+                } else {
+                    alert(data.data.errorMessage);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(xhr.responseText || error);
+            }
+        });
+        $('#createApplicationFormModal').removeClass('active');
+        setTimeout(() => {
+            $('#createApplicationFormModal').fadeOut();
         }, 300);
     });
 });
@@ -547,5 +615,28 @@ function calculateItemTotalAmount() {
 
 function deleteItemRow(rowId) {
     $(`#${rowId}`).remove();
-    calculateTotalAmount();
+    calculateItemTotalAmount();
+}
+
+/* add application form */
+function addInvoiceRow() {
+    invoiceCount++;
+    const rowId = `invoice-${invoiceCount}`;
+    const row = `
+        <tr id="${rowId}">
+            <td>
+                <input type="text" class="form-input invoice-number" placeholder="Enter invoice number">
+            </td>>
+            <td>
+                <button class="delete-item-button" data-row="${rowId}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `;
+    $('#ApplicationFormInvoices').append(row);
+}
+
+function deleteInvoiceRow(rowId) {
+    $(`#${rowId}`).remove();
 }

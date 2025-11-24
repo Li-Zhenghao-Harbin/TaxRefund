@@ -263,7 +263,52 @@
         </div>
         <div class="modal-footer">
             <button class="btn-cancel">Cancel</button>
-            <button class="btn-confirm">Add Invoice</button>
+            <button class="btn-confirm">Create Invoice</button>
+        </div>
+    </div>
+</div>
+
+<!-- Create Application Form Modal -->
+<div class="modal-overlay" id="createApplicationFormModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Applicant Information</h2>
+            <button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Applicant Name</label>
+                <input type="text" class="form-input" id="createApplicationFormApplicantName">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Applicant ID</label>
+                <input type="text" class="form-input" id="createApplicationFormApplicantId">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Applicant Country</label>
+                <input type="text" class="form-input" id="createApplicationFormApplicantCountry">
+            </div>
+            <h3 style="margin: 20px 0 10px 0;">Invoice Items</h3>
+            <div class="form-section">
+                <table class="items-table">
+                    <thead>
+                    <tr>
+                        <th>Invoice Number</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="ApplicationFormInvoices">
+
+                    </tbody>
+                </table>
+                <button class="add-item-button" id="addInvoiceBtn">
+                    <i class="fas fa-plus"></i> Add Invoice
+                </button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel">Cancel</button>
+            <button class="btn-confirm">Create Application Form</button>
         </div>
     </div>
 </div>
