@@ -68,6 +68,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    public void discardInvoice(String invoiceNumber) {
+        invoiceMapper.discardInvoice(invoiceNumber);
+    }
+
+    @Override
     @Transactional(rollbackFor =  Exception.class)
     public List<InvoiceModel> getInvoiceByApplicationFormNumber(String applicationFormNumber) throws BusinessException {
         List<InvoiceDO> invoiceDOs = invoiceMapper.getInvoiceByApplicationFormNumber(applicationFormNumber);

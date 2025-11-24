@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface InvoiceService {
     void createInvoice(InvoiceModel invoiceModel);
+    void discardInvoice(String invoiceNumber);
     List<InvoiceModel> getInvoiceByApplicationFormNumber(String applicationFormNumber) throws BusinessException;
     InvoiceModel getInvoiceByInvoiceNumber(String invoiceNumber) throws BusinessException;
     List<InvoiceModel> getInvoicesByIssueMerchantName(String issueMerchantName);

@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.cityu.common.utils.CommonUtils.generateApplicationFormNumber;
 import static org.cityu.controller.BaseController.BUSINESS_APPLICATION_FORM;
@@ -98,8 +97,8 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public List<ApplicationFormModel> getApplicationFormByIssueMerchantName(String issueMerchantName) throws BusinessException {
-        List<ApplicationFormDO> applicationFormDOs = applicationFormMapper.getApplicationFormByIssueMerchantName(issueMerchantName);
+    public List<ApplicationFormModel> getApplicationFormsByIssueMerchantName(String issueMerchantName) throws BusinessException {
+        List<ApplicationFormDO> applicationFormDOs = applicationFormMapper.getApplicationFormsByIssueMerchantName(issueMerchantName);
         if (applicationFormDOs.isEmpty()) {
             return null;
         }

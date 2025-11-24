@@ -39,6 +39,14 @@ public class InvoiceController {
         return CommonReturnType.create(null);
     }
 
+    @RequestMapping(value = "/discardInvoice", method = {RequestMethod.POST}, consumes = CONTENT_TYPE_FORMED)
+    @ResponseBody
+    @RequireRole({ROLE_MERCHANT})
+    public CommonReturnType discardInvoice(@RequestParam(name = "invoiceNumber") String invoiceNumber) {
+        invoiceService.discardInvoice(invoiceNumber);
+        return CommonReturnType.create(null);
+    }
+
     @RequestMapping(value = "/getInvoiceByInvoiceNumber", method = {RequestMethod.GET})
     @ResponseBody
     @RequireRole({ROLE_MERCHANT, ROLE_CUSTOMS})

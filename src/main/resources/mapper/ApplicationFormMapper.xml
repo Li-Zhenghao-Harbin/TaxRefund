@@ -24,7 +24,7 @@
     from b_application_form
     where application_form_number = #{applicationFormNumber,jdbcType=VARCHAR}
   </select>
-  <select id="getApplicationFormByIssueMerchantName" resultMap="BaseResultMap">
+  <select id="getApplicationFormsByIssueMerchantName" resultMap="BaseResultMap">
     select application_form_number, applicant_name, applicant_id, applicant_country, issue_date, total_amount, customs_confirm_amount, issue_merchant_name, status
     from b_application_form
     where issue_merchant_name = #{issueMerchantName,jdbcType=VARCHAR}

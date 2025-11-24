@@ -3,7 +3,6 @@ package org.cityu.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.cityu.common.annotation.RequireRole;
 import org.cityu.common.utils.CommonUtils;
-import org.cityu.dataobject.ItemDO;
 import org.cityu.error.BusinessException;
 import org.cityu.response.CommonReturnType;
 import org.cityu.service.ApplicationFormService;
@@ -13,13 +12,10 @@ import org.cityu.service.model.ItemModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.cityu.common.utils.JsonUtils.*;
-import static org.cityu.controller.BaseController.*;
 
 @RestController
 @RequestMapping("/applicationForm")
@@ -57,11 +53,11 @@ public class ApplicationFormController extends BaseController {
         return CommonReturnType.create(applicationFormModel);
     }
 
-    @RequestMapping(value = "/getApplicationFormByIssueMerchantName", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getApplicationFormsByIssueMerchantName", method = {RequestMethod.GET})
     @ResponseBody
     @RequireRole({ROLE_MERCHANT, ROLE_CUSTOMS})
-    public CommonReturnType getApplicationFormByIssueMerchantName(@RequestParam(name = "issueMerchantName") String issueMerchantName) throws BusinessException {
-        List<ApplicationFormModel> applicationFormModel = applicationFormService.getApplicationFormByIssueMerchantName(issueMerchantName);
+    public CommonReturnType getApplicationFormsByIssueMerchantName(@RequestParam(name = "issueMerchantName") String issueMerchantName) throws BusinessException {
+        List<ApplicationFormModel> applicationFormModel = applicationFormService.getApplicationFormsByIssueMerchantName(issueMerchantName);
         return CommonReturnType.create(applicationFormModel);
     }
 

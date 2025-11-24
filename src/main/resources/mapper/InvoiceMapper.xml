@@ -19,6 +19,11 @@
       #{totalAmount,jdbcType=DECIMAL}, #{issueDate,jdbcType=TIMESTAMP}, #{applicationFormNumber,jdbcType=VARCHAR},
       #{status,jdbcType=BIT})
   </insert>
+  <update id="discardInvoice" parameterType="java.lang.String">
+    update b_invoice
+    set status = -1
+    where invoice_number = #{invoiceNumber, jdbcType=VARCHAR}
+  </update>
   <update id="updateInvoiceToRelatedApplicationForm">
     update b_invoice
     set application_form_number = #{applicationFormNumber}, status = 2
