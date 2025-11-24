@@ -4,6 +4,7 @@ var applicationForms;
 var invoiceStatusMapper;
 var applicationFormStatusMapper;
 var currentTabId = "invoices";
+var itemCount = 0;
 
 $(document).ready(function() {
     token = localStorage.getItem("auth_token");
@@ -170,15 +171,7 @@ $(document).ready(function() {
         alert(`Loading page ${$(this).text()}`);
 
     });
-    // add invoice/application form
-    $('.add-button').on('click', function() {
-        const tabContent = $(this).closest('.tab-content');
-        const isInvoice = tabContent.attr('id') === 'invoices-tab';
-        const type = isInvoice ? 'invoice' : 'application form';
 
-        alert(`Opening create ${type} form...`);
-
-    });
     // logout
     $('.logout-button').on('click', function() {
         if (confirm('Are you sure to logout?')) {
@@ -208,6 +201,90 @@ $(document).ready(function() {
         modalOverlay.removeClass('active');
         setTimeout(() => {
             modalOverlay.fadeOut();
+        }, 300);
+    });
+    /* create invoice */
+    // open create modal
+    $('.add-button').on('click', function() {
+        if (currentTabId == "invoices") {
+            $('#invoiceItems').empty();
+            addItemRow();
+            var currentUser = JSON.parse(localStorage.getItem("user"))
+            $('#createInvoiceCompany').val(currentUser.company);
+            $('#createInvoiceSellerTaxId').val(currentUser.sellerTaxId);
+            $('#createInvoiceModal').fadeIn().addClass('active');
+        } else {
+            // TODO
+            alert('Opening create application form...');
+        }
+    });
+    $('#addItemBtn').on('click', addItemRow);
+    // delete item
+    $(document).on('click', '.delete-item-button', function() {
+        const rowId = $(this).data('row');
+        deleteItemRow(rowId);
+    });
+    // close create invoice modal
+    $('#createInvoiceModal .btn-cancel').on('click', function() {
+        $('#createInvoiceModal').removeClass('active');
+        setTimeout(() => {
+            $('#createInvoiceModal').fadeOut();
+        }, 300);
+    });
+    // confirm create invoice
+    $('#createInvoiceModal .btn-confirm').on('click', function() {
+        var relatedItems = []; // items in the invoice
+        // check items count
+        if ($('#invoiceItems tr').length === 0) {
+            alert('There are no items in the invoice!');
+            return;
+        }
+        // check items filled
+        var validItems = true;
+        $('#invoiceItems tr').each(function() {
+            var itemName = $(this).find('.item-name').val();
+            var quantity = $(this).find('.item-quantity').val();
+            var unitPrice = $(this).find('.item-unit-price').val();
+            var itemObject = {
+                "itemName": itemName,
+                "quantity": quantity,
+                "unitPrice": unitPrice
+            }
+            relatedItems.push(itemObject);
+            if (!itemName || !quantity || !unitPrice) {
+                validItems = false;
+            }
+        });
+        if (!validItems) {
+            alert('Items information not fulfilled!');
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "http://localhost:8081/invoice/createInvoice",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            data: JSON.stringify({
+                "items": relatedItems
+            }),
+            xhrFields: { withCredentials: true },
+            success: function(data) {
+                if (data.status == "success") {
+                    alert('Invoice created successfully!');
+                    getAllInvoices();
+                } else {
+                    alert(data.data.errorMessage);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(xhr.responseText || error);
+            }
+        });
+        $('#createInvoiceModal').removeClass('active');
+        setTimeout(() => {
+            $('#createInvoiceModal').fadeOut();
         }, 300);
     });
 });
@@ -417,4 +494,58 @@ function formatInvoiceStatus(code) {
         }
     }
     return null;
+}
+
+/* add invoice */
+function addItemRow() {
+    itemCount++;
+    const rowId = `item-${itemCount}`;
+    const row = `
+        <tr id="${rowId}">
+            <td>
+                <input type="text" class="form-input item-name" placeholder="Enter item name">
+            </td>
+            <td>
+                <input type="number" class="form-input item-quantity" min="1" value="1" placeholder="Quantity">
+            </td>
+            <td>
+                <input type="number" class="form-input item-unit-price" min="0" step="0.01" value="0.00" placeholder="0.00">
+            </td>
+            <td>
+                <input type="text" class="form-input item-total" value="0.00" readonly>
+            </td>
+            <td>
+                <button class="delete-item-button" data-row="${rowId}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `;
+    $('#invoiceItems').append(row);
+    $(`#${rowId} .item-quantity, #${rowId} .item-unit-price`).on('input', calculateItemTotal);
+    calculateItemTotalAmount();
+}
+
+// calculate amount of single item
+function calculateItemTotal() {
+    const row = $(this).closest('tr');
+    const quantity = parseFloat(row.find('.item-quantity').val()) || 0;
+    const unitPrice = parseFloat(row.find('.item-unit-price').val()) || 0;
+    const total = (quantity * unitPrice).toFixed(2);
+    row.find('.item-total').val(total);
+    calculateItemTotalAmount();
+}
+
+// calculate amount of all items
+function calculateItemTotalAmount() {
+    let totalAmount = 0;
+    $('.item-total').each(function() {
+        totalAmount += parseFloat($(this).val()) || 0;
+    });
+    $('#totalAmount').val(totalAmount.toFixed(2));
+}
+
+function deleteItemRow(rowId) {
+    $(`#${rowId}`).remove();
+    calculateTotalAmount();
 }
