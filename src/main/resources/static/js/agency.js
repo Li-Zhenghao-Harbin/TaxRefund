@@ -9,6 +9,7 @@ var bankName;
 var applicationForms = [];
 var finalTaxRefundAmount = 0;
 var selectedApplicationForms = [];
+var finalTaxRefundDate;
 // tax refund methods
 var taxRefundMethods = [];
 var selectedRefundMethod = 1;
@@ -100,19 +101,15 @@ $(document).ready(function() {
     }
 
     function updateReceipt() {
-        $('#receiptName').text($('#applicantName').val());
-        $('#receiptId').text($('#applicantId').val());
-        $('#receiptCountry').text($('#applicantCountry').val());
-        const methodText = taxRefundMethods.find(m => m.id === selectedRefundMethod)?.name || '';
-        $('#receiptMethod').text(methodText);
-        $('#receiptApplications').text(selectedApplicationForms.join(', '));
-        const today = new Date();
-        const formattedDate = today.toISOString().split('T')[0];
+        $('#receiptName').text(applicantName);
+        $('#receiptId').text(applicantId);
+        $('#receiptCountry').text(applicantCountry);
+        $('#receiptMethod').text(formatTaxRefundMethod(selectedRefundMethod));
+        $('#receiptApplicationForms').text(selectedApplicationForms.join(', '));
         $('#receiptDate').text(formattedDate);
     }
 
     $('#passportScan').on('click', function() {
-        alert('Passport scanning simulated. Personal information populated.');
         $('#applicantName').val('John Smith');
         $('#applicantId').val('PASS123456');
         $('#applicantCountry').val('United States');
@@ -209,7 +206,7 @@ $(document).ready(function() {
                         "Authorization": "Bearer " + token
                     },
                     data: JSON.stringify({
-                        "applicationFormNumber": selectedApplicationForms,
+                        "applicationFormNumbers": selectedApplicationForms,
                         "bankCardNumber": bankCardNumber,
                         "bankCardHolder": bankCardHolder,
                         "bankName": bankName
@@ -236,7 +233,7 @@ $(document).ready(function() {
                         "Authorization": "Bearer " + token
                     },
                     data: JSON.stringify({
-                        "applicationFormNumber": selectedApplicationForms,
+                        "applicationFormNumbers": selectedApplicationForms,
                     }),
                     xhrFields: { withCredentials: true },
                     success: function(data) {
@@ -271,8 +268,25 @@ $(document).ready(function() {
     });
 
     $('#step5Print').on('click', function() {
-        alert('Receipt printed successfully!');
-        // 在实际应用中，这里会调用打印功能
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8081/taxRefund/printReceipt",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            xhrFields: { withCredentials: true },
+            success: function(data) {
+                if (data.status == "success") {
+                    alert(data.data);
+                    location.reload();
+                } else {
+                    alert(data.data.errorMessage);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(xhr.responseText || error);
+            }
+        });
     });
 });
 
@@ -359,6 +373,15 @@ function formatApplicationFormStatus(code) {
     for (var i = 0; i < applicationFormStatusMapper.length; i++) {
         if (applicationFormStatusMapper[i].code == code) {
             return applicationFormStatusMapper[i].title;
+        }
+    }
+    return null;
+}
+
+function formatTaxRefundMethod(code) {
+    for (var i = 0; i > taxRefundMethods.length; i++) {
+        if (taxRefundMethods[i].code == code) {
+            return taxRefundMethods[i].title;
         }
     }
     return null;
