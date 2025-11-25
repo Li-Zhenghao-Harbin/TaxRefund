@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agency Tax Refund System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/agency.css">
+    <script src="js/common/jquery-1.11.0.min.js"></script>
+    <script src="js/common/utils.js"></script>
+    <script src="js/agency.js"></script>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="logo">
+            <h1>Tax Refund Terminal</h1>
+        </div>
+<!--        <div class="user-info">-->
+<!--            <span>Agency Staff</span>-->
+<!--            <button class="logout-button">Logout</button>-->
+<!--        </div>-->
+    </header>
+
+    <div class="main-content">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-step active" data-step="1">
+                    1
+                    <span class="step-label">Personal Info</span>
+                </div>
+                <div class="progress-step" data-step="2">
+                    2
+                    <span class="step-label">Select Applications</span>
+                </div>
+                <div class="progress-step" data-step="3">
+                    3
+                    <span class="step-label">Submit</span>
+                </div>
+                <div class="progress-step" data-step="4">
+                    4
+                    <span class="step-label">Refund Method</span>
+                </div>
+                <div class="progress-step" data-step="5">
+                    5
+                    <span class="step-label">Print Receipt</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Personal Information -->
+        <div class="step-content active" id="step1">
+            <h2 class="step-title">Step 1: Confirm Personal Information</h2>
+
+            <div class="passport-scan" id="passportScan">
+                <div class="passport-icon">
+                    <i class="fas fa-passport"></i>
+                </div>
+                <h3>Scan Passport</h3>
+                <p>Click here to simulate passport scanning</p>
+            </div>
+
+            <div class="form-section">
+                <h3>Or Enter Information Manually</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Applicant Name</label>
+                        <input type="text" class="form-input" id="applicantName" placeholder="Enter applicant name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Applicant ID</label>
+                        <input type="text" class="form-input" id="applicantId" placeholder="Enter applicant ID">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Applicant Country</label>
+                        <select class="form-select" id="applicantCountry">
+                            <option value="">Select country</option>
+                            <option value="United States">United States</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Canada">Canada</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Germany">Germany</option>
+                            <option value="France">France</option>
+                            <option value="Japan">Japan</option>
+                            <option value="China">China</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-next" id="step1Next">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Select Applications -->
+        <div class="step-content" id="step2">
+            <h2 class="step-title">Step 2: Select Refund Applications</h2>
+
+            <div class="form-section">
+                <p>Select the application forms you want to include in this refund:</p>
+
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Application Number</th>
+                        <th>Customs Confirm Number</th>
+                        <th>Select</th>
+                    </tr>
+                    </thead>
+                    <tbody id="applicationsTable">
+                    <!-- Applications will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-prev" id="step2Prev">Previous</button>
+                <button class="btn btn-next" id="step2Next">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Submit Applications -->
+        <div class="step-content" id="step3">
+            <h2 class="step-title">Step 3: Submit Applications</h2>
+
+            <div class="submit-section">
+                <div class="submit-icon">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <h3>Submit Application Forms</h3>
+                <p>Please place the selected application forms in the submission box.</p>
+                <p>Click the button below to simulate submission.</p>
+
+                <button class="btn btn-next" id="step3Submit" style="margin-top: 20px;">
+                    Submit Applications
+                </button>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-prev" id="step3Prev">Previous</button>
+                <button class="btn btn-next" id="step3Next" style="display: none;">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Refund Method -->
+        <div class="step-content" id="step4">
+            <h2 class="step-title">Step 4: Select Refund Method</h2>
+
+            <div class="form-section">
+                <p>Please select your preferred refund method:</p>
+
+                <div class="refund-options" id="refundOptions">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+
+                <div id="bankDetails" class="hidden">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Bank Card Number</label>
+                            <input type="text" class="form-input" id="bankCardNumber" placeholder="Enter bank card number">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Bank Card Holder</label>
+                            <input type="text" class="form-input" id="bankCardHolder" placeholder="Enter card holder name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Bank Name</label>
+                            <input type="text" class="form-input" id="bankName" placeholder="Enter bank name">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-prev" id="step4Prev">Previous</button>
+                <button class="btn btn-next" id="step4Next">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Print Receipt -->
+        <div class="step-content" id="step5">
+            <h2 class="step-title">Step 5: Print Receipt</h2>
+
+            <div class="receipt-container">
+                <div class="receipt-header">
+                    <h3>TAX REFUND RECEIPT</h3>
+                    <p>Refund ID: <span id="receiptRefundId">REF-2023-001</span></p>
+                    <p>Date: <span id="receiptDate">2023-05-20</span></p>
+                </div>
+
+                <div class="receipt-details">
+                    <div class="receipt-row">
+                        <div class="receipt-label">Applicant Name:</div>
+                        <div class="receipt-value" id="receiptName"></div>
+                    </div>
+                    <div class="receipt-row">
+                        <div class="receipt-label">Applicant ID:</div>
+                        <div class="receipt-value" id="receiptId"></div>
+                    </div>
+                    <div class="receipt-row">
+                        <div class="receipt-label">Applicant Country:</div>
+                        <div class="receipt-value" id="receiptCountry"></div>
+                    </div>
+                    <div class="receipt-row">
+                        <div class="receipt-label">Refund Method:</div>
+                        <div class="receipt-value" id="receiptMethod"></div>
+                    </div>
+                    <div class="receipt-row">
+                        <div class="receipt-label">Total Refund Amount:</div>
+                        <div class="receipt-value" id="receiptAmount">$0.00</div>
+                    </div>
+                    <div class="receipt-row">
+                        <div class="receipt-label">Applications Included:</div>
+                        <div class="receipt-value" id="receiptApplications"></div>
+                    </div>
+                </div>
+
+                <div class="receipt-footer" style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd;">
+                    <p>Thank you for using our tax refund service!</p>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-prev" id="step5Prev">Previous</button>
+                <button class="btn btn-print" id="step5Print">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

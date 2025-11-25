@@ -37,6 +37,9 @@ jQuery(document).ready(function() {
                         case 2:
                             window.location.href = 'customs.html';
                             break;
+                        case 3:
+                            window.location.href = 'agency.html';
+                            break;
                     }
                 } else {
                     alert(data.data.errorMessage);
