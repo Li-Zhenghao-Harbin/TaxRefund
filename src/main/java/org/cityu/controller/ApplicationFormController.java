@@ -63,7 +63,7 @@ public class ApplicationFormController extends BaseController {
 
     @RequestMapping(value = "/getApplicationFormsByApplicant", method = {RequestMethod.GET})
     @ResponseBody
-    @RequireRole({ROLE_MERCHANT, ROLE_CUSTOMS})
+    @RequireRole({ROLE_AGENCY})
     public CommonReturnType getApplicationFormsByApplicant(@RequestParam(name = "applicantName") String applicantName,
                                                            @RequestParam(name = "applicantId") String applicantId,
                                                            @RequestParam(name = "applicantCountry") String applicantCountry) throws BusinessException {

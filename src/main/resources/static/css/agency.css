@@ -247,9 +247,32 @@ header {
     background-color: #f9f9f9;
 }
 
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-1 {
+    background-color: #d1eeee;
+    color: #6699ff;
+}
+
+.status-2 {
+    background-color: #e6fff2;
+    color: #00b894;
+}
+
+.status-3 {
+    background-color: #fafad2;
+    color: #eeb422;
+}
+
 .checkbox-container {
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
 }
 

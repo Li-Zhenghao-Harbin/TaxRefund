@@ -2,7 +2,6 @@ var token;
 var invoices;
 var applicationForms;
 var invoiceStatusMapper;
-var applicationFormStatusMapper;
 var currentTabId = "invoices";
 var itemCount = 0;
 var invoiceCount = 0;
@@ -14,6 +13,7 @@ $(document).ready(function() {
         window.location.href = "login.html";
     }
     // prepare layout
+    loadCountries($("#createApplicationFormApplicantCountry"));
     getAllInvoices();
     // get invoice status
     $.ajax({
@@ -133,7 +133,7 @@ $(document).ready(function() {
                                     <td>` + item.applicationFormNumber +`</td>
                                     <td>` + item.applicantName + `</td>
                                     <td>` + item.applicantId + `</td>
-                                    <td>` + item.applicantCountry + `</td>
+                                    <td>` + getCountryNameByCode(item.applicantCountry) + `</td>
                                     <td>` + formatDate(item.issueDate) + `</td>
                                     <td>` + formatAmount(item.totalAmount) + `</td>
                                     <td>
@@ -428,7 +428,7 @@ function getAllApplicationForms() {
                                 <td>` + item.applicationFormNumber +`</td>
                                 <td>` + item.applicantName + `</td>
                                 <td>` + item.applicantId + `</td>
-                                <td>` + item.applicantCountry + `</td>
+                                <td>` + getCountryNameByCode(item.applicantCountry) + `</td>
                                 <td>` + formatDate(item.issueDate) + `</td>
                                 <td>` + formatAmount(item.totalAmount) + `</td>
                                 <td>
@@ -484,7 +484,7 @@ function initTableOperations() {
                 $("#viewApplicationFormNumber").val(applicationFormNumber);
                 $("#viewApplicantName").val(applicationForm.applicantName);
                 $("#viewApplicantId").val(applicationForm.applicantId);
-                $("#viewApplicantCountry").val(applicationForm.applicantCountry);
+                $("#viewApplicantCountry").val(getCountryNameByCode(applicationForm.applicantCountry));
                 $("#viewApplicationFormIssueDate").val(formatDate(applicationForm.issueDate));
                 $("#viewApplicationFormTotalAmount").val(applicationForm.totalAmount);
                 $("#applicationFormViewModal").fadeIn().addClass('active');

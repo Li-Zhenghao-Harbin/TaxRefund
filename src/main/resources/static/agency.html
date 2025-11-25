@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/agency.css">
     <script src="js/common/jquery-1.11.0.min.js"></script>
     <script src="js/common/utils.js"></script>
+    <script src="js/common/countries.js"></script>
     <script src="js/agency.js"></script>
 </head>
 <body>
@@ -16,10 +17,6 @@
         <div class="logo">
             <h1>Tax Refund Terminal</h1>
         </div>
-<!--        <div class="user-info">-->
-<!--            <span>Agency Staff</span>-->
-<!--            <button class="logout-button">Logout</button>-->
-<!--        </div>-->
     </header>
 
     <div class="main-content">
@@ -28,19 +25,19 @@
             <div class="progress-bar" id="progressBar">
                 <div class="progress-step active" data-step="1">
                     1
-                    <span class="step-label">Personal Info</span>
+                    <span class="step-label">Confirm Personal Info</span>
                 </div>
                 <div class="progress-step" data-step="2">
                     2
-                    <span class="step-label">Select Applications</span>
+                    <span class="step-label">Select Application Forms</span>
                 </div>
                 <div class="progress-step" data-step="3">
                     3
-                    <span class="step-label">Submit</span>
+                    <span class="step-label">Submit Application Forms</span>
                 </div>
                 <div class="progress-step" data-step="4">
                     4
-                    <span class="step-label">Refund Method</span>
+                    <span class="step-label">Select Refund Method</span>
                 </div>
                 <div class="progress-step" data-step="5">
                     5
@@ -58,7 +55,6 @@
                     <i class="fas fa-passport"></i>
                 </div>
                 <h3>Scan Passport</h3>
-                <p>Click here to simulate passport scanning</p>
             </div>
 
             <div class="form-section">
@@ -79,15 +75,7 @@
                     <div class="form-group">
                         <label class="form-label">Applicant Country</label>
                         <select class="form-select" id="applicantCountry">
-                            <option value="">Select country</option>
-                            <option value="United States">United States</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="Canada">Canada</option>
-                            <option value="Australia">Australia</option>
-                            <option value="Germany">Germany</option>
-                            <option value="France">France</option>
-                            <option value="Japan">Japan</option>
-                            <option value="China">China</option>
+
                         </select>
                     </div>
                 </div>
@@ -103,21 +91,25 @@
             <h2 class="step-title">Step 2: Select Refund Applications</h2>
 
             <div class="form-section">
-                <p>Select the application forms you want to include in this refund:</p>
+                <p>Select the application forms you want to tax refund:</p>
 
                 <table class="data-table">
                     <thead>
                     <tr>
-                        <th>Application Number</th>
-                        <th>Customs Confirm Number</th>
+                        <th>Application Form Number</th>
+                        <th>Apply Amount</th>
+                        <th>Customs Confirm Amount</th>
+                        <th>Status</th>
                         <th>Select</th>
                     </tr>
                     </thead>
                     <tbody id="applicationsTable">
-                    <!-- Applications will be populated by JavaScript -->
+
                     </tbody>
                 </table>
             </div>
+
+            <h2 class="step-title" id="finalTaxRefundAmount">Total Tax Refund Amount: ￥ 0</h2>
 
             <div class="step-actions">
                 <button class="btn btn-prev" id="step2Prev">Previous</button>
@@ -125,21 +117,21 @@
             </div>
         </div>
 
-        <!-- Step 3: Submit Applications -->
+        <!-- Step 3: Submit Application forms -->
         <div class="step-content" id="step3">
-            <h2 class="step-title">Step 3: Submit Applications</h2>
+            <h2 class="step-title">Step 3: Submit Application forms</h2>
 
             <div class="submit-section">
                 <div class="submit-icon">
                     <i class="fas fa-envelope-open-text"></i>
                 </div>
                 <h3>Submit Application Forms</h3>
-                <p>Please place the selected application forms in the submission box.</p>
-                <p>Click the button below to simulate submission.</p>
+                <p>Please deliver the application forms to the terminal.</p>
 
                 <button class="btn btn-next" id="step3Submit" style="margin-top: 20px;">
-                    Submit Applications
+                    Submit Application forms
                 </button>
+                <h4 style="color: green; display: none;" id="alertSubmittedSuccessfully">Application forms Successfully Submitted!</h4>
             </div>
 
             <div class="step-actions">
@@ -153,13 +145,12 @@
             <h2 class="step-title">Step 4: Select Refund Method</h2>
 
             <div class="form-section">
-                <p>Please select your preferred refund method:</p>
 
                 <div class="refund-options" id="refundOptions">
-                    <!-- Options will be populated by JavaScript -->
+
                 </div>
 
-                <div id="bankDetails" class="hidden">
+                <div id="bankCardDetails" class="hidden">
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Bank Card Number</label>

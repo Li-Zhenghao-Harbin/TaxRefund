@@ -1,78 +1,44 @@
-// 退税方式数组 - 便于未来扩展
-const refundMethods = [
-    { id: 'cash', name: 'Cash', icon: 'money-bill-wave' },
-    { id: 'bankcard', name: 'Bank Card', icon: 'credit-card' }
-];
+var applicationFormStatusMapper;
+// applicant information
+var applicantName;
+var applicantId;
+var applicantCountry;
+var bankCardNumber;
+var bankCardHolder;
+var bankName;
+var applicationForms = [];
+var finalTaxRefundAmount = 0;
+var selectedApplicationForms = [];
+// tax refund methods
+var taxRefundMethods = [];
+var selectedRefundMethod = 1;
 
-// 模拟申请单数据
-const applicationData = [
-    { appNumber: 'APP-2023-001', customsNumber: 'CUS-001', amount: 250.00 },
-    { appNumber: 'APP-2023-002', customsNumber: 'CUS-002', amount: 175.50 },
-    { appNumber: 'APP-2023-003', customsNumber: 'CUS-003', amount: 320.75 },
-    { appNumber: 'APP-2023-004', customsNumber: 'CUS-004', amount: 89.99 }
-];
-
-// 使用jQuery实现功能
 $(document).ready(function() {
+    // progress bar parameters
     let currentStep = 1;
-    let selectedApplications = [];
-    let selectedRefundMethod = '';
-    let totalRefundAmount = 0;
-
-    // 初始化申请单表格
-    function initializeApplicationsTable() {
-        const tableBody = $('#applicationsTable');
-        tableBody.empty();
-
-        applicationData.forEach(app => {
-            const row = `
-                <tr data-app="${app.appNumber}">
-                    <td>${app.appNumber}</td>
-                    <td>${app.customsNumber}</td>
-                    <td class="checkbox-container">
-                        <input type="checkbox" class="select-checkbox" data-app="${app.appNumber}" data-amount="${app.amount}">
-                    </td>
-                </tr>
-            `;
-            tableBody.append(row);
-        });
+    // token
+    token = localStorage.getItem("auth_token");
+    if (!token) {
+        alert("Please login");
+        window.location.href = "login.html";
     }
+    // prepare layout
+    loadCountries($("#applicantCountry"));
+    getTaxRefundMethods();
+    getApplicationFormStatus();
+    // initialize progress bar
+    updateProgressBar(1);
 
-    // 初始化退税方式选项
-    function initializeRefundOptions() {
-        const optionsContainer = $('#refundOptions');
-        optionsContainer.empty();
-
-        refundMethods.forEach(method => {
-            const option = `
-                <div class="refund-option" data-method="${method.id}">
-                    <div class="option-icon">
-                        <i class="fas fa-${method.icon}"></i>
-                    </div>
-                    <h3>${method.name}</h3>
-                </div>
-            `;
-            optionsContainer.append(option);
-        });
-    }
-
-    // 更新进度条
     function updateProgressBar(step) {
         $('.progress-step').removeClass('active');
         $(`.progress-step[data-step="${step}"]`).addClass('active');
-
-        // 更新进度线
         const progressBar = $('#progressBar');
         const progressSteps = $('.progress-step');
         const progressPercent = ((step - 1) / (progressSteps.length - 1)) * 100;
-
         progressBar.css('--progress', `${progressPercent}%`);
-
-        // 使用CSS变量更新进度线
         progressBar[0].style.setProperty('--progress', `${progressPercent}%`);
     }
 
-    // 显示步骤
     function showStep(step) {
         $('.step-content').removeClass('active');
         $(`#step${step}`).addClass('active');
@@ -80,23 +46,27 @@ $(document).ready(function() {
         updateProgressBar(step);
     }
 
-    // 验证步骤1
     function validateStep1() {
-        const name = $('#applicantName').val().trim();
-        const id = $('#applicantId').val().trim();
-        const country = $('#applicantCountry').val();
-
-        if (!name || !id || !country) {
-            alert('Please fill in all personal information fields.');
+        applicantName = $('#applicantName').val().trim();
+        applicantId = $('#applicantId').val().trim();
+        applicantCountry = $('#applicantCountry').val();
+        if (applicantName == "" || applicantName == null) {
+            alert('Applicant name can not be null!');
             return false;
         }
-
+        if (applicantId == "" || applicantId == null) {
+            alert('Applicant id can not be null!');
+            return false;
+        }
+        if (applicantCountry == "" || applicantCountry == null) {
+            alert('Applicant country can not be null!');
+            return false;
+        }
         return true;
     }
 
-    // 验证步骤2
     function validateStep2() {
-        if (selectedApplications.length === 0) {
+        if (selectedApplicationForms.length === 0) {
             alert('Please select at least one application form.');
             return false;
         }
@@ -104,65 +74,43 @@ $(document).ready(function() {
         return true;
     }
 
-    // 验证步骤4
     function validateStep4() {
         if (!selectedRefundMethod) {
-            alert('Please select a refund method.');
+            alert('Please select a tax refund method!');
             return false;
         }
-
-        if (selectedRefundMethod === 'bankcard') {
-            const cardNumber = $('#bankCardNumber').val().trim();
-            const cardHolder = $('#bankCardHolder').val().trim();
-            const bankName = $('#bankName').val().trim();
-
-            if (!cardNumber || !cardHolder || !bankName) {
-                alert('Please fill in all bank card details.');
+        if (selectedRefundMethod == 2) {
+            bankCardNumber = $('#bankCardNumber').val().trim();
+            bankCardHolder = $('#bankCardHolder').val().trim();
+            bankName = $('#bankName').val().trim();
+            if (bankCardNumber == "" || bankCardNumber == null) {
+                alert('Bank card number can not be null!');
+                return false;
+            }
+            if (bankCardHolder == "" || bankCardHolder == null) {
+                alert('Bank card holder can not be null!');
+                return false;
+            }
+            if (bankName == "" || bankName == null) {
+                alert('Bank name can not be null');
                 return false;
             }
         }
-
         return true;
     }
 
-    // 更新收据信息
     function updateReceipt() {
         $('#receiptName').text($('#applicantName').val());
         $('#receiptId').text($('#applicantId').val());
         $('#receiptCountry').text($('#applicantCountry').val());
-
-        // 设置退款方式显示文本
-        const methodText = refundMethods.find(m => m.id === selectedRefundMethod)?.name || '';
+        const methodText = taxRefundMethods.find(m => m.id === selectedRefundMethod)?.name || '';
         $('#receiptMethod').text(methodText);
-
-        // 计算总退款金额
-        totalRefundAmount = 0;
-        selectedApplications.forEach(app => {
-            const appData = applicationData.find(a => a.appNumber === app);
-            if (appData) {
-                totalRefundAmount += appData.amount;
-            }
-        });
-
-        $('#receiptAmount').text(`$${totalRefundAmount.toFixed(2)}`);
-
-        // 显示选中的申请单
-        $('#receiptApplications').text(selectedApplications.join(', '));
-
-        // 设置当前日期
+        $('#receiptApplications').text(selectedApplicationForms.join(', '));
         const today = new Date();
         const formattedDate = today.toISOString().split('T')[0];
         $('#receiptDate').text(formattedDate);
     }
 
-    // 初始化
-    initializeApplicationsTable();
-    initializeRefundOptions();
-    updateProgressBar(1);
-
-    // 事件绑定
-
-    // 模拟护照扫描
     $('#passportScan').on('click', function() {
         alert('Passport scanning simulated. Personal information populated.');
         $('#applicantName').val('John Smith');
@@ -170,101 +118,248 @@ $(document).ready(function() {
         $('#applicantCountry').val('United States');
     });
 
-    // 步骤1下一步
     $('#step1Next').on('click', function() {
         if (validateStep1()) {
-            showStep(2);
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8081/applicationForm/getApplicationFormsByApplicant",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                data: {
+                    "applicantName": applicantName,
+                    "applicantId": applicantId,
+                    "applicantCountry": applicantCountry
+                },
+                xhrFields: { withCredentials: true },
+                success: function(data) {
+                    if (data.status == "success") {
+                        applicationForms = data.data;
+                        if (applicationForms != null) {
+                            initializeApplicationsTable();
+                            showStep(2);
+                        } else {
+                            alert('There are no application forms!');
+                        }
+                    } else {
+                        alert(data.data.errorMessage);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(xhr.responseText || error);
+                }
+            });
         }
     });
 
-    // 步骤2上一步
     $('#step2Prev').on('click', function() {
         showStep(1);
     });
 
-    // 步骤2下一步
     $('#step2Next').on('click', function() {
         if (validateStep2()) {
             showStep(3);
         }
     });
 
-    // 申请单选择
+    // select application forms
     $(document).on('change', '.select-checkbox', function() {
-        const appNumber = $(this).data('app');
-        const isChecked = $(this).is(':checked');
-
+        var applicationFormNumber = $(this).data('app');
+        var isChecked = $(this).is(':checked');
+        var customsConfirmAmount = $(this).data('amount');
         if (isChecked) {
-            if (!selectedApplications.includes(appNumber)) {
-                selectedApplications.push(appNumber);
+            if (!selectedApplicationForms.includes(applicationFormNumber)) {
+                selectedApplicationForms.push(applicationFormNumber);
+                finalTaxRefundAmount += customsConfirmAmount;
             }
         } else {
-            selectedApplications = selectedApplications.filter(app => app !== appNumber);
+            selectedApplicationForms = selectedApplicationForms.filter(app => app !== applicationFormNumber);
+            finalTaxRefundAmount -= customsConfirmAmount;
         }
-
-        console.log('Selected applications:', selectedApplications);
+        $("#finalTaxRefundAmount").text("Total Tax Refund Amount: ￥ " + finalTaxRefundAmount);
+        console.log('Selected applications:', selectedApplicationForms);
     });
 
-    // 步骤3提交
     $('#step3Submit').on('click', function() {
-        alert('Application forms submitted successfully!');
+        $("#alertSubmittedSuccessfully").show();
         $('#step3Next').show();
     });
 
-    // 步骤3下一步
     $('#step3Next').on('click', function() {
+        initializeRefundOptions();
         showStep(4);
     });
 
-    // 步骤3上一步
     $('#step3Prev').on('click', function() {
         showStep(2);
     });
 
-    // 步骤4上一步
     $('#step4Prev').on('click', function() {
         showStep(3);
     });
 
-    // 步骤4下一步
     $('#step4Next').on('click', function() {
         if (validateStep4()) {
-            updateReceipt();
-            showStep(5);
+            if (selectedRefundMethod == 2) {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8081/taxRefund/taxRefundByBankCard",
+                    contentType: "application/json",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    },
+                    data: JSON.stringify({
+                        "applicationFormNumber": selectedApplicationForms,
+                        "bankCardNumber": bankCardNumber,
+                        "bankCardHolder": bankCardHolder,
+                        "bankName": bankName
+                    }),
+                    xhrFields: { withCredentials: true },
+                    success: function(data) {
+                        if (data.status == "success") {
+                            showStep(5);
+                            updateReceipt();
+                        } else {
+                            alert(data.data.errorMessage);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert(xhr.responseText || error);
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8081/taxRefund/taxRefundByCash",
+                    contentType: "application/json",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    },
+                    data: JSON.stringify({
+                        "applicationFormNumber": selectedApplicationForms,
+                    }),
+                    xhrFields: { withCredentials: true },
+                    success: function(data) {
+                        if (data.status == "success") {
+                            showStep(5);
+                            updateReceipt();
+                        } else {
+                            alert(data.data.errorMessage);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert(xhr.responseText || error);
+                    }
+                });
+            }
         }
     });
 
-    // 退税方式选择
     $(document).on('click', '.refund-option', function() {
         $('.refund-option').removeClass('selected');
         $(this).addClass('selected');
-
         selectedRefundMethod = $(this).data('method');
-
-        // 显示或隐藏银行信息
-        if (selectedRefundMethod === 'bankcard') {
-            $('#bankDetails').removeClass('hidden');
+        if (selectedRefundMethod === 2) {
+            $('#bankCardDetails').removeClass('hidden');
         } else {
-            $('#bankDetails').addClass('hidden');
+            $('#bankCardDetails').addClass('hidden');
         }
     });
 
-    // 步骤5上一步
     $('#step5Prev').on('click', function() {
         showStep(4);
     });
 
-    // 打印收据
     $('#step5Print').on('click', function() {
         alert('Receipt printed successfully!');
         // 在实际应用中，这里会调用打印功能
     });
+});
 
-    // 登出按钮
-    $('.logout-button').on('click', function() {
-        if (confirm('Are you sure you want to logout?')) {
-            alert('Logging out...');
-            // 在实际应用中，这里会执行登出逻辑
+function initializeRefundOptions() {
+    const optionsContainer = $('#refundOptions');
+    optionsContainer.empty();
+    taxRefundMethods.forEach(method => {
+        const option = `
+            <div class="refund-option" data-method="${method.code}">
+                <div class="option-icon">
+                    <i class="fas fa-${method.icon}"></i>
+                </div>
+                <h3>${method.title}</h3>
+            </div>
+        `;
+        optionsContainer.append(option);
+    });
+}
+
+function initializeApplicationsTable() {
+    var tableBody = $('#applicationsTable');
+    tableBody.empty();
+    applicationForms.forEach(applicationForm => {
+        var row = `
+            <tr data-app="${applicationForm.applicationFormNumber}">
+                <td>${applicationForm.applicationFormNumber}</td>
+                <td>` + formatAmount(applicationForm.totalAmount) + `</td>
+                <td>` + formatAmount(applicationForm.customsConfirmAmount) + `</td>
+                <td><span class="status-badge status-`+ applicationForm.status +`">` + formatApplicationFormStatus(applicationForm.status) + `</span></td>`;
+                if (applicationForm.status == 2) {
+                    row += `<td class="checkbox-container">
+                        <input type="checkbox" class="select-checkbox" data-app="${applicationForm.applicationFormNumber}" data-amount="${applicationForm.customsConfirmAmount}">
+                    </td>`;
+                }
+           row += `</tr>
+        `;
+        tableBody.append(row);
+    });
+}
+
+function getTaxRefundMethods() {
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8081/code/getTaxRefundMethods",
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                taxRefundMethods = data.data;
+                taxRefundMethods[0].icon = 'money-bill-wave';
+                taxRefundMethods[1].icon = 'credit-card';
+            } else {
+                alert(data.data.errorMessage);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText || error);
         }
     });
-});
+}
+
+function getApplicationFormStatus() {
+    $.ajax({
+        type: "GET",
+        contentType: "application/x-www-form-urlencoded",
+        url: "http://localhost:8081/code/getStatus",
+        data: {
+            "business": "Application form"
+        },
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                applicationFormStatusMapper = data.data;
+            } else {
+                alert(data.data.errorMessage);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText || error);
+        }
+    });
+}
+
+function formatApplicationFormStatus(code) {
+    for (var i = 0; i < applicationFormStatusMapper.length; i++) {
+        if (applicationFormStatusMapper[i].code == code) {
+            return applicationFormStatusMapper[i].title;
+        }
+    }
+    return null;
+}
