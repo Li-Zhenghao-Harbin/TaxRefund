@@ -25,9 +25,9 @@ public class CommonUtils {
         return stringBuilder.toString();
     }
 
-    public static Date formatDate(String date) throws ParseException {
+    public static String getStringFromDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.parse(date);
+        return sdf.format(date);
     }
 
     public static String generateApplicationFormNumber(int series) {

@@ -12,6 +12,7 @@ import org.cityu.service.model.TaxRefundModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.cityu.common.utils.JsonUtils.getApplicationFormNumbersFromJson;
@@ -34,11 +35,12 @@ public class TaxRefundController extends BaseController {
         TaxRefundModel taxRefundModel = new TaxRefundModel();
         taxRefundModel.setApplicationFormNumbers(applicationFormNumbers);
         taxRefundModel.setTaxRefundMethod(1);
-        taxRefundModel.setTaxRefundDate(CommonUtils.getCurrentDate());
+        Date taxRefundDate = CommonUtils.getCurrentDate();
+        taxRefundModel.setTaxRefundDate(taxRefundDate);
         taxRefundModel.setApplicationFormMaterial(CommonUtils.generateApplicationFormMaterial(applicationFormNumbers.get(0)));
         taxRefundModel.setInvoiceMaterial(CommonUtils.generateInvoiceMaterial(applicationFormNumbers.get(0)));
         taxRefundService.taxRefundByCash(taxRefundModel);
-        return CommonReturnType.create(null);
+        return CommonReturnType.create(CommonUtils.getStringFromDate(taxRefundDate));
     }
 
     @RequestMapping(value = "/taxRefundByBankCard", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_JSON})
@@ -54,14 +56,15 @@ public class TaxRefundController extends BaseController {
         TaxRefundModel taxRefundModel = new TaxRefundModel();
         taxRefundModel.setApplicationFormNumbers(applicationFormNumbers);
         taxRefundModel.setTaxRefundMethod(2);
-        taxRefundModel.setTaxRefundDate(CommonUtils.getCurrentDate());
+        Date taxRefundDate = CommonUtils.getCurrentDate();
+        taxRefundModel.setTaxRefundDate(taxRefundDate);
         taxRefundModel.setApplicationFormMaterial(CommonUtils.generateApplicationFormMaterial(applicationFormNumbers.get(0)));
         taxRefundModel.setInvoiceMaterial(CommonUtils.generateInvoiceMaterial(applicationFormNumbers.get(0)));
         taxRefundModel.setBankCardNumber(bankCardNumber);
         taxRefundModel.setBankCardHolder(bankCardHolder);
         taxRefundModel.setBankName(bankName);
         taxRefundService.taxRefundByBankCard(taxRefundModel);
-        return CommonReturnType.create(null);
+        return CommonReturnType.create(CommonUtils.getStringFromDate(taxRefundDate));
     }
 
     @RequestMapping(value = "/printReceipt", method = {RequestMethod.POST})

@@ -101,18 +101,19 @@ $(document).ready(function() {
     }
 
     function updateReceipt() {
+        $('#receiptDate').text(finalTaxRefundDate);
         $('#receiptName').text(applicantName);
         $('#receiptId').text(applicantId);
         $('#receiptCountry').text(applicantCountry);
         $('#receiptMethod').text(formatTaxRefundMethod(selectedRefundMethod));
+        $('#receiptTotalAmount').text(formatAmount(finalTaxRefundAmount));
         $('#receiptApplicationForms').text(selectedApplicationForms.join(', '));
-        $('#receiptDate').text(formattedDate);
     }
 
     $('#passportScan').on('click', function() {
-        $('#applicantName').val('John Smith');
-        $('#applicantId').val('PASS123456');
-        $('#applicantCountry').val('United States');
+        $('#applicantName').val('Tony');
+        $('#applicantId').val('P123');
+        $('#applicantCountry').val('Afghanistan');
     });
 
     $('#step1Next').on('click', function() {
@@ -214,6 +215,7 @@ $(document).ready(function() {
                     xhrFields: { withCredentials: true },
                     success: function(data) {
                         if (data.status == "success") {
+                            finalTaxRefundDate = data.data;
                             showStep(5);
                             updateReceipt();
                         } else {
@@ -238,6 +240,7 @@ $(document).ready(function() {
                     xhrFields: { withCredentials: true },
                     success: function(data) {
                         if (data.status == "success") {
+                            finalTaxRefundDate = data.data;
                             showStep(5);
                             updateReceipt();
                         } else {
@@ -379,7 +382,7 @@ function formatApplicationFormStatus(code) {
 }
 
 function formatTaxRefundMethod(code) {
-    for (var i = 0; i > taxRefundMethods.length; i++) {
+    for (var i = 0; i < taxRefundMethods.length; i++) {
         if (taxRefundMethods[i].code == code) {
             return taxRefundMethods[i].title;
         }
