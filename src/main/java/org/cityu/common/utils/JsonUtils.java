@@ -47,4 +47,14 @@ public class JsonUtils {
         }
         return items;
     }
+
+    public static List<String> getApplicationFormNumbersFromJson(JsonNode jsonNode) {
+        List<String> applicationFormNumbers = new ArrayList<>();
+        if (jsonNode != null && jsonNode.isArray()) {
+            for (JsonNode applicationFormNumberNode : jsonNode) {
+                applicationFormNumbers.add(applicationFormNumberNode.asText());
+            }
+        }
+        return applicationFormNumbers;
+    }
 }

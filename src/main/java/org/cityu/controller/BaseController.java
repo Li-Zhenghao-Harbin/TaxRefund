@@ -25,20 +25,20 @@ public class BaseController {
     public static final String ROLE_CUSTOMS = "2";
     public static final String ROLE_AGENCY = "3";
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Object handlerException(HttpServletRequest request, Exception ex) {
-        Map<String, Object> responseData = new HashMap<>();
-        if (ex instanceof BusinessException) {
-            BusinessException businessException = (BusinessException) ex;
-            responseData.put("errorCode", businessException.getErrorCode());
-            responseData.put("errorMessage", businessException.getErrorMessage());
-
-        } else {
-            responseData.put("errorCode", EmBusinessError.UNKNOWN_ERROR.getErrorCode());
-            responseData.put("errorMessage", EmBusinessError.UNKNOWN_ERROR.getErrorMessage());
-        }
-        return CommonReturnType.create(responseData, "fail");
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.OK)
+//    @ResponseBody
+//    public Object handlerException(HttpServletRequest request, Exception ex) {
+//        Map<String, Object> responseData = new HashMap<>();
+//        if (ex instanceof BusinessException) {
+//            BusinessException businessException = (BusinessException) ex;
+//            responseData.put("errorCode", businessException.getErrorCode());
+//            responseData.put("errorMessage", businessException.getErrorMessage());
+//
+//        } else {
+//            responseData.put("errorCode", EmBusinessError.UNKNOWN_ERROR.getErrorCode());
+//            responseData.put("errorMessage", EmBusinessError.UNKNOWN_ERROR.getErrorMessage());
+//        }
+//        return CommonReturnType.create(responseData, "fail");
+//    }
 }

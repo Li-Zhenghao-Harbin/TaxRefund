@@ -1,9 +1,10 @@
 package org.cityu.service.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class TaxRefundModel {
-    private String applicationFormNumber;
+    private List<String> applicationFormNumbers;
     private Integer taxRefundMethod;
     private Date taxRefundDate;
     private String applicationFormMaterial;
@@ -12,12 +13,12 @@ public class TaxRefundModel {
     private String bankCardHolder;
     private String bankName;
 
-    public String getApplicationFormNumber() {
-        return applicationFormNumber;
+    public List<String> getApplicationFormNumbers() {
+        return applicationFormNumbers;
     }
 
-    public void setApplicationFormNumber(String applicationFormNumber) {
-        this.applicationFormNumber = applicationFormNumber;
+    public void setApplicationFormNumbers(List<String> applicationFormNumbers) {
+        this.applicationFormNumbers = applicationFormNumbers;
     }
 
     public Integer getTaxRefundMethod() {
