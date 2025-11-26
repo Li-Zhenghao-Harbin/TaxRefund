@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cityu.dao.VisualMapper">
+    <select id="getOverview" resultType="java.util.Map">
+
+    </select>
+    <select id="getItemsPie" resultType="java.util.Map">
+        select
+        count(case when i.status = 2 then 1 end) approvedCount,
+        count(case when i.status = -1 then 1 end) rejectedCount
+        from b_item i
+    </select>
+    <select id="getApplicationFormsPie" resultType="java.util.Map">
+
+    </select>
+    <select id="getCustomsConfirmAmountPie" resultType="java.util.Map">
+
+    </select>
+    <select id="getTaxRefundMethodPie" resultType="java.util.Map">
+
+    </select>
+    <select id="getMonthlyStatistic" resultType="java.util.Map">
+
+    </select>
+</mapper>
