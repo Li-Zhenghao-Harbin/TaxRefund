@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Dashboard - Summary Information</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="js/common/jquery-1.11.0.min.js"></script>
+    <script src="js/common/utils.js"></script>
+    <script src="js/dashboard.js"></script>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="logo">
+            <h1>Data Dashboard</h1>
+        </div>
+        <div class="user-info">
+            <button class="logout-button">Back</button>
+        </div>
+    </header>
+
+    <!-- Row 1: Overview -->
+    <div class="dashboard">
+        <div class="dashboard-card">
+            <div class="card-title">Invoices</div>
+            <div class="card-value" id="invoicesCount">1,254</div>
+            <div class="card-comparison">
+                <span id="invoicesCountThisMonth">This Month: 142</span>
+                <span id="invoicesCountThisYear">This Year: 1,254</span>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-title">Application Forms</div>
+            <div class="card-value">892</div>
+            <div class="card-comparison">
+                <span>This Month: 98</span>
+                <span>This Year: 892</span>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-title">Total Applied Refund Amount</div>
+            <div class="card-value">$245,680</div>
+            <div class="card-comparison">
+                <span>This Month: $28,450</span>
+                <span>This Year: $245,680</span>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-title">Total Customs Confirmed Amount</div>
+            <div class="card-value">$218,320</div>
+            <div class="card-comparison">
+                <span>This Month: $25,120</span>
+                <span>This Year: $218,320</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2-3: Pie Charts -->
+    <div class="chart-row">
+        <div class="chart-container">
+            <div class="chart-title">Items Status</div>
+            <div id="itemsChart" class="chart"></div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Application Forms Status</div>
+            <div id="applicationsChart" class="chart"></div>
+        </div>
+    </div>
+
+    <div class="chart-row">
+        <div class="chart-container">
+            <div class="chart-title">Customs Confirmed Amount by Refund Method</div>
+            <div id="refundAmountChart" class="chart"></div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Refund Methods Distribution</div>
+            <div id="refundMethodsChart" class="chart"></div>
+        </div>
+    </div>
+
+    <!-- Row 3: Mixed Chart -->
+    <div class="mixed-chart-container">
+        <div class="chart-title">Monthly Trends (Jan-Dec)</div>
+        <div id="mixedChart" class="mixed-chart"></div>
+    </div>
+</div>
+</body>
+</html>

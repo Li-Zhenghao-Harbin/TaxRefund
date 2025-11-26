@@ -15,6 +15,7 @@ window.onload = function() {
     initModal();
     // prepare functions
     buttonLogout();
+    buttonDashboard();
     buttonAddUser();
     buttonQueryUser();
     buttonResetQuery();
@@ -308,6 +309,12 @@ function buttonLogout() {
             });
             return false;
         }
+    });
+}
+
+function buttonDashboard() {
+    $('#dashboard').on('click', function() {
+        window.location.href = "dashboard.html";
     });
 }
 
