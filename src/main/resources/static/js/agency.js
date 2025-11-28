@@ -104,7 +104,7 @@ $(document).ready(function() {
         $('#receiptDate').text(finalTaxRefundDate);
         $('#receiptName').text(applicantName);
         $('#receiptId').text(applicantId);
-        $('#receiptCountry').text(applicantCountry);
+        $('#receiptCountry').text(getCountryNameByCode(applicantCountry));
         $('#receiptMethod').text(formatTaxRefundMethod(selectedRefundMethod));
         $('#receiptTotalAmount').text(formatAmount(finalTaxRefundAmount));
         $('#receiptApplicationForms').text(selectedApplicationForms.join(', '));

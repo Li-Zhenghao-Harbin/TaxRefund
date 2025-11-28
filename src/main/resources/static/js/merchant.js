@@ -486,7 +486,7 @@ function initTableOperations() {
                 $("#viewApplicantId").val(applicationForm.applicantId);
                 $("#viewApplicantCountry").val(getCountryNameByCode(applicationForm.applicantCountry));
                 $("#viewApplicationFormIssueDate").val(formatDate(applicationForm.issueDate));
-                $("#viewApplicationFormTotalAmount").val(applicationForm.totalAmount);
+                $("#viewApplicationFormTotalAmount").val(formatAmount(applicationForm.totalAmount));
                 $("#applicationFormViewModal").fadeIn().addClass('active');
                 // invoices table
                 var invoicesTableHtml = "";

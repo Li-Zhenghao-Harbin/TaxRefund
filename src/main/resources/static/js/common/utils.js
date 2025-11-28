@@ -1,6 +1,7 @@
 function formatDate(dateStr) {
     const [datePart, timePart] = dateStr.split('T');
-    const [hours, minutes, seconds] = timePart.split(':');
+    const [hours, minutes] = timePart.split(':');
+    const seconds = timePart.split(':')[2].substring(0, 2);
     return `${datePart} ${hours}:${minutes}:${seconds}`;
 }
 
