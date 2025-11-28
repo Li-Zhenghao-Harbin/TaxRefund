@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="org.cityu.dataobject.UserDO">
     <id column="name" jdbcType="VARCHAR" property="name" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="role" jdbcType="VARCHAR" property="role" />
+    <result column="role" jdbcType="INTEGER" property="role" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="company" jdbcType="INTEGER" property="company" />
     <result column="seller_tax_id" jdbcType="INTEGER" property="sellerTaxId" />
@@ -17,13 +17,13 @@
     insert into b_user (name, password,
       role, status)
     values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-      #{role,jdbcType=VARCHAR}, #{status,jdbcType=BIT})
+      #{role,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
   </insert>
   <update id="updateUserInfo" parameterType="org.cityu.dataobject.UserDO">
     update b_user
     set
       password = #{password,jdbcType=VARCHAR},
-      status = #{status,jdbcType=BIT}
+      status = #{status,jdbcType=INTEGER}
     where name = #{name,jdbcType=INTEGER}
   </update>
   <select id="getAllUsers" resultMap="BaseResultMap">

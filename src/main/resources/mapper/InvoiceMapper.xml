@@ -7,7 +7,7 @@
     <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
     <result column="issue_date" jdbcType="TIMESTAMP" property="issueDate" />
     <result column="application_form_number" jdbcType="VARCHAR" property="applicationFormNumber" />
-    <result column="status" jdbcType="BIT" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="company" jdbcType="VARCHAR" property="company" />
     <result column="seller_tax_id" jdbcType="VARCHAR" property="sellerTaxId" />
   </resultMap>
@@ -17,7 +17,7 @@
       status)
     values (#{invoiceNumber,jdbcType=VARCHAR}, #{issueMerchantName,jdbcType=VARCHAR},
       #{totalAmount,jdbcType=DECIMAL}, #{issueDate,jdbcType=TIMESTAMP}, #{applicationFormNumber,jdbcType=VARCHAR},
-      #{status,jdbcType=BIT})
+      #{status,jdbcType=INTEGER})
   </insert>
   <update id="discardInvoice" parameterType="java.lang.String">
     update b_invoice
