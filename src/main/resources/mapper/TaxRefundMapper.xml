@@ -8,32 +8,10 @@
     <result column="application_form_material" jdbcType="VARCHAR" property="applicationFormNumberMaterial" />
     <result column="invoice_material" jdbcType="VARCHAR" property="invoiceMaterial" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from b_tax_refund
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
   <insert id="insert" parameterType="org.cityu.dataobject.TaxRefundDO">
     insert into b_tax_refund (application_form_number, tax_refund_method,
       tax_refund_date, application_form_material, invoice_material)
     values (#{applicationFormNumber,jdbcType=VARCHAR}, #{taxRefundMethod,jdbcType=INTEGER},
       #{taxRefundDate,jdbcType=TIMESTAMP}, #{applicationFormMaterial,jdbcType=VARCHAR}, #{invoiceMaterial,jdbcType=VARCHAR})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="org.cityu.dataobject.TaxRefundDO">
-    update b_tax_refund
-    set application_form_number = #{applicationFormNumber,jdbcType=VARCHAR},
-      tax_refund_method = #{taxRefundMethod,jdbcType=INTEGER},
-      tax_refund_date = #{taxRefundDate,jdbcType=TIMESTAMP},
-      application_form_material = #{applicationFormMaterial,jdbcType=VARCHAR},
-      invoice_material = #{invoiceMaterial,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select application_form_number, tax_refund_method, tax_refund_date, application_form_material, invoice_material
-    from b_tax_refund
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select application_form_number, tax_refund_method, tax_refund_date, application_form_material, invoice_material
-    from b_tax_refund
-  </select>
 </mapper>
