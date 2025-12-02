@@ -76,6 +76,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         }
         // calculate total amount
         BigDecimal totalAmount = applicationFormMapper.calculateTotalAmount(invoiceNumbers);
+        if (totalAmount.compareTo(BigDecimal.valueOf(200)) < 0) {
+            throw new BusinessException(EmBusinessError.IMPROPER_APPLICATION_AMOUNT);
+        }
         applicationFormDO.setTotalAmount(totalAmount);
         applicationFormMapper.insert(applicationFormDO);
         // update application form information

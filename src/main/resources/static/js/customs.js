@@ -72,7 +72,7 @@ $(document).ready(function() {
             xhrFields: { withCredentials: true },
             success: function(data) {
                 if (data.status == "success") {
-                    alert("Application form successfully reviewed!");
+                    console.log("Application form successfully reviewed!");
                 } else {
                     alert(data.data.errorMessage);
                 }

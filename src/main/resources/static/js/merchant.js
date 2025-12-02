@@ -271,7 +271,7 @@ $(document).ready(function() {
             xhrFields: { withCredentials: true },
             success: function(data) {
                 if (data.status == "success") {
-                    alert('Invoice successfully created!');
+                    console.log('Invoice successfully created!');
                     getAllInvoices();
                 } else {
                     alert(data.data.errorMessage);
@@ -339,7 +339,7 @@ $(document).ready(function() {
             xhrFields: { withCredentials: true },
             success: function(data) {
                 if (data.status == "success") {
-                    alert('Application form successfully created!');
+                    console.log('Application form successfully created!');
                     getAllApplicationForms();
                 } else {
                     alert(data.data.errorMessage);
@@ -521,7 +521,7 @@ function initTableOperations() {
                     xhrFields: { withCredentials: true },
                     success: function(data) {
                         if (data.status == "success") {
-                            alert("Invoice (" + invoiceNumber + ") has been discarded!" );
+                            console.log("Invoice (" + invoiceNumber + ") has been discarded!" );
                             getAllInvoices();
                         } else {
                             alert(data.data.errorMessage);

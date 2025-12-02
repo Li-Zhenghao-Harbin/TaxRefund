@@ -428,7 +428,7 @@ function initTableOperations() {
                     xhrFields: { withCredentials: true },
                     success: function(data) {
                         if (data.status == "success") {
-                            alert(`${username} has been deleted!`);
+                            console.log(`${username} has been deleted!`);
                             getAllUsers();
                         } else {
                             alert(data.data.errorMessage);
@@ -478,33 +478,3 @@ function getUserByName(name) {
     }
     return null;
 }
-
-
-//
-//// 搜索功能
-//document.querySelector('.search-button').addEventListener('click', function() {
-//    const searchTerm = document.querySelector('.search-input').value.toLowerCase();
-//    const rows = document.querySelectorAll('.users-table tbody tr');
-//
-//    rows.forEach(row => {
-//        const username = row.querySelector('td:first-child').textContent.toLowerCase();
-//        const role = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-//
-//        if (username.includes(searchTerm) || role.includes(searchTerm)) {
-//            row.style.display = '';
-//        } else {
-//            row.style.display = 'none';
-//        }
-//    });
-//});
-//
-//// 分页按钮点击事件
-//document.querySelectorAll('.pagination button').forEach(button => {
-//    button.addEventListener('click', function() {
-//        document.querySelector('.pagination .active').classList.remove('active');
-//        this.classList.add('active');
-//        alert(`Loading page ${this.textContent}`);
-//        // 在实际应用中，这里会有加载对应页数据的逻辑
-//    });
-//});
-

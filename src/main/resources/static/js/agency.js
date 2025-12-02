@@ -280,7 +280,7 @@ $(document).ready(function() {
             xhrFields: { withCredentials: true },
             success: function(data) {
                 if (data.status == "success") {
-                    alert(data.data);
+                    console.log(data.data);
                     location.reload();
                 } else {
                     alert(data.data.errorMessage);

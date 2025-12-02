@@ -65,7 +65,7 @@ public class TaxRefundServiceImpl implements TaxRefundService {
                 throw new BusinessException(EmBusinessError.APPLICATION_FORM_NOT_REVIEWED);
             }
             if (applicationFormDO.getStatus() == 3) {
-                throw new BusinessException(EmBusinessError.REPEAT_TAX_REFOUND);
+                throw new BusinessException(EmBusinessError.REPEAT_TAX_REFUND);
             }
             // insert tax refund record
             TaxRefundDO taxRefundDO = convertFromTaxRefundModel(taxRefundModel);
