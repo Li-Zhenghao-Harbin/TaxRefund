@@ -2,24 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.cityu.dao.VisualMapper">
     <select id="getOverview" resultType="java.util.Map">
-
+        select
+            (select count(*) from b_invoice where issue_date >= date_format(now(), '%y-%m-01')) as invoiceMonthCount,
+            (select count(*) from b_invoice where issue_date >= date_format(now(), '%y-01-01')) as invoiceYearCount,
+            (select count(*) from b_application_form where issue_date >= date_format(now(), '%y-%m-01')) as applicationFormMonthCount,
+            (select count(*) from b_application_form where issue_date >= date_format(now(), '%y-01-01')) as applicationFormYearCount,
+            (select coalesce(sum(total_amount), 0) from b_application_form where issue_date >= date_format(now(), '%y-%m-01')) as applicationFormMonthTotalAmount,
+            (select coalesce(sum(total_amount), 0) from b_application_form where issue_date >= date_format(now(), '%y-01-01')) as applicationFormYearTotalAmount,
+            (select coalesce(sum(customs_confirm_amount), 0) from b_application_form where issue_date >= date_format(now(), '%y-%m-01')) as applicationFormMonthCustomsConfirmAmount,
+            (select coalesce(sum(customs_confirm_amount), 0) from b_application_form where issue_date >= date_format(now(), '%y-01-01')) as applicationFormYearCustomsConfirmAmount
     </select>
     <select id="getItemsPie" resultType="java.util.Map">
         select
-        count(case when i.status = 2 then 1 end) approvedCount,
-        count(case when i.status = -1 then 1 end) rejectedCount
-        from b_item i
+            count(case when i.status = 2 then 1 end) approvedCount,
+            count(case when i.status = -1 then 1 end) rejectedCount,
+            count(case when i.status = 1 then 1 end) notReviewedCount
+        from
+            b_item i
     </select>
     <select id="getApplicationFormsPie" resultType="java.util.Map">
-
+        select
+            count(case when a.status = 3 then 1 end) taxRefundedCount,
+            count(case when a.status != 3 then 1 end)  notTaxRefundedCount
+        from
+            b_application_form a
     </select>
     <select id="getCustomsConfirmAmountPie" resultType="java.util.Map">
-
+        select
+            coalesce(sum(case when t.tax_refund_method = 1 then a.customs_confirm_amount end), 0) as cash,
+            coalesce(sum(case when t.tax_refund_method = 2 then a.customs_confirm_amount end), 0) as bankCard
+        from
+            b_application_form a
+            left join b_tax_refund t on a.application_form_number = t.application_form_number
+        where
+            t.tax_refund_method is not null
     </select>
     <select id="getTaxRefundMethodPie" resultType="java.util.Map">
-
+        select
+            count(case when t.tax_refund_method = 1 then 1 end) as cash,
+            count(case when t.tax_refund_method = 2 then 1 end) as bankCard
+        from
+            b_application_form a
+            left join b_tax_refund t on a.application_form_number = t.application_form_number
+        where
+            t.tax_refund_method is not null
     </select>
     <select id="getMonthlyStatistic" resultType="java.util.Map">
-
+        select
+            m.month_number monthNumber,
+            coalesce(count(a.application_form_number), 0) as applicationFormCount,
+            coalesce(sum(a.total_amount), 0) as totalAmountSum,
+            coalesce(sum(a.customs_confirm_amount), 0) as customsConfirmAmountSum
+        from
+            (select 1 as month_number union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9 union select 10 union select 11 union select 12) as m
+            left join b_application_form a on month(a.issue_date) = m.month_number and year(a.issue_date) = year(curdate())
+        group by
+            m.month_number
+        order by
+            m.month_number
     </select>
 </mapper>

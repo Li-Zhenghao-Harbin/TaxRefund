@@ -20,9 +20,36 @@ $(document).ready(function() {
 });
 
 function initOverview() {
-    $("#invoicesCount").text("1234");
-    $("#invoicesCountThisMonth").text(formatTitlePrefix("12", 1));
-    $("#invoicesCountThisYear").text(formatTitlePrefix("34", 2));
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8081/visual/getOverview",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                var d = data.data;
+                $("#invoiceCount").text(d.invoiceYearCount);
+                $("#invoiceCountThisMonth").text(formatTitlePrefix(d.invoiceMonthCount, 1));
+                $("#invoiceCountThisYear").text(formatTitlePrefix(d.invoiceYearCount, 2));
+                $("#applicationFormCount").text(d.applicationFormYearCount);
+                $("#applicationFormCountThisMonth").text(formatTitlePrefix(d.applicationFormMonthCount, 1));
+                $("#applicationFormCountThisYear").text(formatTitlePrefix(d.applicationFormYearCount, 2));
+                $("#applicationFormTotalAmount").text(formatAmount(d.applicationFormYearTotalAmount));
+                $("#applicationFormTotalAmountThisMonth").text(formatTitlePrefix(formatAmount(d.applicationFormMonthTotalAmount), 1));
+                $("#applicationFormTotalAmountThisYear").text(formatTitlePrefix(formatAmount(d.applicationFormYearTotalAmount), 2));
+                $("#applicationFormCustomsConfirmAmount").text(formatAmount(d.applicationFormYearCustomsConfirmAmount));
+                $("#applicationFormCustomsConfirmAmountThisMonth").text(formatTitlePrefix(formatAmount(d.applicationFormMonthCustomsConfirmAmount), 1));
+                $("#applicationFormCustomsConfirmAmountThisYear").text(formatTitlePrefix(formatAmount(d.applicationFormYearCustomsConfirmAmount), 2));
+            } else {
+                console.log(data.data.errorMessage);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log(xhr.responseText || error);
+        }
+    });
 }
 
 function formatTitlePrefix(title, prefix) {
@@ -56,7 +83,7 @@ function initItemsChart() {
                         orient: 'vertical',
                         right: 10,
                         top: 'center',
-                        data: ['Approved', 'Rejected']
+                        data: ['Approved', 'Rejected', 'Not Reviewed']
                     },
                     series: [
                         {
@@ -85,7 +112,8 @@ function initItemsChart() {
                             },
                             data: [
                                 {value: data.data.rejectedCount, name: 'Approved', itemStyle: {color: '#4CAF50'}},
-                                {value: data.data.approvedCount, name: 'Rejected', itemStyle: {color: '#F44336'}}
+                                {value: data.data.approvedCount, name: 'Rejected', itemStyle: {color: '#F44336'}},
+                                {value: data.data.notReviewedCount, name: 'Not Reviewed', itemStyle: {color: '#88ABDA'}}
                             ]
                         }
                     ]
@@ -109,52 +137,67 @@ function initItemsChart() {
 function initApplicationsChart() {
     const chartDom = document.getElementById('applicationsChart');
     const myChart = echarts.init(chartDom);
-
-    const option = {
-        tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b}: {c} ({d}%)'
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8081/visual/getApplicationFormsPie   ",
+        headers: {
+            "Authorization": "Bearer " + token
         },
-        legend: {
-            orient: 'vertical',
-            right: 10,
-            top: 'center',
-            data: ['Refunded', 'Not Refunded']
-        },
-        series: [
-            {
-                name: 'Applications',
-                type: 'pie',
-                radius: ['40%', '70%'],
-                avoidLabelOverlap: false,
-                itemStyle: {
-                    borderRadius: 10,
-                    borderColor: '#fff',
-                    borderWidth: 2
-                },
-                label: {
-                    show: false,
-                    position: 'center'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: '18',
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: [
-                    {value: 654, name: 'Refunded', itemStyle: {color: '#2196F3'}},
-                    {value: 238, name: 'Not Refunded', itemStyle: {color: '#FF9800'}}
-                ]
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                const option = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        right: 10,
+                        top: 'center',
+                        data: ['Refunded', 'Not Refunded']
+                    },
+                    series: [
+                        {
+                            name: 'Application forms',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: '18',
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                {value: data.data.taxRefundedCount, name: 'Refunded', itemStyle: {color: '#2196F3'}},
+                                {value: data.data.notTaxRefundedCount, name: 'Not Refunded', itemStyle: {color: '#FF9800'}}
+                            ]
+                        }
+                    ]
+                };
+                myChart.setOption(option);
+            } else {
+                console.log(data.data.errorMessage);
             }
-        ]
-    };
-
-    myChart.setOption(option);
+        },
+        error: function(xhr, status, error) {
+            console.log(xhr.responseText || error);
+        }
+    });
 
     window.addEventListener('resize', function() {
         myChart.resize();
@@ -164,53 +207,68 @@ function initApplicationsChart() {
 function initRefundAmountChart() {
     const chartDom = document.getElementById('refundAmountChart');
     const myChart = echarts.init(chartDom);
-
-    const option = {
-        tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b}: {c} ({d}%)'
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8081/visual/getCustomsConfirmAmountPie",
+        headers: {
+            "Authorization": "Bearer " + token
         },
-        legend: {
-            orient: 'vertical',
-            right: 10,
-            top: 'center',
-            data: ['Cash', 'Bank Card']
-        },
-        series: [
-            {
-                name: 'Refund Amount',
-                type: 'pie',
-                radius: ['40%', '70%'],
-                avoidLabelOverlap: false,
-                itemStyle: {
-                    borderRadius: 10,
-                    borderColor: '#fff',
-                    borderWidth: 2
-                },
-                label: {
-                    show: false,
-                    position: 'center'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: '18',
-                        fontWeight: 'bold',
-                        formatter: '{b}\n${c}'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: [
-                    {value: 125430, name: 'Cash', itemStyle: {color: '#FFC107'}},
-                    {value: 92890, name: 'Bank Card', itemStyle: {color: '#9C27B0'}}
-                ]
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                const option = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        right: 10,
+                        top: 'center',
+                        data: ['Cash', 'Bank Card']
+                    },
+                    series: [
+                        {
+                            name: 'Customs Confirmed Amount',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: '18',
+                                    fontWeight: 'bold',
+                                    formatter: '{b}\n￥{c}'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                {value: data.data.cash, name: 'Cash', itemStyle: {color: '#FFC107'}},
+                                {value: data.data.bankCard, name: 'Bank Card', itemStyle: {color: '#9C27B0'}}
+                            ]
+                        }
+                    ]
+                };
+                myChart.setOption(option);
+            } else {
+                console.log(data.data.errorMessage);
             }
-        ]
-    };
-
-    myChart.setOption(option);
+        },
+        error: function(xhr, status, error) {
+            console.log(xhr.responseText || error);
+        }
+    });
 
     window.addEventListener('resize', function() {
         myChart.resize();
@@ -220,52 +278,67 @@ function initRefundAmountChart() {
 function initRefundMethodsChart() {
     const chartDom = document.getElementById('refundMethodsChart');
     const myChart = echarts.init(chartDom);
-
-    const option = {
-        tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b}: {c} ({d}%)'
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8081/visual/getTaxRefundMethodPie",
+        headers: {
+            "Authorization": "Bearer " + token
         },
-        legend: {
-            orient: 'vertical',
-            right: 10,
-            top: 'center',
-            data: ['Cash', 'Bank Card']
-        },
-        series: [
-            {
-                name: 'Refund Methods',
-                type: 'pie',
-                radius: ['40%', '70%'],
-                avoidLabelOverlap: false,
-                itemStyle: {
-                    borderRadius: 10,
-                    borderColor: '#fff',
-                    borderWidth: 2
-                },
-                label: {
-                    show: false,
-                    position: 'center'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: '18',
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: [
-                    {value: 587, name: 'Cash', itemStyle: {color: '#FFC107'}},
-                    {value: 305, name: 'Bank Card', itemStyle: {color: '#9C27B0'}}
-                ]
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                const option = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        right: 10,
+                        top: 'center',
+                        data: ['Cash', 'Bank Card']
+                    },
+                    series: [
+                        {
+                            name: 'Tax Refund Methods',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: '18',
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                {value: data.data.cash, name: 'Cash', itemStyle: {color: '#FFC107'}},
+                                {value: data.data.bankCard, name: 'Bank Card', itemStyle: {color: '#9C27B0'}}
+                            ]
+                        }
+                    ]
+                };
+                myChart.setOption(option);
+            } else {
+                console.log(data.data.errorMessage);
             }
-        ]
-    };
-
-    myChart.setOption(option);
+        },
+        error: function(xhr, status, error) {
+            console.log(xhr.responseText || error);
+        }
+    });
 
     window.addEventListener('resize', function() {
         myChart.resize();
@@ -275,86 +348,113 @@ function initRefundMethodsChart() {
 function initMixedChart() {
     const chartDom = document.getElementById('mixedChart');
     const myChart = echarts.init(chartDom);
-
-    const option = {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross',
-                crossStyle: {
-                    color: '#999'
-                }
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8081/visual/getMonthlyStatistic",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+        xhrFields: { withCredentials: true },
+        success: function(data) {
+            if (data.status == "success") {
+                var d = getMonthlyData(data.data);
+                const option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    legend: {
+                        data: ['Applied Tax Refund Amount', 'Customs Confirmed Amount', 'Application Forms Count']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: 'Amount',
+                            axisLabel: {
+                                formatter: '￥{value}'
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: 'Application forms',
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'Applied Tax Refund Amount',
+                            type: 'bar',
+                            data: d.totalAmountSum,
+                            itemStyle: {
+                                color: '#667eea'
+                            }
+                        },
+                        {
+                            name: 'Customs Confirmed Amount',
+                            type: 'bar',
+                            data: d.customsConfirmAmountSum,
+                            itemStyle: {
+                                color: '#764ba2'
+                            }
+                        },
+                        {
+                            name: 'Application Forms Count',
+                            type: 'line',
+                            yAxisIndex: 1,
+                            data: d.applicationFormCount,
+                            itemStyle: {
+                                color: '#4CAF50'
+                            },
+                            lineStyle: {
+                                width: 3
+                            }
+                        }
+                    ]
+                };
+                myChart.setOption(option);
+            } else {
+                console.log(data.data.errorMessage);
             }
         },
-        legend: {
-            data: ['Applied Refund Amount', 'Customs Confirmed Amount', 'Application Forms']
-        },
-        xAxis: [
-            {
-                type: 'category',
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                axisPointer: {
-                    type: 'shadow'
-                }
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value',
-                name: 'Amount',
-                min: 0,
-                max: 30000,
-                interval: 5000,
-                axisLabel: {
-                    formatter: '￥{value}'
-                }
-            },
-            {
-                type: 'value',
-                name: 'Applications',
-                min: 0,
-                max: 120,
-                interval: 20,
-                axisLabel: {
-                    formatter: '{value}'
-                }
-            }
-        ],
-        series: [
-            {
-                name: 'Applied Refund Amount',
-                type: 'bar',
-                data: [18500, 19200, 20100, 23400, 24900, 26400, 27200, 28450, 27600, 26300, 24800, 23100],
-                itemStyle: {
-                    color: '#667eea'
-                }
-            },
-            {
-                name: 'Customs Confirmed Amount',
-                type: 'bar',
-                data: [16200, 17500, 18400, 21000, 22300, 23800, 24500, 25120, 24200, 22800, 21500, 19800],
-                itemStyle: {
-                    color: '#764ba2'
-                }
-            },
-            {
-                name: 'Application Forms',
-                type: 'line',
-                yAxisIndex: 1,
-                data: [68, 72, 76, 85, 92, 98, 102, 98, 95, 88, 82, 76],
-                itemStyle: {
-                    color: '#4CAF50'
-                },
-                lineStyle: {
-                    width: 3
-                }
-            }
-        ]
-    };
-
-    myChart.setOption(option);
+        error: function(xhr, status, error) {
+            console.log(xhr.responseText || error);
+        }
+    });
 
     window.addEventListener('resize', function() {
         myChart.resize();
     });
+}
+
+function getMonthlyData(data) {
+    var applicationFormCount = [];
+    var customsConfirmAmountSum = [];
+    var totalAmountSum = [];
+    for (var i = 0; i < data.length; i++) {
+        applicationFormCount.push(data[i].applicationFormCount);
+        customsConfirmAmountSum.push(data[i].customsConfirmAmountSum);
+        totalAmountSum.push(data[i].totalAmountSum);
+    }
+    var obj = {
+        "applicationFormCount": applicationFormCount,
+        "customsConfirmAmountSum": customsConfirmAmountSum,
+        "totalAmountSum": totalAmountSum
+    }
+    return obj;
 }

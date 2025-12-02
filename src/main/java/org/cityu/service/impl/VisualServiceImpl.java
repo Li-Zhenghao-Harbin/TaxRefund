@@ -15,7 +15,7 @@ public class VisualServiceImpl implements VisualService {
 
     @Override
     public Object getOverview() {
-        return null;
+        return visualMapper.getOverview();
     }
 
     @Override
@@ -25,21 +25,21 @@ public class VisualServiceImpl implements VisualService {
 
     @Override
     public Object getApplicationFormsPie() {
-        return null;
+        return visualMapper.getApplicationFormsPie();
     }
 
     @Override
     public Object getCustomsConfirmAmountPie() {
-        return null;
+        return visualMapper.getCustomsConfirmAmountPie();
     }
 
     @Override
     public Object getTaxRefundMethodPie() {
-        return null;
+        return visualMapper.getTaxRefundMethodPie();
     }
 
     @Override
     public List<Object> getMonthlyStatistic() {
-        return null;
+        return visualMapper.getMonthlyStatistic();
     }
 }
