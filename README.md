@@ -14,4 +14,6 @@ This project aims to simulate the departure tax refund process and provide a sel
 + Database: MySQL;
 + Frontend: HTML/CSS/JavaScript/jQuery/Echarts.
 
+The database source is available as `src/main/resources/tax_refund.sql`
+
 [//]: # (# Explanation)
